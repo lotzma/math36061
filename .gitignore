@@ -4,3 +4,10 @@ notes/Week\ 1/inpainting.ipynb
 # Prive directories
 eval/
 exams/
+
+# Sage files
+**/*.sage-chat
+**/*.sage-jupyter
+
+# Other directories
+**/.ipynb_checkpoints
