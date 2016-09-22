@@ -1,3 +1,11 @@
+# Auxiliary and backup files
+**/*~
+**/*.backup
+**/*.out
+**/*.aux
+**/*.log
+**/*.dvi
+
 # Auxiliary documents
 notes/Week\ 1/inpainting.ipynb
 
