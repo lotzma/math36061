@@ -1,0 +1,121 @@
+\documentclass[11pt]{amsart}
+%\newcommand\hmmax{0} % Default is 3.
+%\newcommand\bmmax{0} % Default is 4.
+%\usepackage{geometry}
+%\usepackage[T1]{fontenc}
+%\usepackage{charter}
+%\usepackage{fourier}
+\input{macros}
+%\usepackage[charter]{mathdesign}
+%\usepackage{times}
+%\usepackage{newtxmath}
+
+
+%\usepackage{microtype}
+
+\title[Convex Optimization]{Convex Optimization and Machine Learning}
+
+\author[M.~Lotz]{Martin Lotz}
+
+\date{\today}
+
+
+\begin{document}
+\maketitle
+
+\begin{tabular}{|l|l|}
+\hline
+ {\bf Unit code:} & MATH36061\\
+ \hline
+ {\bf Credit Rating:} & 10\\
+ \hline
+ {\bf Unit level:} & 3\\
+ \hline
+ {\bf Teaching period(s):} & Semester 1\\
+ \hline
+ {\bf Offered by} & School of Mathematics\\
+ \hline
+ {\bf Available as a free choice unit} & N\\
+ \hline
+ \end{tabular}
+
+\section{Requisites}
+The course requires basic knowledge of multivariate calculus, analysis and linear algebra as provided first and second year modules (MATH10121 or MATH10131, MATH10202 or MATH10212). 
+
+\section{Aims}
+The course aims to introduce students to modern convex optimization and its applications in fields such as machine learning. The course is designed to cover practical modelling aspects, algorithm analysis and design, and the theoretical foundations of the subject.  
+
+\section{Overview}
+Optimization is the art of optimal decision making under constraints. 
+Convex optimization refers to a set of problems and methods that can be formulated using convex functions and sets; countless problems from science, engineering and statistics can be cast as convex optimization problems and solved using efficient algorithms. 
+The course is intended as an introduction to convex optimization, focussing on the theory, the modelling techniques, and the algorithm analysis and design. Recent developments such as convex regularization and compressed sensing will be discussed.
+The problem sessions will be used to present applications from machine learning, signal processing, and finance.
+
+\section{Assessment}
+Exam: 80, coursework: 20.
+
+\section{Assessment Further Information}
+\begin{itemize}
+\item[] Coursework; Weighting within unit 20\%\\
+\item[] 2 hours end of semester examination; Weighting within unit 80\%
+\end{itemize}
+
+\section{Learning outcomes}
+On completion of the course, students should be able to
+\begin{enumerate}
+ \item recognize and formulate convex optimization problems as they arise in practise;
+ \item know a range of algorithms for solving linear, quadratic and semidefinite programming problems, and evaluate their performance;
+ \item understand the theoretical foundations and be able to use it to characterise optimal solutions to optimization problems;
+ \item appreciate the role of convex optimization in machine learning, signal processing, compressed sensing, and finance;
+ \item use the software CVX to model and solve convex optimization problems.
+\end{enumerate}
+
+
+\section{Syllabus}
+The lectures and problem sessions will cover the following topics:
+\begin{enumerate}
+\item Overview and examples of optimization problems; 
+\item Least-squares, gradient descent, Newton's method;
+\item Introduction to CVX;
+\item Fundamentals of convex analysis and geometry: convex sets and functions, subdifferential calculus; 
+\item Linear and quadratic programming, semidefinite programming, conic optimization;
+\item Optimality conditions, duality theory, theorems of alternative;
+\item Interior-point methods, augmented Lagrangians, alternating direction method of multipliers;
+\item Applications in machine learning: convex regularization, compressed sensing and matrix completion.
+\end{enumerate}
+
+\section{Recommended reading}
+The main reference is the book
+\begin{itemize}
+ \item Stephen Boyd and Lieven Vandenberghe. Convex Optimization. Cambridge University Press, 2004.
+\end{itemize}
+The book is available online at \url{ http://www.stanford.edu/~boyd/cvxbook/}.
+The lecture will also make use of the CVX software, which is based on {\sc Matlab}. Other useful references include:
+\begin{itemize}
+ \item J.~Nocedal and S.J.Wright. Numerical Optimization. Springer, 2006.
+ \item A. Ben-Tal and A.~Nemirovski. Lectures on Modern Convex Optimization. 2013.
+ \item Y. Nesterov. Introductory lectures on convex optimization: A basic course. Springer, 2004.
+\end{itemize}
+
+\section{Feedback methods}
+Tutorials will provide an opportunity for students’ work to be discussed and to provide feedback on their understanding.
+
+\section{Study hours}
+\noindent Lectures - 22 hours\\
+Tutorials - 11 hours\\
+Independent study hours - 67 hours\\
+
+\section{Teaching staff}
+Martin Lotz - Unit coordinator
+%\begin{abstract}
+%Something
+%\end{abstract}
+
+
+%\tableofcontents
+
+
+%\bibliographystyle{alpha}
+%\bibliography{../../bib/mybib}
+
+\end{document}

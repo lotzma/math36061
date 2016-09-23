@@ -1,0 +1,291 @@
+%=================================================
+% Packages
+%=================================================
+
+\usepackage{fixltx2e}
+\usepackage[usenames,dvipsnames]{xcolor}
+\usepackage{fancyhdr}
+\usepackage{amsmath,amsfonts,amsbsy,amsgen,amscd,mathrsfs,amssymb}
+%\usepackage{amsthm}
+\usepackage{subfig}
+\usepackage{url}
+\usepackage{tikz}
+\usepackage{enumitem}
+\usepackage{listings}
+\lstset{language=Matlab}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+%\newtheorem{remark}[theorem]{Remark}
+
+\numberwithin{equation}{section}
+
+\definecolor{dark-gray}{gray}{0.3}
+\usepackage[colorlinks=true]{hyperref}
+\hypersetup{urlcolor=Blue}
+\hypersetup{citecolor=Black}
+\hypersetup{linkcolor=dark-gray}
+
+\usepackage{setspace}
+\usepackage{graphicx}
+\usepackage{booktabs,longtable,tabu} % Nice tables
+\setlength{\tabulinesep}{1pt}
+\usepackage{multirow} % More control over tables
+
+% Fonts
+%\usepackage{times}
+\usepackage{fourier}
+\usepackage{bm} % boldmath must be called after the package
+
+%\usepackage{hyperref}
+%\usepackage[notcite]{showkeys}
+%\usepackage{bbm}  % Loads too many fonts :(
+%\usepackage{euscript}
+%\usepackage{latexsym}
+%\usepackage{color}
+%\usepackage[margin=1.25in]{geometry}
+%\usepackage{thmtools}
+%\usepackage{url}
+%\usepackage{citesort}
+%\usepackage{supertabular}
+%\usepackage[font=small,margin=10pt,labelfont={bf},labelsep={space}]{caption}
+%\usepackage{pstricks}
+
+%=================================================
+% Paths
+%=================================================
+
+\graphicspath{{figures/}}
+
+%=================================================
+% Formatting
+%=================================================
+
+\sloppy % Helps with margin justification
+
+%%% Further font changes
+\newcommand{\lang}{\textit}
+\newcommand{\titl}{\textsl}
+\newcommand{\term}{\emph}
+
+%%% Equation numbering
+\numberwithin{equation}{section} 
+
+%%% Typesetting
+\providecommand{\mathbold}[1]{\bm{#1}}  % Must be after 'fourier'
+                                % package loads
+%%% Annotations
+\newcommand{\notate}[1]{\textcolor{red}{\textbf{[#1]}}}
+
+%=================================================
+% Theorem environment
+%=================================================
+
+
+%=================================================
+% Symbols
+%=================================================
+
+%%% Old symbols with new names
+\newcommand{\oldphi}{\phi}
+\renewcommand{\phi}{\varphi}
+
+\newcommand{\eps}{\varepsilon}
+\newcommand{\e}{\varepsilon}
+
+\newcommand{\oldmid}{\mid}
+\renewcommand{\mid}{\mathrel{\mathop{:}}} 
+
+%%% New symbols
+\newcommand{\defby}{\overset{\mathrm{\scriptscriptstyle{def}}}{=}}
+\newcommand{\half}{\tfrac{1}{2}}
+\newcommand{\third}{\tfrac{1}{3}}
+
+\newcommand{\sumnl}{\sum\nolimits}
+
+\newcommand{\defeq}{\ensuremath{\mathrel{\mathop{:}}=}} % Definition-equals
+\newcommand{\eqdef}{\ensuremath{=\mathrel{\mathop{:}}}} % Equals-definition
+
+%%% Constants
+\newcommand{\cnst}[1]{\mathrm{#1}} 
+\newcommand{\econst}{\mathrm{e}}
+\newcommand{\iunit}{\mathrm{i}}
+
+\newcommand{\onevct}{\mathbf{e}} % All ones vector
+\newcommand{\zerovct}{\vct{0}} % Zero vector
+
+\newcommand{\Id}{\mathbf{I}}
+\newcommand{\onemtx}{\bm{1}}
+\newcommand{\zeromtx}{\bm{0}}
+
+%%% Sets
+\newcommand{\coll}[1]{\mathscr{#1}}
+\newcommand{\sphere}[1]{\mathsf{S}^{#1}}
+\newcommand{\ball}[1]{\mathsf{B}^{#1}}
+\newcommand{\Grass}[2]{\mathsf{G}^{#1}_{#2}}
+\providecommand{\mathbbm}{\mathbb} % In case we don't load bbm
+\newcommand{\Rplus}{\mathbbm{R}_{+}}
+\newcommand{\R}{\mathbbm{R}}
+\newcommand{\C}{\mathbbm{C}}
+\newcommand{\N}{\mathbbm{N}}
+
+% Set operations
+\newcommand{\polar}{\circ}
+\newcommand{\closure}{\overline}
+
+%%% Real and complex analysis
+\newcommand{\abs}[1]{\left\vert {#1} \right\vert}
+\newcommand{\abssq}[1]{{\abs{#1}}^2}
+
+\newcommand{\sgn}[1]{\operatorname{sgn}{#1}}
+\newcommand{\real}{\operatorname{Re}}
+\newcommand{\imag}{\operatorname{Im}}
+\newcommand{\pos}{\operatorname{Pos}}
+\newcommand{\shrink}{\operatorname{Shrink}}
+
+\newcommand{\diff}[1]{\mathrm{d}{#1}}
+\newcommand{\idiff}[1]{\, \diff{#1}}
+
+
+%\newcommand{\grad}{\nabla} % Conflicts w/SIAM styles?
+\newcommand{\subdiff}{\partial}
+
+\newcommand{\argmin}{\operatorname*{arg\; min}}
+\newcommand{\argmax}{\operatorname*{arg\; max}}
+
+%%% Probability & measure
+
+\newcommand{\Prob}{\mathbbm{P}}
+\newcommand{\Probe}[1]{\Prob\left({#1}\right)}
+\newcommand{\Expect}{\operatorname{\mathbb{E}}}
+
+\newcommand{\normal}{\textsc{Normal}}
+\newcommand{\uniform}{\textsc{Uniform}}
+\newcommand{\erf}{\operatorname{erf}}
+
+\DeclareMathOperator{\rvol}{rvol}
+\DeclareMathOperator{\Var}{Var}
+
+%%% Vector and matrix operators
+\newcommand{\vct}[1]{\mathbold{#1}}
+\newcommand{\mtx}[1]{\mathbold{#1}}
+\newcommand{\Eye}{\mathbf{I}}
+
+\newcommand{\transp}{t}
+\newcommand{\adj}{*}
+\newcommand{\psinv}{\dagger}
+
+\newcommand{\lspan}[1]{\operatorname{span}{#1}}
+
+\newcommand{\range}{\operatorname{range}}
+\newcommand{\colspan}{\operatorname{colspan}}
+
+\newcommand{\rank}{\operatorname{rank}}
+\newcommand{\nullity}{\operatorname{null}}
+
+%\newcommand{\diag}{\operatorname{diag}}
+\newcommand{\trace}{\operatorname{tr}}
+
+%\newcommand{\supp}[1]{\operatorname{supp}(#1)}
+
+\newcommand{\smax}{\sigma_{\max}}
+\newcommand{\smin}{\sigma_{\min}}
+
+\newcommand{\nnz}{\operatorname{nnz}}
+\renewcommand{\vec}{\operatorname{vec}}
+
+\newcommand{\Proj}{\ensuremath{\mtx{\Pi}}} % Projection operator
+
+%%% Semidefinite orders
+\newcommand{\psdle}{\preccurlyeq}
+\newcommand{\psdge}{\succcurlyeq}
+
+\newcommand{\psdlt}{\prec}
+\newcommand{\psdgt}{\succ}
+
+%%% Mensuration: inner products and norms
+
+% TeX does not like either \newcommand or \renewcommand for these
+% two macros.  There is probably a good reason not to use them via
+% \def, but I don't know it.  
+%\newcommand{\<}{\langle} 
+%\newcommand{\>}{\rangle}
+\newcommand{\ip}[2]{\left\langle {#1},\ {#2} \right\rangle}
+\newcommand{\absip}[2]{\abs{\ip{#1}{#2}}}
+\newcommand{\abssqip}[2]{\abssq{\ip{#1}{#2}}}
+\newcommand{\tworealip}[2]{2 \, \real{\ip{#1}{#2}}}
+
+\newcommand{\norm}[1]{\left\Vert {#1} \right\Vert}
+\newcommand{\normsq}[1]{\norm{#1}^2}
+
+\newcommand{\lone}[1]{\norm{#1}_{\ell_1}}
+\newcommand{\smlone}[1]{\|#1\|_{\ell_1}}
+\newcommand{\linf}[1]{\norm{#1}_{\ell_\infty}}
+\newcommand{\sone}[1]{\norm{#1}_{S_1}}
+\newcommand{\snorm}[1]{\sone{#1}}
+\DeclareMathOperator{\dist}{dist}
+
+% Fixed-size inner products and norms are useful sometimes
+\newcommand{\smip}[2]{\bigl\langle {#1}, \ {#2} \bigr\rangle}
+\newcommand{\smabsip}[2]{\bigl\vert \smip{#1}{#2} \bigr\vert}
+\newcommand{\smnorm}[2]{{\bigl\Vert {#2} \bigr\Vert}_{#1}}
+
+% Specific norms that are used frequently
+\newcommand{\enormdangle}{{\ell_2}}
+\newcommand{\enorm}[1]{\norm{#1}}
+\newcommand{\enormsm}[1]{\enorm{\smash{#1}}}
+
+\newcommand{\enormsq}[1]{\enorm{#1}^2}
+
+\newcommand{\fnorm}[1]{\norm{#1}_{\mathrm{F}}}
+\newcommand{\fnormsq}[1]{\fnorm{#1}^2}
+
+\newcommand{\pnorm}[2]{\norm{#2}_{#1}}
+%\newcommand{\snorm}[1]{\norm{#1}_*}
+
+\newcommand{\triplenorm}[1]{\left\vert\!\left\vert\!\left\vert {#1} \right\vert\!\right\vert\!\right\vert} 
+
+% Special cones
+\newcommand{\Feas}{\mathcal{F}}
+\newcommand{\Desc}{\mathcal{D}}
+
+\newcommand{\sdim}{\delta}
+\newcommand{\ddt}[1]{\dot{#1}}
+\DeclareMathOperator{\Circ}{Circ}
+
+%%% Differential geometry
+\newcommand{\Cinf}{C^{\infty}}
+\newcommand{\Tensf}{\mathcal{T}}
+\newcommand{\Vbundle}{\mathcal{X}}
+\newcommand{\Christ}[3]{\Gamma_{{#1}{#2}}^{#3}}
+
+% Stuff to be sorted in somewhere
+\DeclareMathOperator{\Lip}{Lip}
+
+
+\newcommand{\IR}{\mathbbm{R}}
+\newcommand{\veps}{\varepsilon}
+\newcommand{\mC}{\mathcal{C}}
+\newcommand{\mD}{\mathcal{D}}
+\newcommand{\mN}{\mathcal{N}}
+\newcommand{\mL}{\mathcal{L}}
+\newcommand{\bface}{\overline{\mathcal{F}}}
+\newcommand{\face}{\mathcal{F}}
+\newcommand{\relint}{\operatorname{relint}}
+\newcommand{\cone}{\operatorname{cone}}
+\newcommand{\lin}{\operatorname{lin}}
+\newcommand{\Gr}{\operatorname{Gr}}
+\newcommand{\powerset}{\mathscr{P}}
+\newcommand{\hd}{{\operatorname{hd}}}
+
+\newcommand{\conv}{\operatorname{conv}}
+\newcommand{\minimize}{\text{minimize}\quad}
+\newcommand{\subjto}{\quad\text{subject to}\quad}
+\newcommand{\find}[1]{\text{Find }{#1}\quad\longrightarrow\quad}
+
+\newcommand{\comm}[1]{\textcolor{red}{\textbf{[#1]}}}
