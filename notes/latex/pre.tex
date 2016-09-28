@@ -684,7 +684,7 @@ We write $C([a,b])=C^0([a,b])$ for the set of continuous functions on an interva
   \sup_{x\in [a,b]} f(x) &= \min\{y\in\R \mid \forall x\in [a,b], f(x)\leq y\}.
 \end{align*}
 Again, we allow the ``values'' $-\infty$ and $\infty$. If the infimum is attained (i.e., there exists $x^*$ such that $f(x^*) = \inf_{x\in [a,b]} f(x)$), then we write $\min_{x\in [a,b]}f(x)$, and similarly $\max$ if the supremum is attained. Any $f\in C([a,b])$ for $a,b\in \R$ attains its infimum and supremum on $[a,b]$.
-\marginparmargin{outer}
+
 Three important concepts are the \textbf{Intermediate Value Theorem}, the \textbf{Mean Value Theorem}, and the \textbf{Taylor expansion}. 
 
 \begin{theorem*}[\textbf{Intermediate Value Theorem}]
@@ -945,6 +945,18 @@ for the derivative of the curve. If $\dot{f}(t_0)=\vct{v}\in \R^n$ and $g\colon 
 \begin{equation*}
  \frac{\diff{g\circ f}(t_0)}{\diff{t}} = \ip{\nabla g(f(t_0))}{\vct{v}}.
 \end{equation*}
+
+Before going on to deal with higher derivative, we state the generalisation of the Mean Value Theorem to higher dimensions.
+
+\begin{theorem*}[Multivariate Mean Value Theorem]
+\strictpagecheck\marginpar{\textbf{Multivariate MVT}}
+Let $f\in C^1(U)$ for an open set $U$ with $\vct{x}_0,\vct{x}\in U$, $\vct{x}\neq \vct{x}_0$. Then there exists $t\in (0,1)$ such that
+\begin{equation*}
+  f(\vct{x})-f(\vct{x}_0) = \ip{\nabla f(t\vct{x}+(1-t)\vct{x}_0)}{\vct{x}-\vct{x}_0}.
+\end{equation*}
+\end{theorem*}
+Note that $t\vct{x}+(1-t)\vct{x}_0$ parametrises the line segment connecting $\vct{x}$ and $\vct{x}_0$. 
+\marginparmargin{outer}
 
 For a tuple of natural number $\alpha = (\alpha_1,\dots,\alpha_n)$, set $|\alpha|=\sum_{i=1}^n \alpha_i$, and define the higher order partial derivative
 \begin{equation*}
