@@ -1,0 +1,118 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{1}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}}
+
+%\theoremstyle{remark}
+%\newtheorem{problem}[problemSheetNumber]{}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Analysis}
+\rhead{October 1, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+Problems in Part A will be discussed in class. Problems in Part B come with solutions and should be tried at home, they will be discussed in class if time permits. 
+
+\section*{Part A}
+
+ \problem Find examples of
+\begin{itemize}
+ \item[(a)] A function $f\in C^2(\R)$ with a strict minimizer $x$ such that $f''(x)=0$ (that is, the second derivative is not positive definite).
+ \item[(b)] A function $f\colon \R\to \R$ with a strict minimizer $x^*$ that is not an isolated local minimizer.
+\end{itemize}
+
+\problem For this problem you might want to recall some linear algebra.
+\begin{itemize} 
+ \item[(a)] Let $\mtx{A}\in \R^{n\times n}$ by a symmetric matrix, $\vct{b}\in \R^n$ and $c\in \R$. Show that the quadratic function
+ \begin{equation}\label{eq:quad}\tag{1}
+f(\vct{x}) = \frac{1}{2}\vct{x}^{\trans}\mtx{A}\vct{x}+\vct{b}^{\trans}\vct{x}+c  
+ \end{equation}
+ with symmetric $\mtx{A}$
+is convex if and only if $\mtx{A}$ is positive semidefinite.
+\item[(b)] Now let $\mtx{A}\in \R^{m\times n}$ by an arbitrary matrix. Show that the function
+\begin{equation*}
+ f(\vct{x}) = \norm{\mtx{A}\vct{x}-\vct{b}}_2^2
+\end{equation*}
+is convex (the $2$-norm is defined as $\norm{\vct{x}}_2=\vct{x}^{\trans}\vct{x}$). Moreover, if $m\geq n$ and the matrix $\mtx{A}$ has rank $m$, then it is strictly convex and the unique minimizer is
+\begin{equation*}
+ \vct{x}^* = (\mtx{A}^{\trans}\mtx{A})^{-1}\mtx{A}^{\trans}\vct{b}.
+\end{equation*}
+\end{itemize}
+
+\problem A set $S\subseteq \R^n$ is called {\em convex}, if for any $\vct{x},\vct{y}\in S$ and $\lambda\in [0,1]$, 
+\begin{equation*}
+ \lambda \vct{x}+(1-\lambda)\vct{y}\in S.
+\end{equation*}
+In words, for any two points in $S$, the line segment joining them is also in $S$. Which of the following sets are convex?
+\begin{itemize}
+ \item[(a)] $S = \{\vct{x}\in \R^3 \mid \norm{\vct{x}}_2=1\}$ (the unit sphere);
+ \item[(b)] $S = \{\vct{x}\in \R^2 \mid 1\leq x_1-x_2< 2\}$;
+ \item[(c)] $S = \{\vct{x}\in \R^n \mid |x_1|+\cdots+|x_d|\leq 1\}$;
+ \item[(d)] $S = \mathcal{S}^n_{+}\subset \R^{n\times n}$, the set of symmetric, positive semidefinite matrices.
+\end{itemize}
+
+\section*{Part B}
+
+\problem 
+In engineering applications\footnote{For example in the synthesis of linear time-invariant dynamical systems.} one sometimes encounters a problem of the form
+\begin{equation}\label{eq:linfty}\tag{2}
+ \minimize \norm{\mtx{A}\vct{x}-\vct{b}}_\infty,
+\end{equation}
+with $\mtx{A}\in \R^{m\times n}$, $\vct{b}\in \R^m$ and $\norm{\vct{x}}_\infty = \max_{1\leq i\leq n} |x_i|$ is the $\infty$-norm. 
+\begin{itemize}
+ \item[(a)] Draw the ``unit circle'' $\{\vct{x}\in \R^2 \mid \norm{\vct{x}}_\infty \leq 1\}$.
+ \item[(b)] Formulate a linear programming problem $\mathcal{P}$ with decision variables $(\vct{x},t)$, such that if $(\vct{x}^*,t^*)$ is the unique minimizer of $\mathcal{P}$, then $\vct{x}^*$ is the unique minimizer of~\eqref{eq:linfty}. 
+\end{itemize}
+Even though~\eqref{eq:linfty} is not a linear programming problem (the objective is not linear), it is {\em equivalent} to one, in the sense that a minimizer can be read off the solution of a linear programming problem.
+
+\problem For this problem we generalize the notion of convexity to function not necessarily defined on all of $\R^n$. Denote by $\dom f$ the {\em domain} of $f$, i.e., the set of $\vct{x}$ on which $f(\vct{x})$ attains a finite value. A function $f$ is called {\em convex}, if $\dom f$ is a convex set and for all $\vct{x},\vct{y}\in \dom f$ and $\lambda\in [0,1]$,
+\begin{equation*}
+ f(\lambda \vct{x}+(1-\lambda)\vct{y})\leq \lambda f(\vct{x})+(1-\lambda)f(\vct{y}).
+\end{equation*}
+Which of the following functions are convex?
+\begin{itemize}
+ \item[(a)] $f(x) = \log(x)$ on $\R_{++}$ (the positive real numbers);
+ \item[(b)] $f(x) = x^4$ on $\R$;
+ \item[(c)] $f(\vct{x}) = x_1x_2$ on $\R^2_{++}$;
+ \item[(d)] $f(\vct{x}) = x_1/x_2$ on $\R^2_{++}$;
+ \item[(e)] $f(x)=e^x-1$ on $\R$;
+ \item[(f)] $f(\vct{x}) = \max_i x_i$ on $\R^n$.
+\end{itemize}
+
+\problem Using Python or another computing system, compute and plot the sequence of points $\vct{x}_k$, starting with $\vct{x}_0=(0,0)^{\trans}$, for the gradient descent algorithm for the problem
+\begin{equation*}
+ \minimize \norm{\mtx{A}\vct{x}-\vct{b}}_2^2
+\end{equation*}
+with data
+ \begin{equation*}
+  \mtx{A} = \begin{pmatrix}
+             1 & 2\\
+             2 & 1\\
+             -1 & 0
+            \end{pmatrix},
+\quad \vct{b} = \begin{pmatrix}
+                 10\\-1\\0
+                \end{pmatrix}.
+ \end{equation*}
+
+
+\end{document}

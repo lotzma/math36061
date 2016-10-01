@@ -1,0 +1,126 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{1}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{3}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{October 8, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1}
+\begin{itemize}
+ \item[(a)] The function $f(x)=x^4$ has a strict minimum at $x=0$, but the second derivative satisfies $f''(0)=0$. 
+ \item[(b)] We construct a function that has a strict minimizer $x^*$, but such that every open neighourhood $U$ of $x^*$ contains other local minimizers. One such function is
+ \begin{equation*}
+  f(x) = \begin{cases} x^4 (\cos(1/x)+2) & \text{ for } x\neq 0\\
+          0 & \text{ for } x=0.
+         \end{cases}
+ \end{equation*}
+
+\begin{figure}[h!]
+\centering
+ \includegraphics[width=0.5\textwidth]{images/strictmin_cropped.pdf}
+\end{figure}
+We explain the construction of this function:
+\begin{enumerate}
+ \item Start out with $g(x) = \cos(1/x)+2$ for $x\neq 0$ and $g(0)=1$. This function has minimizers $x_0=0$ and $x_k = 1/(\pi k)$ for $k>0$, with values $g(x_k)=1$ at all minimizers. Therefore, any open interval around $0$ contains (infinitely many) local minimizers $x_k$ other than $x_0=0$. 
+ \item Multipy $x^4$ to the function: $f(x) = x^4g(x)$. This ensures that $f(0)=0$ and $f(x)>0$ for $x\neq 0$. There are still local minima in every neighbourhood of $0$. To see this, compute the derivative
+ \begin{equation}\label{eq:der}\tag{1}
+  f'(x) = x^2(4x\cos(1/x)+\sin(1/x)+8x).
+ \end{equation}
+ Set $z_m=1/(\pi/2+m\pi)$ for $m>0$. Since $\sin(1/z_m)=\sin(\pi/2+m\pi)= 1$ for $m$ even and $-1$ for $m$ odd, for $m$ sufficiently large the derivative~\eqref{eq:der} changes signs between successive $z_m$. Since $f'(x)$ is continuous, it has roots between any $z_m$ and $z_{m+1}$ for large enough $m$, and these correspond to maxima and minima of $f$.
+\end{enumerate}
+The function is in $C^2(\R)$. For $x\neq 0$ this is clear, and to verify this at $x=0$, one shows that the right and left limits as $x\to 0$ of $f'(x)$ and $f''(x)$ coincide (they are in fact $0$).
+
+Note the subtle point that one minimizer $x^*$ can have local minimizers that are arbitrary close: while each open interval $I$ surrounding $x^*$ has another local minimizer $\tilde{x}$, every such $\tilde{x}$ has an interval $\tilde{I}$ surrounding it where this $\tilde{x}$ is the only minimizer!
+\end{itemize}
+
+
+\solution{pr:2} We want to show that the function
+\begin{equation}\label{eq:quad}\tag{2}
+f(\vct{x}) = \frac{1}{2}\vct{x}^{\trans}\mtx{A}\vct{x}+\vct{b}^{\trans}\vct{x}+c  
+ \end{equation}
+is convex if and only $\mtx{A}$ is positive semidefinite.
+To see this, we compute the partial derivatives and the Hessian of $f$. The parts $\vct{b}^{\trans}\vct{x}$ and $c$ disappear when computing second derivatives. The function $\vct{x}^{\trans}\mtx{A}\vct{x}$ can be written as
+\begin{equation*}
+ \vct{x}^{\trans}\mtx{A}\vct{x} = \sum_{i=1}^m\sum_{j=1}^n a_{ij}x_ix_j,
+\end{equation*}
+so that the first derivative is
+\begin{equation*}
+ \frac{\partial f}{\partial x_i} = \frac{1}{2} \sum_{j\neq i} (a_{ij}+a_{ji}) x_j + a_{ii}x_i+b_i = \sum_{j=1}^n a_{ij}x_j+b_i,
+\end{equation*}
+where we used the symmetry of $\mtx{A}$ (i.e., $a_{ij}=a_{ji}$). The gradient and Hessian are therefore just given by
+\begin{equation*}
+ \nabla f(\vct{x}) = \mtx{A}\vct{x}+\vct{b}, \quad \nabla^2f(\vct{x}) = \mtx{A}.
+\end{equation*}
+
+An interesting special case is when the~\eqref{eq:quad} arises in the form
+\begin{equation}\label{eq:least}\tag{3}
+ f(\vct{x}) = \frac{1}{2}\norm{\mtx{A}\vct{x}-\vct{b}}_2^2. 
+\end{equation}
+The quadratic system then has the form
+\begin{equation}\label{eq:normquad}\tag{4}
+ \norm{\mtx{A}\vct{x}-\vct{b}}_2^2 = (\mtx{A}\vct{x}-\vct{b})^{\trans}(\vct{A}\vct{x}-\vct{b}) = \vct{x}^{\trans}\mtx{A}^{\trans}\mtx{A}\vct{x}-2\vct{b}^{\trans}\mtx{A}\vct{x}+\norm{\vct{b}}_2^2.
+\end{equation}
+The matrix $\mtx{A}^{\trans}\mtx{A}$ is always symmetric and positive semidefinite:
+\begin{equation*}
+ (\mtx{A}^{\trans}\mtx{A})^{\trans} = \mtx{A}^{\trans}(\mtx{A}^{\trans})^{\trans} = \mtx{A}^{\trans}\mtx{A}, \quad \text{ and } \quad \vct{x}^{\trans}\mtx{A}^\trans\mtx{A}\vct{x} = \norm{\mtx{A}\vct{x}}_2^2>0 \text{ if and only if } \vct{x}\neq \zerovct,
+\end{equation*}
+
+so that the function~\eqref{eq:least} is convex. From~\eqref{eq:normquad} we also see that the derivative of~\eqref{eq:least} is
+\begin{equation*}
+ \mtx{A}^{\trans}(\mtx{A}\vct{x}-\vct{b}).
+\end{equation*}
+
+\solution{pr:3} 
+\begin{itemize}
+\item[(a)] The unit circle with respect to the $\infty$-norm is the square with corners $(\pm 1,\pm 1)^{\trans}$.
+\item[(b)] The trick in transforming the unconstrained problem
+\begin{equation}\label{eq:linfty}\tag{5}
+ \minimize \norm{\mtx{A}\vct{x}-\vct{b}}_{\infty}
+\end{equation}
+into a constrained linear programming problem is to characterise the $\infty$-norm as the solution of a minimization problem. In fact, for any set of numbers $x_1,\dots,x_n$,
+\begin{equation*}
+ \max_{1\leq i\leq n} |x_i| = \min_{\forall i\colon |x_i|\leq t} t.
+\end{equation*}
+Put simply, the {\em maximum} of a set of non-negative numbers is the {\em smallest} upper bound on these numbers. We can further replace the condition $|x_i|\leq t$ by $-t\leq x_i\leq t$, so that the problem~\eqref{eq:linfty} becomes
+
+\begin{align}\label{eq:linprog}\tag{6}
+\begin{split}
+\mathop{\text{minimize}}_{(\vct{x},t)} \quad & t \\
+\subjto & -t \leq \vct{a}_1^{\trans} \vct{x} \leq t\\
+& \cdots\\
+& -t \leq \vct{a}_m^{\trans}\vct{x} \leq t,
+\end{split}
+\end{align}
+where $\mtx{a}_i^{\trans}$ are the rows of the matrix $\mtx{A}$. This problem can be brought into {\em standard form} by replacing each condition with the pair of conditions
+\begin{align*}
+ \vct{a}_i^{\trans}\vct{x}-t &\leq 0\\
+ -\vct{a}_i^{\trans}\vct{x}-t & \leq 0.
+\end{align*}
+The solution $\vct{x}$ of Problem~\eqref{eq:linfty} can be read off the solution $(\vct{x},t)$ of Problem~\eqref{eq:linprog}.
+\end{itemize}
+
+
+\end{document}
