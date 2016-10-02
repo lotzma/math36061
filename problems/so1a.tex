@@ -13,7 +13,7 @@
 %\setcounter{section}{\theproblemSheetNumber}  
 %\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
 \newcounter{problems}
-\setcounter{problems}{3}
+\setcounter{problems}{0}
 %\setlength{\parindent}{0cm}
 \renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
 \renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
@@ -21,11 +21,11 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{October 8, 2015}
+\rhead{October 6, 2016}
 
 \begin{document} 
 \begin{center}
-{\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
 \solution{pr:1}
@@ -122,5 +122,56 @@ where $\mtx{a}_i^{\trans}$ are the rows of the matrix $\mtx{A}$. This problem ca
 The solution $\vct{x}$ of Problem~\eqref{eq:linfty} can be read off the solution $(\vct{x},t)$ of Problem~\eqref{eq:linprog}.
 \end{itemize}
 
+\solution{pr:2}
+\begin{itemize}
+ \item[(a)] This function is not convex. There are various ways of deriving this. For example, one can verify that the Hessian, or second derivative, is $-1/x^2$, which is not positive semidefinite. 
+ 
+ Alternatively, one can also prove the statement using a pedestrian approach. We have to show that there are points $y\neq x$ and $\lambda \in [0,1]$ such that
+ \begin{equation*}
+  \log(\lambda x+(1-\lambda)y) > \lambda \log(x)+(1-\lambda)\log(y).
+ \end{equation*}
+ Let's choose $y=0$. Then what needs to be shown is that for the points $\vct{p}_1=(1,0)$ and $\vct{p}_2=(x,\log(x))$,
+ the line joining $\vct{p}_1$ and $\vct{p}_2$ lies {\em below} the curve $(t,\log(t))$ between $1$ and $x$. The line is given by the equation
+ \begin{equation*}
+  \ell(t) = \frac{\log(x)}{x-1}(t-1).
+ \end{equation*}
+ Evaluating this, for example, at $x=2$ and $t=1.5$, one sees that $\ell(t)>\log(t)$, which is enough evidence that $\log(t)$ is not convex.
+ With a little more effort one can deduce that the function is actually concave.
+\item[(b)] The function $f(x)=x^4$ is convex, as we will verify using Theorem 2.4. First, note that the derivative $4x^3$ is an increasing function with $x$. 
+Given two points $(x,x^4)$ and $(y,y^4)$ with $y>x$, the line connecting them has slope $(y^4-x^4)/(y-x)$. By the mean value theorem, there exists a $z\in (x,y)$ such that
+\begin{equation*}
+ \frac{y^4-x^4}{y-x} = f'(z) = 4z^3 \geq 4x^3.
+\end{equation*}
+Rearranging this inequality, we get
+\begin{equation*}
+ f(y)-f(x) = y^4-x^4 \geq 4x^3(y-x) = f'(x)(y-x),
+\end{equation*}
+which is precisely the criterium for convexity in Theorem 2.4(1).
+\item[(c)] Using Theorem 2.4(2), we compute the Hessian as
+\begin{equation*}
+ \nabla^2f(\vct{x}) = \begin{pmatrix}
+                       0 & 1\\
+                       1 & 0
+                      \end{pmatrix}.
+\end{equation*}
+This matrix is positive semidefinite on $\R^2_{++}$, since for all $\vct{x}\in \R^2_{++}$ we have
+\begin{equation*}
+ \vct{x}^{\trans}\nabla^2f(\vct{x})\vct{x} = 2x_1x_2>0.
+\end{equation*}
+It follows that the function $f(\vct{x})=x_1x_2$ is convex.
+\item[(d)] The Hessian matrix of $f(\vct{x})=x_1/x_2$ is 
+\begin{equation*}
+ \nabla^2f(\vct{x}) = \begin{pmatrix}
+                       0 & -\frac{1}{x_2^2}\\
+                       -\frac{1}{x_2^2} & 2\frac{x_1}{x_2^3}
+                      \end{pmatrix}.
+\end{equation*}
+This matrix is not positive semidefinite for all valid values of $\vct{x}$ (take for example $\vct{x}=(1,1)^{\trans}$, which leads to a negative eigenvalue).
+\item[(e)] The function $e^x-1$ is convex, as is easily seen using Theorem 2.4(2) by computing the second derivative.
+\item[(f)] The function $f(\vct{x})=\max_i x_i$ is convex. Here, we can't use the criteria from Theorem 2.4 since the function is not differentiable, so we have to verify convexity directly:
+\begin{equation*}
+ \max_i \lambda x_i+(1-\lambda)y_i \leq \lambda \max_i x_i+(1-\lambda) \max_i y_i.
+\end{equation*}
+ \end{itemize}
 
 \end{document}

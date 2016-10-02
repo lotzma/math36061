@@ -13,7 +13,7 @@
 %\setcounter{section}{\theproblemSheetNumber}  
 %\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
 \newcounter{problems}
-\setcounter{problems}{3}
+\setcounter{problems}{4}
 %\setlength{\parindent}{0cm}
 \renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
 \renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
@@ -32,7 +32,7 @@
 \begin{itemize}
 \item[(a)] The unit circle with respect to the $\infty$-norm is the square with corners $(\pm 1,\pm 1)^{\trans}$.
 \item[(b)] The trick in transforming the unconstrained problem
-\begin{equation}\label{eq:linfty}\tag{5}
+\begin{equation}\label{eq:linfty}\tag{1}
  \minimize \norm{\mtx{A}\vct{x}-\vct{b}}_{\infty}
 \end{equation}
 into a constrained linear programming problem is to characterise the $\infty$-norm as the solution of a minimization problem. In fact, for any set of numbers $x_1,\dots,x_n$,
@@ -41,7 +41,7 @@ into a constrained linear programming problem is to characterise the $\infty$-no
 \end{equation*}
 Put simply, the {\em maximum} of a set of non-negative numbers is the {\em smallest} upper bound on these numbers. We can further replace the condition $|x_i|\leq t$ by $-t\leq x_i\leq t$, so that the problem~\eqref{eq:linfty} becomes
 
-\begin{align}\label{eq:linprog}\tag{6}
+\begin{align}\label{eq:linprog}\tag{2}
 \begin{split}
 \mathop{\text{minimize}}_{(\vct{x},t)} \quad & t \\
 \subjto & -t \leq \vct{a}_1^{\trans} \vct{x} - b_1 \leq t\\
@@ -58,66 +58,13 @@ The solution $\vct{x}$ of Problem~\eqref{eq:linfty} can be read off the solution
 \end{itemize}
 
 
-\solution{pr:2}
-\begin{itemize}
- \item[(a)] This function is not convex. There are various ways of deriving this. For example, one can verify that the Hessian, or second derivative, is $-1/x^2$, which is not positive semidefinite. 
- 
- Alternatively, one can also prove the statement using a pedestrian approach. We have to show that there are points $y\neq x$ and $\lambda \in [0,1]$ such that
- \begin{equation*}
-  \log(\lambda x+(1-\lambda)y) > \lambda \log(x)+(1-\lambda)\log(y).
- \end{equation*}
- Let's choose $y=0$. Then what needs to be shown is that for the points $\vct{p}_1=(1,0)$ and $\vct{p}_2=(x,\log(x))$,
- the line joining $\vct{p}_1$ and $\vct{p}_2$ lies {\em below} the curve $(t,\log(t))$ between $1$ and $x$. The line is given by the equation
- \begin{equation*}
-  \ell(t) = \frac{\log(x)}{x-1}(t-1).
- \end{equation*}
- Evaluating this, for example, at $x=2$ and $t=1.5$, one sees that $\ell(t)>\log(t)$, which is enough evidence that $\log(t)$ is not convex.
- With a little more effort one can deduce that the function is actually concave.
-\item[(b)] The function $f(x)=x^4$ is convex, as we will verify using Theorem 2.4. First, note that the derivative $4x^3$ is an increasing function with $x$. 
-Given two points $(x,x^4)$ and $(y,y^4)$ with $y>x$, the line connecting them has slope $(y^4-x^4)/(y-x)$. By the mean value theorem, there exists a $z\in (x,y)$ such that
-\begin{equation*}
- \frac{y^4-x^4}{y-x} = f'(z) = 4z^3 \geq 4x^3.
-\end{equation*}
-Rearranging this inequality, we get
-\begin{equation*}
- f(y)-f(x) = y^4-x^4 \geq 4x^3(y-x) = f'(x)(y-x),
-\end{equation*}
-which is precisely the criterium for convexity in Theorem 2.4(1).
-\item[(c)] Using Theorem 2.4(2), we compute the Hessian as
-\begin{equation*}
- \nabla^2f(\vct{x}) = \begin{pmatrix}
-                       0 & 1\\
-                       1 & 0
-                      \end{pmatrix}.
-\end{equation*}
-This matrix is positive semidefinite on $\R^2_{++}$, since for all $\vct{x}\in \R^2_{++}$ we have
-\begin{equation*}
- \vct{x}^{\trans}\nabla^2f(\vct{x})\vct{x} = 2x_1x_2>0.
-\end{equation*}
-It follows that the function $f(\vct{x})=x_1x_2$ is convex.
-\item[(d)] The Hessian matrix of $f(\vct{x})=x_1/x_2$ is 
-\begin{equation*}
- \nabla^2f(\vct{x}) = \begin{pmatrix}
-                       0 & -\frac{1}{x_2^2}\\
-                       -\frac{1}{x_2^2} & 2\frac{x_1}{x_2^3}
-                      \end{pmatrix}.
-\end{equation*}
-This matrix is not positive semidefinite for all valid values of $\vct{x}$ (take for example $\vct{x}=(1,1)^{\trans}$, which leads to a negative eigenvalue).
-\item[(e)] The function $e^x-1$ is convex, as is easily seen using Theorem 2.4(2) by computing the second derivative.
-\item[(f)] The function $f(\vct{x})=\max_i x_i$ is convex. Here, we can't use the criteria from Theorem 2.4 since the function is not differentiable, so we have to verify convexity directly:
-\begin{equation*}
- \max_i \lambda x_i+(1-\lambda)y_i \leq \lambda \max_i x_i+(1-\lambda) \max_i y_i.
-\end{equation*}
- \end{itemize}
+
 
 \solution{pr:3} We want to apply gradient descent to the function
 \begin{equation*}
-  f(\vct{x}) = \norm{\mtx{A}\vct{x}-\vct{b}}_2^2.
+  f(\vct{x}) = \norm{\mtx{A}\vct{x}-\vct{b}}_2^2
 \end{equation*}
-The gradient is given by
-\begin{equation*}
-  \nabla f(\vct{x}) = 
-\end{equation*}
+as described in Lecture 3.
 
 The Python implementation, using numpy, looks as follows.
 
@@ -177,6 +124,49 @@ plt.show()
 
 \begin{figure}[h!]
 \centering
-\includegraphics[width=1\textwidth]{images/contourtraj.png}
+\includegraphics[width=0.5\textwidth]{images/contourtraj.png}
+\end{figure}
+
+\solution{pr:4} The gradient and the Hessian of the Rosenbrock function are
+\begin{equation*}
+  \nabla f(\vct{x}) = \begin{pmatrix}
+  -400x_1(x_2-x_1^2)-2(1-x_1)\\
+  200 (x_2-x_1^2)
+  \end{pmatrix}, \quad \nabla^2f(\vct{x}) = \begin{pmatrix}
+  -400x_2+1200 x_1^2+2 & -400 x_1\\
+  -400 x_1 & -400 x_1
+  \end{pmatrix}
+\end{equation*}
+The point $(1,1)^{\trans}$ is a stationary point, as the gradient at this point vanishes. Moreover, with a computer program (Python or Matlab) one verifies that the eigenvalues of the Hessian matrix are positive, from which it follows that the matrix is positive definite. By the second order optimality conditions, it follows that $(1,1)^{\trans}$ is a local minimum. Moreover, it is the only local minimum, as there is no other point for which the gradient vanishes. The contour plot looks as follows.
+
+\begin{ipythonnb}
+import numpy as np
+import matplotlib.pyplot as plt
+
+def rosenbrock(X, Y):
+    return ((1-X)**2)+100*(Y-X**2)**2
+
+xx = np.linspace(-2,2,100)
+yy = np.linspace(-2,2,100)
+X, Y = np.meshgrid(xx,yy)
+Z = rosenbrock(X, Y)
+
+%matplotlib inline
+plt.figure()
+levels = [0.1,0.5,1.0,2.0,5.0,10.0,50.0,100.0,200.0,400.0,600.0]
+cmap = plt.cm.get_cmap("coolwarm")
+
+cp = plt.contour(X,Y,Z,levels,cmap = cmap)
+#plt.clabel(cp, inline=1, fontsize=10)
+plt.title('Level sets of Rosenbrock function')
+plt.xlabel('x')
+plt.ylabel('y')
+plt.plot([1],[1],'ro')
+plt.show()
+\end{ipythonnb}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.6\textwidth]{images/rosenbrock.png}
 \end{figure}
 \end{document}
