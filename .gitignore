@@ -5,6 +5,8 @@
 **/*.aux
 **/*.log
 **/*.dvi
+**/*.gz
+**/*.listing
 
 # Auxiliary documents
 notes/Week\ 1/inpainting.ipynb
