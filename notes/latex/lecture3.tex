@@ -124,62 +124,6 @@ We plot the trajectory of gradient descent with the data
 As can be seen from the plot, we always move in the direction orthogonal to a level set, and stop at a point where we are tangent to a level set.
 \end{example}
 
-\section{Step length selection}\label{sec:steplength}
-When moving in a descent direction $\vct{p}_k$ (not necessarily the steepest descent direction), 
-\begin{equation*}
-  \vct{x}_{k+1} = \vct{x}_k+\alpha_k \vct{p}_k
-\end{equation*}
-we can only guarantee that the function value will decrease if the step length $\alpha_k$ is small enough. If we move too far in a descent direction, we might even land at a point where $f$ is larger than where we started! It is therefore important to choose a step length that 
-\begin{itemize}
-\item is not too small (so that the algorithm does not take too long);
-\item is not too large (so that we don't end up at a point with larger function value);
-\item is easy to compute.
-\end{itemize} 
-
-An optimal step $\alpha$ for a descent method would be the minimizer of the function
-\begin{equation*}
- \alpha \mapsto \oldphi(\alpha) := f(\vct{x}_k+\alpha \vct{p}_k).
-\end{equation*}
-In practice, minimizing this function is not always the most efficient thing to do (or even possible). One would rather choose a step length that satisfies some criteria that ensure that the sequence $\vct{x}_k$ converges to a minimizer $\vct{x}^*$ under suitable conditions on a function $f$. One such condition is a \textbf{sufficient decrease condition},
-\begin{equation*}
- f(\vct{x}_k+\alpha \vct{p}_k) \leq f(\vct{x}_k) + c \alpha\ip{\nabla f(\vct{x}_k)}{\vct{p}_k} =: \ell(\alpha),
-\end{equation*}
-with $c\in (0,1)$. Note that $\oldphi'(0) = \ip{\nabla f(\vct{x}_k)}{\vct{p}_k} <0$, because $\vct{p}_k$ is a descent direction. The function $\ell(\alpha)$ is therefore a line through $f(\vct{x}_k)$ with a slope $c \ip{\nabla f(\vct{x}_k)}{\vct{p}_k} = c\oldphi'(0)>\oldphi'(0)$. To see why this condition is necessary, consider the function $f(x)=x^2-1$ and the sequence $x_k = \sqrt{1+1/k}$ for $k\geq 1$. Clearly, the sequence $f(\vct{x}_k)=1/k$ decreases, but fails to converge to the minimizer $f(0)=-1$.
-
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.6\textwidth]{images/armillo.png}
-\caption{The sufficient decrease condition}
-\end{figure}
-
-The sufficient decrease condition (also called Armijo condition) can always be satisfied if $\alpha$ is chosen small enough, but the algorithm may become very slow. It is therefore common to supplement the sufficient descent condition with other criteria that guarantee that sufficient progress is made. Two of the commonly used criteria are:
-
-\begin{itemize}
-\item the Wolfe conditions, which add a {\em curvature condition}
-\begin{equation*}
-\oldphi'(\alpha)\geq \tilde{c} \oldphi'(0)
-\end{equation*}
-for some $\tilde{c}\in (c,1)$, which gives a lower bound on the slope of the new point;
-\item the Armijo-Goldstein conditions, which state that a step length $\alpha_k$ should additionally satisfy bound 
-\begin{equation}\label{eq:armgold}
-  f(\vct{x}_k)+(1-c)\alpha_k \ip{\nabla f(\vct{x}_k)}{\vct{p}_k} \leq f(\vct{x}_k+\alpha_k \vct{p}_k),
-\end{equation}
-which gives a lower bound on the step size.
-\end{itemize}
-
-Another common approach is \textbf{backtracking}: in this method one uses a high initial value of $\alpha$ (for example, $\alpha=1$), and then decreases it until the sufficient descent condition is satisfied. 
-
-\begin{example}
- Consider the function $f\colon \R^2\to \R$ defined by $f(\vct{x}) = x_1^2+x_2^2$. The gradient is $\nabla f(\vct{x}) = 2\vct{x}$, and the $\phi$ function at $\vct{x}_k=(1,1)^{\trans}$
- \begin{equation*}
-  \phi(\alpha) = f(\vct{x}_k-\alpha \nabla f(\vct{x}_k)) = 2(1-2\alpha)^2, \quad \phi'(\alpha) = -8(1-2\alpha).
- \end{equation*}
-The Armijo-Goldstein conditions~\eqref{eq:armgold} then state that we can choose $\alpha$ such that
-\begin{equation*}
- 2(1-4(1-c)\alpha) \leq 2(1-2\alpha)^2 \leq 2(1-4c\alpha).
-\end{equation*}
-The optimal step length in this case would be $\alpha=0.5$.
-\end{example}
 
 
 %-----------------------------------------------------------------------
