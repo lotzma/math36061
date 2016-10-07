@@ -1,0 +1,90 @@
+\documentclass{article}
+% Include macros here
+\input{../../../Work/macros/macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{2}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{October 10, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} We implement the function $f(x)$ in MATLAB as follows
+\begin{lstlisting}[frame=single]
+  f = @(x)((x-1).^6);
+ df = @(x)(6*(x-1).^5);
+ddf = @(x)(30*(x-1).^4);
+\end{lstlisting}
+We then run the code ({\tt pr21.m}) implementing Newton's method with the three stopping criteria and with tolerance $\e=10^{-6}$. The results are:
+\begin{itemize}
+ \item[(a)] Iterations: 66, Solution found: $\overline{x}=1.0000$;
+ \item[(b)] Iterations: 24, Solution found: $\overline{x}=1.0425$;
+ \item[(c)] Iterations: 100, Solution found: $\overline{x}=1.0000$.
+\end{itemize}
+While (b) was the fastest, the accuracy was not so great. Stopping criterium (a) is reasonable, since in view of the quadratic convergence, the inequality
+\begin{equation*}
+ \norm{\vct{x}_{k+1}-\vct{x}_k}\geq \norm{\vct{x}_k-\vct{x}^*}-\norm{\vct{x}_{k+1}-\vct{x}^*} \geq \norm{\vct{x}_k-\vct{x}^*}-M\norm{\vct{x}_{k}-\vct{x}^*}^2
+\end{equation*}
+shows that the difference of successive iterates gives a good bound on the error. Criterium (b) is problematic, as the function can have a very flat slope while still being far away from the minimizer, as the example shows.
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{flat_cropped.pdf}
+\end{figure}
+This issue is related to the notion of conditioning of the function $f$. Criterium (c) always has the same running time, and 100 iterations would normally be more than enough for Newton's method. However, this is a very pessimistic bound, and takes much longer than necessary.
+
+\solution{pr:2} The code is contained in {\tt pr22.m}, which makes use of the functions {\tt newton2d.m}, {\tt graddescco.m}, and {\tt graddescbt.m}. The problems are solved with tolerance $\e=10^{-6}$. Gradient descent with constant step length $0.1$ takes 52 iterations and we get plot in Figure~\ref{fig:1}.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{gdcotraj_cropped.pdf}
+ \caption{Gradient descent with step size $0.1$}\label{fig:1}
+\end{figure}
+
+Gradient descent with backtracking takes 31 iterations and we get the trajectory of Figure~\ref{fig:2}.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{gdbt_cropped.pdf}
+ \caption{Gradient descent with backtracking}\label{fig:2}
+\end{figure}
+
+Finally, Newton's method only takes 6 iterations and the trajectory is pictured in Figure~\ref{fig:3}.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{newtontraj_cropped.pdf}
+ \caption{Newton's method}\label{fig:3}
+\end{figure}
+
+\solution{pr:3} 
+\begin{itemize}
+ \item[(a)] The verification follows from applying the definition of convexity.
+\item[(b)] The code {\tt pr23.m} minimizes the function using Newton's method with starting point $(a,b)=(0.5,0.5)$ and tolerance $10^{-6}$. The number of iterations is 6 and the solution is $(a,b) = (1.2533,-3.2975)$. Plotting the probability of passing the exam as a function of the number of preparation hours, with the parameters $(a,b)$, gives the curve in Figure~\ref{fig:log}.
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{log_cropped.pdf}
+ \caption{Probability of passing exam as function of preparation}\label{fig:log}
+\end{figure}
+
+\end{itemize}
+
+\end{document}

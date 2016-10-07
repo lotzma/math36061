@@ -75,7 +75,7 @@ where we used the symmetry of $\mtx{A}$ (i.e., $a_{ij}=a_{ji}$). The gradient an
  \nabla f(\vct{x}) = \mtx{A}\vct{x}+\vct{b}, \quad \nabla^2f(\vct{x}) = \mtx{A}.
 \end{equation*}
 
-An interesting special case is when the~\eqref{eq:quad} arises in the form
+An interesting special case is when the quadratic function~\eqref{eq:quad} arises in the form
 \begin{equation}\label{eq:least}\tag{3}
  f(\vct{x}) = \frac{1}{2}\norm{\mtx{A}\vct{x}-\vct{b}}_2^2. 
 \end{equation}
@@ -93,34 +93,29 @@ so that the function~\eqref{eq:least} is convex. From~\eqref{eq:normquad} we als
  \mtx{A}^{\trans}(\mtx{A}\vct{x}-\vct{b}).
 \end{equation*}
 
-\solution{pr:3} 
+\solution{pr:1} 
 \begin{itemize}
-\item[(a)] The unit circle with respect to the $\infty$-norm is the square with corners $(\pm 1,\pm 1)^{\trans}$.
-\item[(b)] The trick in transforming the unconstrained problem
-\begin{equation}\label{eq:linfty}\tag{5}
- \minimize \norm{\mtx{A}\vct{x}-\vct{b}}_{\infty}
-\end{equation}
-into a constrained linear programming problem is to characterise the $\infty$-norm as the solution of a minimization problem. In fact, for any set of numbers $x_1,\dots,x_n$,
-\begin{equation*}
- \max_{1\leq i\leq n} |x_i| = \min_{\forall i\colon |x_i|\leq t} t.
-\end{equation*}
-Put simply, the {\em maximum} of a set of non-negative numbers is the {\em smallest} upper bound on these numbers. We can further replace the condition $|x_i|\leq t$ by $-t\leq x_i\leq t$, so that the problem~\eqref{eq:linfty} becomes
-
-\begin{align}\label{eq:linprog}\tag{6}
-\begin{split}
-\mathop{\text{minimize}}_{(\vct{x},t)} \quad & t \\
-\subjto & -t \leq \vct{a}_1^{\trans} \vct{x} \leq t\\
-& \cdots\\
-& -t \leq \vct{a}_m^{\trans}\vct{x} \leq t,
-\end{split}
-\end{align}
-where $\mtx{a}_i^{\trans}$ are the rows of the matrix $\mtx{A}$. This problem can be brought into {\em standard form} by replacing each condition with the pair of conditions
-\begin{align*}
- \vct{a}_i^{\trans}\vct{x}-t &\leq 0\\
- -\vct{a}_i^{\trans}\vct{x}-t & \leq 0.
-\end{align*}
-The solution $\vct{x}$ of Problem~\eqref{eq:linfty} can be read off the solution $(\vct{x},t)$ of Problem~\eqref{eq:linprog}.
+ \item[(a)] This set is not convex: take $\vct{x}=(1,0,0)^{\trans}$ and $\vct{y}=(-1,0,0)^{\trans}$, then $\frac{1}{2}\vct{x}+\frac{1}{2}\vct{y}=\zerovct \not\in S$.
+ \item[(b)] This set is convex: if $\vct{x},\vct{y}\in S$, then $1\leq x_1-x_2<2$ and $1\leq y_1-y_2<2$, and
+ \begin{equation*}
+  \lambda x_1+(1-\lambda)y_1-\lambda x_2-(1-\lambda)y_2 = \lambda (x_1-x_2)+(1-\lambda)(y_1-y_2)<\lambda 2+(1-\lambda)2 = 2,
+ \end{equation*}
+ with the same argument giving the lower bound. 
+ \item[(c)] This set is convex. In fact, $S$ is the unit ball of the $1$-norm
+ \begin{equation*}
+  \norm{\vct{x}}_1 = \sum_{i=1}^d |x_i|.
+ \end{equation*}
+ Given $\vct{x},\vct{y}\in S$,
+ \begin{equation*}
+  \norm{\lambda \vct{x}+(1-\lambda)\vct{y}}_1 \leq \lambda \norm{\vct{x}}_1+(1-\lambda)\norm{\vct{y}}_1 \leq \lambda \cdot 1+(1-\lambda)\cdot 1 = 1.
+ \end{equation*}
+ \item[(d)] This set is convex. Here, one needs to show that convex combinations preserve symmetry and positive definiteness of a matrix. The symmetry is clear. As for the positive definiteness, let $\vct{x}\neq \zerovct$ be given. Then
+ \begin{equation*}
+  \vct{x}^{\trans}(\lambda \mtx{A}+(1-\lambda)\mtx{B})\vct{x} = \lambda \vct{x}^{\trans}\mtx{A}\vct{x}+(1-\lambda)\vct{x}^{\trans}\mtx{B}\vct{x} \geq 0,
+ \end{equation*}
+which shows that positive definiteness is also preserved.
 \end{itemize}
+
 
 \solution{pr:2}
 \begin{itemize}
