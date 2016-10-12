@@ -14,258 +14,147 @@
 
 \chapter*{Lecture 6}
 \addcontentsline{toc}{chapter}{Lecture 6}
-\addtocounter{chapter}{1}
-\addtocounter{section}{-1}
+\addtocounter{chapter}{6}
+\addtocounter{section}{0}
 %\numberwithin{section}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{theorem}{chapter}
 
-% \epigraph{}{--- \textup{}}
-\epigraph{``[A]lmost every ``convex'' idea can be explained by a two-dimensional picture.''}{--- \textup{Alexander Barvinok}}
-
-In this lecture we begin our study of the theory underlying constrained convex optimization. One way to define a {\em convex optimization problem} is
-\begin{align*}
-\begin{split}
- \minimize & f(\vct{x})\\
- \subjto & g_1(\vct{x})\leq 0\\
- & \cdots \\
- & g_m(\vct{x})\leq 0\\
- & \vct{x}\in \Omega
- \end{split}
-\end{align*}
-where $f,g_1,\dots,g_m\colon \R^d\to \R$ are {\em convex} functions and $\Omega\subseteq \R^d$ is a {\em convex} set. The special case where the $f$ and the $g_i$ are linear functions and $\Omega=\R^d$ is known as linear programming, and is studied first. Before embarking on the study of models and algorithms for convex optimization, we need to study convex sets in more depth.
-
-\section{Convex sets}
-We recall the definition of a convex set.
-\begin{definition}
- A set $C\subseteq \R^d$ is a {\em convex set}, if for all $\vct{x},\vct{y}\in C$ and $\lambda\in [0,1]$, $\lambda\vct{x}+(1-\lambda)\vct{y}\in C$. In words, for every two points in $C$, the line joining them is also in $C$. A compact (closed and bounded) convex set is called a {\em convex body}.
-\end{definition}
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[thick,rotate=15,scale=0.8]
-\filldraw[color=black, fill=blue!5, very thick, rotate=15](0,0) ellipse (2 and 1.2);
-
-\node (A1) at (-1,0)  [label=180:$\vct{x}$] {};
-\node (A2) at (1,0)   [label=0:$\vct{y}$] {};
-\filldraw[black] (-0.9,0) circle (2pt);
-\filldraw[black] (0.9,0) circle (2pt);
-
-\draw[color=blue,thick] (A1) -- (A2);
-\end{tikzpicture}
-\end{figure}
-
-We will denote by $\mathcal{C}(\R^d)$ the collection of convex sets and by $\mathcal{K}(\R^d)$ the collection of convex bodies. The following Lemma is left as an exercise.
-
-\begin{lemma}
- Let $C,D\in \mathcal{C}(\R^d)$ be convex sets. Then the following are also convex.
- \begin{itemize}
-  \item $\displaystyle C\cap D$;
-  \item $\displaystyle C+D=\{\vct{x}+\vct{y} \mid \vct{x}\in C, \vct{y}\in D\}$;
-  \item $\displaystyle \mtx{A}C=\{\mtx{A}\vct{x} \mid \vct{x}\in C\}$, where $\mtx{A}\in \R^{m\times d}$.
- \end{itemize}
-\end{lemma}
-
-The {\em convex hull} $\conv{S}$ of a set $S$ is the intersection of all convex sets containing $S$. Clearly, if $S$ is convex, then $S=\conv{S}$.
-
-\begin{example}
- Let $S=\{(1,1)^{\trans},(1,-1)^{\trans},(-1,1)^{\trans},(-1,-1)^{\trans},(0,0)^{\trans}\}$. The convex hull of this set is the square.
- \begin{figure}[h!]
-\centering
-\begin{tikzpicture}[thick,scale=1]
-\node (A1) at (-1.1,-1.1)  [label=195:{(-1,-1)}] {};
-\node (A2) at (1.1,1.1)   [label=45:{(1,1)}] {};
-\node (A3) at (-1,1)  [label=135:{(-1,1)}] {};
-\node (A4) at (1,-1)   [label=-45:{(1,-1)}] {};
-\node (A5) at (0,0)   [label=90:{(0,0)}] {};
-\draw[color=black!15, fill=blue!5, thick, rounded corners=2pt, dashed] (A1) rectangle (A2);
-\filldraw[black] (1,1) circle (2pt);
-\filldraw[black] (1,-1) circle (2pt);
-\filldraw[black] (-1,1) circle (2pt);
-\filldraw[black] (-1,-1) circle (2pt);
-\filldraw[black] (0,0) circle (2pt);
-\end{tikzpicture}
-\caption{A convex hull of five points.}
-\end{figure}
-\end{example}
-
-A {\em convex combination} of points $\vct{x}_1,\dots,\vct{x}_k$ is a linear combination
+In this lecture we will embark on one of the most important modern applications of convex optimization: \textbf{machine learning}. The goal of machine learning is to develop methods to automatically {\em learn} a function
 \begin{equation*}
- \sum_{i=1}^k \lambda_i \vct{x}_i
+ h\colon \mathcal{X}\to \mathcal{Y},
 \end{equation*}
-such that $\lambda_i\geq 0$ and $\sum_{i=1}^k \lambda_i = 1$. It can be shown inductively that convex sets are closed under convex combinations: any convex combination of points in $C\in \mathcal{C}(\R^d)$ is still in $C$. In fact, the set of all convex combinations of points in a set $S$ is the convex hull of $S$.
+where $\mathcal{X}$ is a space of {\em inputs} or {\em features}, and $\mathcal{Y}$ consists of {\em outputs} or {\em responses}. The input space $\mathcal{X}$ is usually an $\R^n$, though the inputs could represent anything such as images, texts, emails, genome sequences, or networks, financial time series, or demographic data. The output could be either \textbf{quantitative} values, such as a temperature or the amount of some substance in the body, or \textbf{qualitative} or \textbf{categorical}, such as {YES, NO} or $\{0,1,2,3,4,5,6,7,8,9\}$ (for recognising spam or handwritten digits, respectively). The first type of problem is usually called \textbf{regression}, while the latter is called \textbf{classification}. Machine learning techniques underlie much of modern technology, from car electronics to online product recommendation systems and search engines.
 
-\begin{lemma}
- Let $S$ be a set. Then 
- \begin{equation*}
-  \conv{S} = \{\vct{x}\in \R^d \mid \vct{x}=\sum_{i=1}^k \lambda_i \vct{x}_k, \ \vct{x}_i\in S, \ \sum_{i=1}^k \lambda_i = 1, \ \lambda_i\geq 0\}.
- \end{equation*}
-\end{lemma}
-
-\begin{example}
-A hyperplane, defined as the solution set of one linear equations,
+\section{Supervised Learning}
+In supervised learning, we have at our disposal a collection of input-output pairs
 \begin{equation*}
- H = \{\vct{x} \mid \ip{\vct{a}}{\vct{x}} = b\},
+  (\vct{x}_i, y_i) \in \mathcal{X}\times \mathcal{Y}, \ 1\leq i\leq m,
 \end{equation*}
-is a convex set.
-Define the halfspaces $H_+$ and $H_-$ as the two sides that $H$ divides $\R^d$ into:
-\begin{equation*}
- H_- = \{\vct{x}\mid \ip{\vct{a}}{\vct{x}}\leq b\}, \quad H_+ = \{\vct{x}\mid \ip{\vct{a}}{\vct{x}}\geq b\}
-\end{equation*}
-These are also convex sets. 
+and the goal is to {\em learn} a function $h\colon \mathcal{X}\to \mathcal{Y}$ from this data. 
+The given pairs $\{(\vct{x}_i,y_i)\}_{1\leq i\leq m}$ are called the \textbf{training set}.
+
+\begin{example}(Handwriting recognition)
+Given a dataset of pixel matrices, each representing a grey-scale image, with associated \textbf{labels} telling us for each image the number it represents, the task is to use this to train a computer program to recognise new numbers. Such classification tasks are often carried out using \textbf{deep neural networks}. 
+
 \begin{figure}[h!]
 \centering
-\begin{tikzpicture}[thick,rotate=-45]
-\coordinate (A1) at (-1.1,0);
-\coordinate (A2) at (1.1,0);
-\coordinate (A3) at (0,-1.2);
-\coordinate (A4) at (0,1);
-\coordinate (A5) at (1.1,-1);
-
-\draw[color=black!0, fill=blue!5, thick, dashed] (A1) rectangle (A5);
-\draw[color=black, thick] (A1) -- (A2);
-\draw[color=black, thick,->] (A3) -- (A4);
-\filldraw[black] (A3) circle (2pt);
-
-\node (A) at (0.2,1) [label=90:$\vct{a}$] {};
-\node (H) at (1,0) [label=0:{$\ip{\vct{a}}{\vct{x}}=b$}] {};
-\node (Hm) at (-1.2,-0.5) [label=270:{$\ip{\vct{a}}{\vct{x}}\leq b$}] {};
-\end{tikzpicture}
-\caption{Hyperplane and halfspace}
-\end{figure}
-\end{example}
-
-\begin{example}
- Euclidean balls and ellipsoids are common examples of convex sets. Let $\mtx{P}$ be a positive semidefinite symmetric matrix. Then an ellipsoid with center $\vct{x}_0$ is a set of the form
- \begin{equation*}
-  \mathcal{E} = \{\vct{x} \mid \ip{\vct{x}-\vct{x}_0}{\mtx{P}^{-1}(\vct{x}-\vct{x}_0)}\leq 1\}.
- \end{equation*}
-A Euclidean unit ball is the special case $\mtx{P}=\mtx{I}$.
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[thick,rotate=15,scale=0.8]
-\filldraw[color=black, fill=blue!5, very thick, rotate=15](0,0) ellipse (2 and 1.2);
-
-\node (A1) at (0,0)  [label=45:{$\vct{x}_0$}] {};
-\filldraw[black] (0,0) circle (2pt);
-\end{tikzpicture}
-\caption{An ellipse}
-\end{figure}
-\end{example}
-
-\begin{example}
- A {\em convex cone} is a set $C$ such that for all $\vct{x},\vct{y}$ and $\lambda\geq 0, \mu\geq 0$,
- $\lambda \vct{x}+\mu \vct{y}\in C$. It is easily verified that such a set is convex. Three important cones are the following:
- \begin{enumerate}
-  \item The non-negative orthant $\R^d_{+}=\{\vct{x}\in \R^d \mid x_i\geq 0, 1\leq i\leq d\}$,
-  \item The second order (ice cream) cone (or Lorentz cone)
-  \begin{equation*}
-   C_{\alpha} = \{\vct{x} \mid \sum_{i=1}^{d-1}x_i^2\leq x_d^2\},
-  \end{equation*}
-  \item The cone $\mathcal{S}_{+}^d$ of positive semidefinite symmetric matrices.
- \end{enumerate}
-\begin{figure}[h!]
-\centering
- \includegraphics[width=0.6\textwidth]{images/cones.png}
- \caption{The orthant and the second order cone}
+\includegraphics[width=0.8\textwidth]{images/letters.jpg}
 \end{figure}
 
 \end{example}
 
-
-Possibly the most important result in convex geometry is the {\em hyperplane separation theorem}.  We first need the following.
-
-\begin{lemma}\label{le:obtuse}
- Let $C$ be a non-empty convex set and $\vct{x}\not\in C$. Then there exists a point $\vct{y}\in C$ that minimizes the distance $\norm{\vct{x}-\vct{y}}$. Moreover, for all $\vct{z}\in C$ we have
- \begin{equation*}
-  \ip{\vct{z}-\vct{y}}{\vct{x}-\vct{y}}\leq 0.
- \end{equation*}
-In words, the vectors $\vct{z}-\vct{y}$ and $\vct{x}-\vct{y}$ form an obtuse angle.
-\end{lemma}
-
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[thick,rotate=30,scale=0.8]
-\filldraw[color=black, fill=blue!5, very thick](0,0) ellipse (2 and 1.2);
-\node (A1) at (0,-3)  [label=0:{$\vct{x}$}] {};
-\node (A2) at (0,-1.2)  [label=90:{$\vct{y}$}] {};
-%\node (A3) at (0,-2.5)  [label=180:{$\vct{a}$}] {};
-\node (A4) at (-1,0)  [label=180:{$\vct{z}$}] {};
-\filldraw[black] (0,-3) circle (2pt);
-\filldraw[black] (0,-1.2) circle (2pt);
-\filldraw[black] (-1,0) circle (2pt);
-\draw[color=black, thick, <-] (0,-2.9) -- (0,-1.2);
-\draw[color=black, thick, <-] (-0.9,-0.1) -- (0,-1.2);
-\end{tikzpicture}
-\caption{Internal and external directions} \label{fig:neg}
-\end{figure}
-
-\begin{proof}
- Since $C\neq \emptyset$, there exists $r>0$ such that the ball $B(\vct{x},r):=\{\vct{y}\in \R^d \mid \norm{\vct{y}-\vct{x}}\leq \e\}$ intersected with $C$ is not empty. Since $K:=C\cap B(\vct{x},r)$ is compact (closed and bounded) and the function $\norm{\vct{y}-\vct{x}}$ is continuous on $K$, it has a minimizer $\vct{y}\in K$. For the second claim, note that since $C$ is convex, for every $\lambda\in [0,1]$,
- \begin{equation*}
-  \vct{w} = \lambda \vct{z}+(1-\lambda)\vct{y} \in C.
- \end{equation*}
-For the distance between $\vct{z}$ and $\vct{x}$ we then get
-\begin{align*}
- \norm{\vct{w}-\vct{x}}^2  &= \norm{\lambda\vct{z}+(1-\lambda) \vct{y}-\vct{x}}^2 = \norm{\lambda (\vct{z}-\vct{y})-(\vct{x}-\vct{y})}^2\\
- &= \lambda^2\norm{\vct{z}-\vct{y}}^2-2\lambda \ip{\vct{z}-\vct{y}}{\vct{x}-\vct{y}}+\norm{\vct{x}-\vct{y}}^2.
-\end{align*}
-We now prove the claim by contradition. Assume $\ip{\vct{z}-\vct{y}}{\vct{x}-\vct{y}}>0$. Then we can choose $\lambda$ such that
+\begin{example}(Linear regression)
+Recall from Lecture 1 the problem of finding a function of the form
 \begin{equation*}
- 0< \lambda < \min\left\{ \frac{2\ip{\vct{x}-\vct{y}}{\vct{z}-\vct{y}}}{\norm{\vct{z}-\vct{y}}^2} , 1\right\}.
+  Y = \beta_0+\beta_1X_1+\cdots +\beta_pX_p.
 \end{equation*}
-With such a $\lambda$ we get
+Given a set of input-output pairs $(\vct{x}_i,y_i)$, arranged in a matrix $\mtx{X}$ and a vector $\vct{y}$, we saw that we could {\em guess} the correct $\vct{\beta} = (\beta_0,\beta_1,\dots, \beta_p)^{\trans}$ by solving the {\em least-squares} optimization problem
 \begin{equation*}
- \norm{\vct{w}-\vct{x}}^2 = \lambda^2\norm{\vct{z}-\vct{y}}^2-2\lambda \ip{\vct{z}-\vct{y}}{\vct{x}-\vct{y}}+\norm{\vct{x}-\vct{y}}^2 < \norm{\vct{x}-\vct{y}}^2.
+  \mathop{\minimize}_{\vct{\beta}} \norm{\mtx{X}\vct{\beta}-\vct{y}}_2^2.
 \end{equation*}
-This inequality, however, contradicts the assumption that $\vct{y}$ is a closest point, so that
-$\ip{\vct{z}-\vct{y}}{\vct{x}-\vct{y}}\leq 0$ has to hold.
-\end{proof}
+By now, we know how to solve this problem using gradient descent.
+\end{example}
 
-In what follows write $\inter S$ for the {\em interior} of a set $S$.
+\begin{example}
+In text classification, the task is to decide to which of a given set of categories a given text belongs. The training data consists of a {\em bag of words}: this is a large sparse matrix, whose
+columns represent words and the rows represent articles, with the $(i,j)$-th entry containing the number of times word $j$ is contained in text $i$. 
 
-\begin{theorem}
- Let $C$ be a closed convex set and $\vct{x}\not\in C$. Then there exists a hyperplane $H$ such that $C\subset \inter H_-$ and $\vct{x}\in \inter H_+$. 
-\end{theorem}
+\begin{center}
+\begin{tabular}{|r|c|c|}
+ & Rooney & Boris \\
+\hline 
+ Article 1 & 5 & 0 \\
+ Article 2 & 1 & 7 \\
+\end{tabular}
+\end{center}
 
-\begin{figure}[h!]
-\centering
-\begin{tikzpicture}[thick,rotate=30,scale=0.8]
-\filldraw[color=black, fill=blue!5, very thick](0,0) ellipse (2 and 1.2);
+For example, in the above set we would classify the first article as "Sports" and the second one as "Politics". One such training dataset is the
+Reuters Corpus Volume I (RCV1), an archive of over 800,000 categorised newswire stories.
 
-\node (A1) at (0,-2)  [label=0:{$\vct{x}$}] {};
-\filldraw[black] (0,-2) circle (2pt);
-\draw[color=black, thick] (-3,-1.5) -- (3,-1.5);
-\end{tikzpicture}
-\caption{A separating hyperplane}
-\end{figure}
-
-\begin{proof}
- Let $\vct{y}\in C$ be a nearest point to $\vct{x}$ in $C$, i.e., a point such that for all other $\vct{z}\in C$, $\norm{\vct{x}-\vct{y}}\leq \norm{\vct{x}-\vct{z}}$. Define
- \begin{equation*}
-  \vct{a}= \vct{x}-\vct{y}, \quad b = (\norm{\vct{x}}^2-\norm{\vct{y}}^2)/2.
- \end{equation*}
-We aim to show that $\ip{\vct{a}}{\vct{x}} = b$ defines a separating hyperplane. 
-
-For this we have to show that
-\begin{enumerate}
- \item $\ip{\vct{a}}{\vct{x}}>b$;
- \item For all $\vct{z}\in C$, $\ip{\vct{a}}{\vct{z}}<b$.
-\end{enumerate}
-For (1), note that 
+A typical binary classifier for such a problem would be a \textbf{linear classifier} of the form
 \begin{equation*}
- \ip{\vct{a}}{\vct{x}} = \ip{\vct{x}-\vct{y}}{\vct{x}}>\ip{\vct{x}-\vct{y}}{\vct{x}}-\frac{1}{2}\norm{\vct{x}-\vct{y}}^2 = \frac{1}{2}(\norm{\vct{x}}^2-\norm{\vct{y}}^2) = b.
-\end{equation*}
-To prove (2), assume on the contrary that there exists a $\vct{z}\in C$ such that $\ip{\vct{a}}{\vct{z}}\geq b$. We know that the point $\vct{y}\in C$ satisfies the inequality (2), since
+  h(\vct{x}) = \vct{w}^{\trans}\vct{x}-\tau,
+\end{equation*} 
+with $\vct{w}\in \R^n$ and $\tau\in \R$. Given a text, represented as a row of the dataset $\vct{x}$, it is classified into one of two classes $\{+1,-1\}$, depending on whether $h(\vct{x})>0$ or $h(\vct{x})<0$. 
+\end{example}
+
+Suppose we have the training data $\{\vct{x}_i,y_i\}_{1\leq i\leq m}$ and we found a candidate function $h\colon \mathcal{X}\to \mathcal{Y}$. How do we assess if this is a good fit? One usually assigns to the problem a \textbf{loss function} $\ell\colon \mathcal{Y}\times \mathcal{Y}\to \R_+$ that measures the mismatch of a prediction. One would then aim to find a function $h$ among a set of candidates that minimizes the loss when applying the function to the training data:
+
 \begin{equation*}
- \ip{\vct{a}}{\vct{y}} < \ip{\vct{a}}{\vct{y}}+\frac{1}{2}\norm{\vct{a}}^2 = \ip{\vct{a}}{\vct{y}}+\frac{1}{2}\norm{\vct{x}-\vct{y}}^2 = b.
+  \mathop{\minimize}_{h} \ \frac{1}{m} \sum_{i=1}^m \ell(h(\vct{x}_i,y_i).
 \end{equation*}
-Therefore, 
+
+The form of the loss function depends on the problem at hand, but two typical candidates are the \textbf{square error} for regression problems,
 \begin{equation*}
- \ip{\vct{a}}{\vct{z}-\vct{y}} = \ip{\vct{a}}{\vct{z}}-\ip{\vct{a}}{\vct{y}} > b-b = 0,
+  \ell(h(\vct{x}),y) = (h(\vct{x})-y)^2,
 \end{equation*}
-but this contradict Lemma~\ref{le:obtuse}. We therefore conclude $\ip{\vct{a}}{\vct{z}}<b$. The separating hyperplane $H$ is thus defined by the equation $\ip{\vct{a}}{\vct{x}}=b$. 
-\end{proof}
+and the indicator loss function
+\begin{equation*}
+  \mathbf{1}\{h(\vct{x})\neq y\},
+\end{equation*}
+where $\mathbf{1}\{A\}$ is the indication function, which takes the value $1$ if $A$ is true, and $0$ else. As this function is not continuous, in practice one often encounters the {\em log loss} function,
+\begin{equation*}
+  \ell(h(\vct{x}),y) = \log\left(1+e^{-h(\vct{x})y} \right).
+\end{equation*}
+Note that if $h(\vct{x})$ and $\vct{y}$ have the same sign (corresponding to a match), then the value of this function will be close to zero. 
+
+Suppose we have a binary classification task at hand, with $\mathcal{Y}=\{-1,1\}$. We could {\em learn} the following function from our data:
+\begin{equation*}
+  h(\vct{x}) = \begin{cases}
+    y_i & \text{ if } \vct{x}=\vct{x}_i,\\
+    1 & \text{ otherwise.}
+  \end{cases}
+\end{equation*}
+The \textbf{empirical misclassification risk} in for this problem is then $0$,
+\begin{equation*}
+  R(h) = \frac{1}{m} \sum_{i=1}^m \mathbf{1}\{h(\vct{x}_i\neq y_i\} = 0.
+\end{equation*}
+Nevertheless, this is not a good classifier: it will not perform very well outside of the training set. This is an example of \textbf{overfitting}: when the function is adapted too closely to the seen data. To remedy this, one often (randomly) splits the available data into a \textbf{training set} and a \textbf{test set}. The training set is used to find the function $h$, while the test set is for testing how good it is (in practise, one often adds a validation set, used to tune some parameters of the problem).
+
+\begin{example}
+In the linear regression problem with the quadratic loss function, we end up with the minimization problem
+\begin{equation*}
+  \mathop{\minimize}_{\vct{\beta}} \frac{1}{n} \sum_{i=1}^n (\vct{x}_i^{\trans}\vct{\beta}-y_i)^2 =\frac{1}{n}\norm{\mtx{X}\vct{\beta}-\vct{y}}_2^2.
+\end{equation*}
+This is precisely the problem encountered in Lecture 1.
+\end{example}
+
+\begin{example}
+In the example of classifying a text into two classes using a linear classifier, we can look at the problem
+\begin{equation*}
+ \mathop{\minimize}_{\vct{w}, \tau} \frac{1}{n}\sum_{i=1}^m \mathbf{1}\{\vct{w}^{\trans}\vct{x}_i-\tau \neq y_i\}.
+\end{equation*}
+Since this function is not smooth or even continuous, we can work with the log-loss function described above,
+\begin{equation*}
+\mathop{\minimize}_{\vct{w}, \tau} \frac{1}{n} \sum_{i=1}^m \ell(\vct{w}^{\trans}\vct{x}_i-\tau, y_i).
+\end{equation*}
+This function can, in principle, be minimized using gradient descent or Newton's method. 
+\end{example}
+
+We have seen how a machine learning problem can be turned into an optimization problem. Unfortunately, when the amount of data is large, computing gradients and Hessians of the resulting functions can be very expensive. Suppose the function $h$ depends on parameters $\vct{w}$ which we want to optimize over, $h=h(\vct{x}; \vct{w})$, and denote the composition of the loss function $\ell$ with $h$ on the data $\vct{x}_i$ by
+\begin{equation*}
+  f_i(\vct{w}) := \ell(h(\vct{x}_i; \vct{w}),y_i).
+\end{equation*}
+We can then write our optimization problem as
+\begin{equation*}
+  \mathop{\minimize}_{\vct{w}} F(\vct{w}), \quad F(\vct{w}) = \frac{1}{m} \sum_{i=1}^m f_i(\vct{w}).
+\end{equation*}
+The gradient is then
+\begin{equation*}
+  \nabla F(\vct{w}) = \frac{1}{m} \sum_{i=1}^n \nabla f_i(\vct{w}).
+\end{equation*}
+For large datasets (for example, $m>10^6$ is not uncommon), computing all the gradients in each step is highly ineffective.
+
+An old algorithm that has recently been revived in light of big data is \textbf{stochastic gradient descent}. The idea is to compute, at each step, only the gradient of {\em one} of the summands of the loss function:
+
+\begin{equation*}
+  \vct{w}_{k+1} = \vct{w}_k-\alpha_k \nabla f_{i_k}(\vct{w}_k),
+\end{equation*}
+where the index $i_k$ is {\em chosen at random} from $\{1,\dots,m\}$ at each step. 
+
+Each step of this algorithm is clearly faster than gradient descent, but does it even work? It turns out that this algorithm converges quickly and that it is surprisingly effective on large datasets.
+
 
 % %-----------------------------------------------------------------------
 % % End of chap1.tex
