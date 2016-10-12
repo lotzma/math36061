@@ -1,6 +1,6 @@
 \documentclass{article}
 % Include macros here
-\input{../../../Work/macros/macros}
+\input{macros}
 \usepackage{fancyhdr}
 %\include{macros}
 \usepackage{pifont}
@@ -22,17 +22,64 @@
 
 \pagestyle{fancy}
 \lhead{MATH36061}
-\chead{Convex Analysis}
-\rhead{October 10, 2015}
+\chead{Convex Optimization}
+\rhead{October 9, 2016}
 
 \begin{document} 
 \begin{center}
 {\Large {\bf Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-Problems in Part A come with solutions and should be tried at home. Problems in Part B will be discussed in class.
+Problems in Part A will be discussed in class.
+Problems in Part B come with solutions and should be tried at home. 
+
 
 \section*{Part A}
+
+\problem Let $\{\vct{x}_k\}_{k\geq 0}$ be a sequence of vectors in $\R^n$ and assume that this sequence converges linearly to some $\vct{x}^*\in \R^n$ with respect to a norm $\norm{\cdot}$,
+\begin{equation*}
+ \norm{\vct{x}_{k+1}-\vct{x}^*} \leq r\cdot \norm{\vct{x}_k-\vct{x}^*}, \quad k\geq 0,
+\end{equation*}
+for some constant $r\in (0,1)$. 
+\begin{itemize}
+ \item[(a)] Show that for $M=\norm{\vct{x}_0-\vct{x}^*}$, 
+ \begin{equation*}
+  \norm{\vct{x}_k-\vct{x}^*} \leq r^k \cdot M.
+ \end{equation*}
+\item[(b)] Let $\e>0$ be given. Show that if $N$ is an integer such that
+\begin{equation*}
+ N> \frac{1}{1-r}\left(\ln(M)+\ln\left(\frac{1}{\e}\right)\right),
+\end{equation*}
+then $\norm{\vct{x}_N-\vct{x}^*}\leq \e$. In words, $N$ iterations are sufficient to reach accuracy $\e$.
+\item[(c)] Now assume that the sequence converges quadratically,
+\begin{equation*}
+ \norm{\vct{x}_k-\vct{x}^*}\leq C\norm{\vct{x}_k-\vct{x}^*}^2
+\end{equation*}
+for some constant $C>0$. Show that
+\begin{equation*}
+ \norm{\vct{x}_k-\vct{x}^*}\leq C^k \cdot M^{2^k}.
+\end{equation*}
+How many steps will guarantee a solution up to an error $\e$?
+\end{itemize}
+
+ \problem Consider the function
+ \begin{equation*}
+  f(x) = \sqrt{x^2+1}.
+ \end{equation*}
+Determine a value $\overline{x}\in \R$ such that
+\begin{itemize}
+ \item for $x_0<\overline{x}$, Newton's method converges to a minimizer,
+ \item for $x_0>\overline{x}$, Newton's method does not converge.
+\end{itemize}
+What happens if $x_0=\overline{x}$ is chosen as starting point?
+ 
+ \problem Describe a steepest descent method with respect to the norm 
+ \begin{equation*}
+  \norm{\vct{x}}_{\infty} = \max_{1\leq i\leq n} |x_i|.
+ \end{equation*}
+What are the descent directions? How can the best descent direction be found?
+ 
+\section*{Part B}
 
 \problem Iterative algorithms will never find the exact solution, so it is important to have suitable criteria for stopping an algorithm. Given a tolerance $\e>0$, consider the following candidates for stopping criteria:
 \begin{itemize}
@@ -44,21 +91,17 @@ Apply Newton's method for minimizing the function
 \begin{equation*}
  f(x) = (x-1)^6
 \end{equation*}
-(in MATLAB, Python, or by hand) with each of the given stopping criteria. Which of these is the most efficient? In general, describe the benefits or disadvantages of each of these stopping criteria. 
+(in Python, MATLAB, or by hand) with each of the given stopping criteria. Which of these is the most efficient? In general, describe the benefits or disadvantages of each of these stopping criteria. 
 
-\problem When implementing descent algorithms one often uses {\em backtracking} to select a good step length. Given a descent direction $\vct{p}_k$, one first tries the step length $1$ and then successively scales it down until the {\em sufficient decrease} condition (right bound in Equation (3.2) from Lecture 3) is satisfied.
+\problem When implementing descent algorithms one often uses {\em backtracking} to select a good step length. Given a descent direction $\vct{p}_k$, one first tries the step length $1$ and then successively scales it down until the {\em sufficient decrease} condition (Lecture 4) is satisfied.
 
 Fixing a decrease parameter $c\in (0,1/2)$ and a scaling parameter $s\in (0,1)$, backtracking works as follows.
-\begin{figure}[h!]
-\begin{PseudoCode}
- $\alpha=1$;
- while $f(\vct{x}_k+\alpha \vct{p}_k)<f(\vct{x}_k)+\alpha \cdot c\cdot \ip{\vct{p}_k}{\nabla f(\vct{x}_k)}$
+\begin{itemize}
+\item $\alpha=1$;
+\item while $f(\vct{x}_k+\alpha \vct{p}_k) \geq f(\vct{x}_k)+\alpha \cdot c\cdot \ip{\vct{p}_k}{\nabla f(\vct{x}_k)}$: 
      $\displaystyle \alpha = \alpha\cdot s$;
- end
- $\displaystyle \vct{x}_{k+1} = \vct{x}_k+\alpha \vct{p}_k$
-\end{PseudoCode}
-\caption{Backtracking}
-\end{figure}
+\item $\displaystyle \vct{x}_{k+1} = \vct{x}_k+\alpha \vct{p}_k$
+\end{itemize}
 
 Consider the function
 \begin{equation*}
@@ -74,7 +117,7 @@ Using the starting point $\vct{x}_0=(-1,0.7)^{\trans}$, plot the trajectory of
 
 \begin{figure}[h!]
  \centering
- \includegraphics[width=0.6\textwidth]{contour_cropped.pdf}
+ \includegraphics[width=0.6\textwidth]{images/contour_cropped.pdf}
  \caption{Contour plot}\label{fig:contour}
 \end{figure}
 
@@ -116,51 +159,5 @@ Find the (negative) log likelihood function $f(a,b)$. Solve the corresponding mi
 \end{equation*}
 in two dimensions using either gradiend descent or Newton's method, and plot the resulting probability function~\eqref{eq:logprob}, giving the relationship of hours of study to probability of success.
 \end{itemize}
-
-\section*{Part B}
-
-\problem Let $\{\vct{x}_k\}_{k\geq 0}$ be a sequence of vectors in $\R^d$ and assume that this sequence converges linearly to some $\vct{x}^*\in \R^d$ with respect to a norm $\norm{\cdot}$,
-\begin{equation*}
- \norm{\vct{x}_{k+1}-\vct{x}^*} \leq r\cdot \norm{\vct{x}_k-\vct{x}^*}, \quad k\geq 0,
-\end{equation*}
-for some constant $r\in (0,1)$. 
-\begin{itemize}
- \item[(a)] Show that for $M=\norm{\vct{x}_0-\vct{x}^*}$, 
- \begin{equation*}
-  \norm{\vct{x}_k-\vct{x}^*} \leq r^k \cdot M.
- \end{equation*}
-\item[(b)] Let $\e>0$ be given. Show that if $N$ is an integer such that
-\begin{equation*}
- N> \frac{1}{1-r}\left(\ln(M)+\ln\left(\frac{1}{\e}\right)\right),
-\end{equation*}
-then $\norm{\vct{x}_N-\vct{x}^*}\leq \e$. In words, $N$ iterations are sufficient to reach accuracy $\e$.
-\item[(c)] Now assume that the sequence converges quadratically,
-\begin{equation*}
- \norm{\vct{x}_k-\vct{x}^*}\leq C\norm{\vct{x}_k-\vct{x}^*}^2
-\end{equation*}
-for some constant $C>0$. Show that
-\begin{equation*}
- \norm{\vct{x}_k-\vct{x}^*}\leq C^k \cdot M^{2^k}.
-\end{equation*}
-How many steps will guarantee a solution up to an error $\e$?
-\end{itemize}
-
- \problem Consider the function
- \begin{equation*}
-  f(x) = \sqrt{x^2+1}.
- \end{equation*}
-Determine a value $\overline{x}\in \R$ such that
-\begin{itemize}
- \item for $x_0<\overline{x}$, Newton's method converges to a minimizer,
- \item for $x_0>\overline{x}$, Newton's method does not converge.
-\end{itemize}
-What happens if $x_0=\overline{x}$ is chosen as starting point?
- 
- \problem Describe a steepest descent method with respect to the norm 
- \begin{equation*}
-  \norm{\vct{x}}_{\infty} = \max_{1\leq i\leq d} |x_i|.
- \end{equation*}
-What are the descent directions? How can the best descent direction be found?
- 
 
 \end{document}

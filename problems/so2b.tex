@@ -1,6 +1,6 @@
 \documentclass{article}
 % Include macros here
-\input{../../../Work/macros/macros}
+\input{macros}
 \usepackage{fancyhdr}
 %\include{macros}
 \usepackage{pifont}
@@ -21,79 +21,190 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{October 14, 2015}
+\rhead{October 9, 2016}
 
 \begin{document} 
 \begin{center}
 {\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-\solution{pr:4}
+\solution{pr:1} We implement the function $f(x)$ in Python as follows
+
+\begin{ipythonnb}
+def f(x):
+    return (x-1)**6
+    
+def df(x):
+    return 6*(x-1)**5
+    
+def ddf(x):
+    return 30*(x-1)**4
+\end{ipythonnb}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.4\textwidth]{images/flat_cropped.pdf}
+\end{figure}
+
+We then run Newton's method, implemented as follows, with the three stopping criteria and with tolerance $\e=10^{-6}$. 
+
+\begin{ipythonnb}
+def newton(f, df, ddf, x0, tol, maxiter=100):
+    """
+    Newton's method
+    """
+    x, xold = x0, x0+2*tol*np.ones(x0.shape)
+    iter = 0
+    while ( la.norm(x-xold)>tol ) and ( iter < maxiter ):
+        grad = df(x)
+        hess = ddf(x)
+        z = la.solve(hess,grad)[0]
+        xold = x
+        x = x-z
+        iter += 1
+    return x, iter	
+\end{ipythonnb}
+
+The results are:
 \begin{itemize}
- \item[(a)] We apply the bound inductively,
- \begin{equation*}
-  \norm{\vct{x}_k-\vct{x}^*}\leq r\cdot \norm{\vct{x}_{k-1}-\vct{x}^*}\leq r \cdot (r \cdot  \norm{\vct{x}_{k-2}-\vct{x}^*})\leq \cdots \leq r^k\cdot \norm{\vct{x}_{0}-\vct{x}^*}.
- \end{equation*}
-\item[(b)] Let $\e>0$. We are guaranteed to have an error bounded by $\e$ if $r^N\cdot M<\e$, by Part (a).
-Taking logarithms of this inequality,
+ \item[(a)] Iterations: 67, Solution found: $\overline{x}=1.0000$;
+ \item[(b)] Iterations: 25, Solution found: $\overline{x}=1.0425$;
+ \item[(c)] Iterations: 100, Solution found: $\overline{x}=1.0000$.
+\end{itemize}
+While (b) was the fastest, the accuracy was not so great. Stopping criterium (a) is reasonable, since in view of the quadratic convergence, the inequality
 \begin{equation*}
- N\ln(r) + \ln(M)\leq \ln(\e).
+ \norm{\vct{x}_{k+1}-\vct{x}_k}\geq \norm{\vct{x}_k-\vct{x}^*}-\norm{\vct{x}_{k+1}-\vct{x}^*} \geq \norm{\vct{x}_k-\vct{x}^*}-M\norm{\vct{x}_{k}-\vct{x}^*}^2
 \end{equation*}
-Negating this, we get
-\begin{equation*}
- -N\ln(r) - \ln(M)=N\ln(1/r) - \ln(M)\geq \ln(1/\e).
-\end{equation*}
-Dividing by $\ln(1/r)$ gives
-\begin{equation*}
- N  \geq \frac{1}{\ln(1/r)} \left(\ln(1/\e)+\ln(M)\right) > \frac{r}{1-r}\left(\ln(M)+\ln(1/\e)\right),
-\end{equation*}
-where we used the inequality $\ln(1/r)<1/r-1 = (1-r)/r$. 
-\item[(c)] For quadratic convergence, the bound is derived in exactly the same way as for linear convergence. To determine the number of steps, we start with the bound
-\begin{equation*}
- C^N\cdot M^{2^N}\leq \e.
-\end{equation*}
-Taking logarithms and negating,
-\begin{equation*}
- N\ln(1/C)-2^N\ln(M) \geq \ln(1/\e).
-\end{equation*}
-Taking logarithms again, we get
-\begin{equation*}
- N\cdot \left(\frac{\log_2(N)}{N}+\log_2(\ln(1/c)-\ln(M))\right) \geq \log_2 (\ln(1/\e)),
-\end{equation*}
-so that if 
-\begin{equation*}
- N> C'\cdot \ln\ln(1/\e)
-\end{equation*}
-for a constant $C'$, we are guaranteed an error below $\e$.
+shows that the difference of successive iterates gives a good bound on the error. Criterium (b) is problematic, as the function can have a very flat slope while still being far away from the minimizer, as the example shows.
+
+This issue is related to the notion of conditioning of the function $f$. Criterium (c) always has the same running time, and 100 iterations would normally be more than enough for Newton's method. However, this is a very pessimistic bound, and takes much longer than necessary.
+
+\solution{pr:2} The code is recreated below. We first define the methods, then the function, after that the parameters and run the code. In the end, the results are plotted.
+
+\begin{ipythonnb}
+def newton(f, df, ddf, x0, tol, maxiter=100):
+    """
+    Newton's method with stopping criteria (a)
+    """
+    x = np.vstack((x0+2*tol*np.ones(x0.shape),x0)).transpose()
+    i = 1
+    while ( la.norm(x[:,i]-x[:,i-1]) > tol ) and ( i < maxiter ):
+        grad = df(x[:,i])
+        hess = ddf(x[:,i])
+        z = la.solve(hess,grad)
+        xnew = x[:,i]-z
+        x = np.concatenate((x,xnew.reshape((len(x0), 1))), axis=1)
+        i += 1
+    return x[:,1:]
+
+def graddesc_bt(f, df, ddf, x0, tol, maxiter=100, rho=0.5, c=0.1):
+    """
+    Gradient descent with backtracking
+    """
+    x = np.vstack((x0+2*tol*np.ones(x0.shape),x0)).transpose()
+    i = 1
+    while ( la.norm(x[:,i]-x[:,i-1]) > tol ) and ( i < maxiter ):
+        p = -df(x[:,i])
+        # Start backtracking
+        alpha = 1
+        xnew = x[:,i] + alpha*p
+        while (f(xnew) >= f(x[:,i]) + alpha*c*np.dot(p, df(x[:,i]))):
+            alpha = alpha*rho
+            xnew = x[:,i] + alpha*p
+        x = np.concatenate((x,xnew.reshape((len(x0),1))), axis=1)
+        i += 1
+    return x[:,1:]
+
+def graddesc_co(f, df, ddf, x0, tol, maxiter=100):
+    """
+    Gradient descent with constant step length
+    """
+    alpha = 0.1
+    x = np.vstack((x0+2*tol*np.ones(x0.shape),x0)).transpose()
+    i = 1
+    while ( la.norm(x[:,i]-x[:,i-1]) > tol ) and ( i < maxiter ):
+        r = df(x[:,i])
+        xnew = x[:,i] - alpha*r
+        x = np.concatenate((x,xnew.reshape((len(x0),1))), axis=1)
+        i += 1
+    return x[:,1:]
+\end{ipythonnb}
+
+\begin{ipythonnb}
+def f(x):
+    return np.exp(x[0]+3*x[1]-0.1)+np.exp(x[0]-3*x[1]-0.1)+np.exp(-x[0]-0.1)
+
+def df(x):
+    return np.array([np.exp(x[0]+3*x[1]-0.1)+np.exp(x[0]-3*x[1]-0.1)-np.exp(-x[0]-0.1), 
+                     3*np.exp(x[0]+3*x[1]-0.1)-3*np.exp(x[0]-3*x[1]-0.1)])
+
+def ddf(x):
+    return np.array([[np.exp(x[0]+3*x[1]-0.1)+np.exp(x[0]-3*x[1]-0.1)+np.exp(-x[0]-0.1), 
+                     3*np.exp(x[0]+3*x[1]-0.1)-3*np.exp(x[0]-3*x[1]-0.1)], 
+                     [3*np.exp(x[0]+3*x[1]-0.1)-3*np.exp(x[0]-3*x[1]-0.1),
+                    9*np.exp(x[0]+3*x[1]-0.1)+9*np.exp(x[0]-3*x[1]-0.1)]])
+\end{ipythonnb}
+
+\begin{ipythonnb}
+tol = 1e-6
+x0 = np.array([-1.,0.7])
+
+# Run the three methods
+xbt = graddesc_bt(f, df, ddf, x0, tol)
+xco = graddesc_co(f, df, ddf, x0, tol)
+xn = newton(f, df, ddf, x0, tol)
+\end{ipythonnb}
+
+\begin{ipythonnb}
+xvals = np.array([[np.linspace(-4,-0.5,20)], [np.zeros(20)]])
+yvals = list(reversed(f(xvals)[0]))
+
+# Create a meshgrid and a contour plot
+xx = np.linspace(-2.5,1,100)
+yy = np.linspace(-0.8,0.8,100)
+X, Y = np.meshgrid(xx, yy)
+# The construction inside looks odd: we want to transform the set of input pairs given
+# by the meshgrid into a 2 x n array of values that we can apply f to (calling f on such
+# an array will apply the function f to each column)
+Z = f(np.dstack((X,Y)).reshape((X.size, 2)).transpose())
+# the result of applying f is a long list, but we want a matrix
+Z = Z.reshape(X.shape)
+
+% matplotlib inline
+cmap = plt.cm.get_cmap("coolwarm")
+
+fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+
+ax[0].contour(X, Y, Z, yvals, cmap = cmap)
+ax[0].plot(xco[0,:], xco[1,:], color='black', linewidth=3)
+
+ax[1].contour(X, Y, Z, yvals, cmap = cmap)
+ax[1].plot(xbt[0,:], xbt[1,:], color='black', linewidth=3)
+
+ax[2].contour(X, Y, Z, yvals, cmap = cmap)
+ax[2].plot(xn[0,:], xn[1,:], color='black', linewidth=3)
+
+plt.show()
+\end{ipythonnb}
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.85\textwidth]{images/threemethods.png}
+\end{figure}
+
+The number of iterations with constant step length is 44, the number of iterations with backtracking is 28, while the number of iterations with Newton's method is 6.
+
+\solution{pr:3} 
+\begin{itemize}
+ \item[(a)] The verification follows from applying the definition of convexity.
+\item[(b)] The code below minimizes the function using Newton's method with starting point $(a,b)=(0.5,0.5)$ and tolerance $10^{-8}$. The number of iterations is 6 and the solution is $(a,b) = (1.724, -4.434)$. Plotting the probability of passing the exam as a function of the number of preparation hours, with the parameters $(a,b)$, gives the curve in Figure~\ref{fig:log}.
+
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{images/logcurve.png}
+ \caption{Probability of passing exam as function of preparation}\label{fig:log}
+\end{figure}
 
 \end{itemize}
 
-\solution{pr:5} We first compute the derivatives,
-\begin{align*}
- f(x) &= \sqrt{x^2+1}\\
- f'(x) &= \frac{x}{\sqrt{x^2+1}}\\
- f''(x) &= \frac{1}{(x^2+1)^{3/2}}.
-\end{align*}
-Note that the second derivative is always positive.
-Newton's method then has the following form
-\begin{equation*}
- x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} = x_k - x_k(1+x_k^2) = -x_k^3.
-\end{equation*}
-For $|x_0|<1$ this clearly converges to $0$, while for $x_0>1$ this diverges. For $|x_0|=1$ the sequence alternates between $1$ and $-1$.
-
-\solution{pr:6} We first have to think about what it means to be a steepest descent direction with respect to a norm. If we look for a vector $\vct{p}$ with $\norm{\vct{p}}_\infty=1$ such that $\ip{\vct{p}}{\nabla f(\vct{x})}$ is minimal. 
-Set $\vct{v}=\nabla f(\vct{x})$, to ease notation. Since $\norm{\vct{p}}_\infty = 1$ is the same as saying that $\max_{1\leq i\leq d} |p_i| = 1$, this amounts to solving the minimization problem
-\begin{align*}
- \minimize& \ip{\vct{p}}{\vct{v}}\\
- \subjto & -1 \leq p_i \leq 1, \quad 1\leq i\leq d.
-\end{align*}
-Suppose that a minimizer is found and the minimum has the form
-\begin{equation*}
- \sum_{i=1}^d p_i v_i.
-\end{equation*}
-If $p_iv_i>0$, then we can decrease the objective function further by changing the sign of $p_i$, and then even further by setting $p_i=-1$ if $\mathrm{sign} \ v_i=1$ and $p_i=1$ otherwise. Therefore, the optimizer has the form
-\begin{equation*}
- p_i = -\mathrm{sign} \ \nabla f(\vct{x})_i
-\end{equation*}
-for $1\leq i\leq d$.
 \end{document}

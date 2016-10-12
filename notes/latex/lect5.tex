@@ -1,0 +1,77 @@
+%-----------------------------------------------------------------------
+% Beginning of chapter.tex
+%-----------------------------------------------------------------------
+%
+%  This is a sample file for use with AMS-LaTeX.  It provides an example
+%  of how to set up a file for a book to be typeset with AMS-LaTeX.
+%
+%  This is the driver file.  Separate chapters should be included at
+%  the end of this file.
+%
+%  ***** DO NOT USE THIS FILE AS A STARTER FOR YOUR BOOK. *****
+%  Follow the guidelines in the file chapter.template.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,a4paper]{memoir}
+\chapterstyle{demo}
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{8cm}
+\setlength\epigraphrule{0pt}
+\epigraphfontsize{\small\itshape}
+%\includeonly{preface,chap1,biblio}
+
+%\numberwithin{section}{chapter}
+%\numberwithin{equation}{chapter}
+
+% Include macros here
+\input{macros}
+
+%\renewcommand{\chaptername}{}
+%\renewcommand{\thechapter}{}
+
+\begin{document}
+\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+
+\lstset{language=Matlab}
+
+%\frontmatter
+%\title{Convex Optimization}
+
+%    Information for first author
+%\author{Martin Lotz}
+%    Address of record for the research reported here
+
+%\address{School of Mathematics\\ The University of Manchester\\ Alan Turing Building, Oxford Road\\ Manchester M139PL}
+
+%\email{martin.lotz@manchester.ed.uk}
+%\urladdr{http://www.maths.manchester.ac.uk/\textasciitilde mlotz}
+
+%\date{\today}
+
+%\maketitle
+
+%\newpage 
+
+%\tableofcontents
+
+%\include{preface}
+
+\mainmatter
+
+%\include{notation}
+\include{lecture5}
+
+%\appendix
+%\include{appendix1}
+
+%\backmatter
+%\include{biblio}
+%\include{index}
+\end{document}
+
+%-----------------------------------------------------------------------
+% End of chapter.tex
+%-----------------------------------------------------------------------
