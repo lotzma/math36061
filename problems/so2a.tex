@@ -21,7 +21,7 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{October 9, 2016}
+\rhead{October 13, 2016}
 
 \begin{document} 
 \begin{center}
@@ -82,10 +82,10 @@ Newton's method then has the following form
 For $|x_0|<1$ this clearly converges to $0$, while for $x_0>1$ this diverges. For $|x_0|=1$ the sequence alternates between $1$ and $-1$.
 
 \solution{pr:6} We first have to think about what it means to be a steepest descent direction with respect to a norm. If we look for a vector $\vct{p}$ with $\norm{\vct{p}}_\infty=1$ such that $\ip{\vct{p}}{\nabla f(\vct{x})}$ is minimal. 
-Set $\vct{v}=\nabla f(\vct{x})$, to ease notation. Since $\norm{\vct{p}}_\infty = 1$ is the same as saying that $\max_{1\leq i\leq d} |p_i| = 1$, this amounts to solving the minimization problem
+Set $\vct{v}=\nabla f(\vct{x})$, to ease notation. Since $\norm{\vct{p}}_\infty = 1$ is the same as saying that $\max_{1\leq i\leq n} |p_i| = 1$, this amounts to solving the minimization problem
 \begin{align*}
  \minimize& \ip{\vct{p}}{\vct{v}}\\
- \subjto & -1 \leq p_i \leq 1, \quad 1\leq i\leq d.
+ \subjto & -1 \leq p_i \leq 1, \quad 1\leq i\leq n.
 \end{align*}
 Suppose that a minimizer is found and the minimum has the form
 \begin{equation*}
@@ -95,5 +95,5 @@ If $p_iv_i>0$, then we can decrease the objective function further by changing t
 \begin{equation*}
  p_i = -\mathrm{sign} \ \nabla f(\vct{x})_i
 \end{equation*}
-for $1\leq i\leq d$.
+for $1\leq i\leq n$.
 \end{document}
