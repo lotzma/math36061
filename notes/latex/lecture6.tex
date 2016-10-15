@@ -130,6 +130,120 @@ Since this function is not smooth or even continuous, we can work with the log-l
 \mathop{\minimize}_{\vct{w}, \tau} \frac{1}{n} \sum_{i=1}^m \ell(\vct{w}^{\trans}\vct{x}_i-\tau, y_i).
 \end{equation*}
 This function can, in principle, be minimized using gradient descent or Newton's method. 
+
+In the following example, we use this classifier to separate an artificial data set of 20 points. 10 points are generated as normal (Gaussian) distributed vectors in $\R^2$, with mean $(2,2)^{\trans}$ and variance $0.25$, while the other 10 points are generated with mean $(0,0)^{\trans}$ and the same variance.
+
+\begin{ipythonnb}
+X = np.zeros((2,20))
+for i in range(10):
+    X[:,i] = np.array([2,2]) + 0.5*rnd.randn(2)
+for i in range(10):
+    X[:,10+i] = np.array([0,0]) + 0.5*rnd.randn(2)
+    
+% matplotlib inline
+plt.plot(X[0,0:10], X[1,0:10], 'o')
+plt.plot(X[0,10:], X[1,10:], 'o', color='red')
+plt.show()
+\end{ipythonnb}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{images/pointcloud.png}
+\end{figure}
+
+We next minimize the {\em log-loss function},
+\begin{equation*}
+  F(\vct{w}) = \sum_{i=1}^{20} \log(1+e^{-y_i (\vct{w}^{\trans}\vct{x}_i-\tau)}),
+\end{equation*}
+where the $\vct{x}_i\in \R^2$ are the points, and the $y_i\in \{-1,1\}$ classify these as either red or blue. As minimization algorithm we choose gradient descent with backtracking, though any other reasonable algorithm would do.
+
+\begin{ipythonnb}
+def graddesc_bt(f, df, x0, tol, maxiter=100, rho=0.5, c=0.1):
+    """
+    Gradient descent with backtracking
+    """
+    x = np.vstack((x0+2*tol*np.ones(x0.shape),x0)).transpose()
+    i = 1
+    while ( la.norm(x[:,i]-x[:,i-1]) > tol ) and ( i < maxiter ):
+        p = -df(x[:,i])
+        # Start backtracking
+        alpha = 1
+        xnew = x[:,i] + alpha*p
+        while (f(xnew) >= f(x[:,i]) + alpha*c*np.dot(p, df(x[:,i]))):
+            alpha = alpha*rho
+            xnew = x[:,i] + alpha*p
+        x = np.concatenate((x,xnew.reshape((len(x0),1))), axis=1)
+        i += 1
+    return x[:,1:]
+\end{ipythonnb}
+
+\begin{ipythonnb}
+y = np.concatenate((-np.ones(10),np.ones(10)))
+X = np.concatenate((X, np.ones((1,20))), axis=0)
+
+def f(w):
+    return np.sum(np.log(1+np.exp(-y*(np.dot(w,X)))))
+
+def df(w):
+    return np.array([-np.sum(y*X[0,:]*np.exp(-y*np.dot(w,X))/
+     				 (1+np.exp(-y*np.dot(w,X)))), 
+                     -np.sum(y*X[1,:]*np.exp(-y*np.dot(w,X))/
+                     (1+np.exp(-y*np.dot(w,X)))),
+                     -np.sum(y*X[2,:]*np.exp(-y*np.dot(w,X))/
+                     (1+np.exp(-y*np.dot(w,X))))])
+
+W = graddesc_bt(f, df, np.array([1.,1.,1.]), 1.e-8)                     
+\end{ipythonnb}
+
+The algorithm gives as output a vector $\vct{w}=(w_1,w_2,w_3)\in \R^3$, so that the line separating the two sets of points is given by
+\begin{equation*}
+ w_1 x_1 + w_2 x_2 + w_3 = 0.
+\end{equation*}
+Rearranging this as a function $\ell(x_1) = x_2 = -(w_1x_1+w_3)/w_2$ and plotting the line into the pointcloud, we get the following graph.
+
+\begin{ipythonnb}
+def l(x):
+    return (-W[0,-1]*x-W[2,-1])/W[1,-1]
+    
+xx = np.linspace(-0.5,3,100)
+yy = l(xx)
+plt.plot(X[0,0:10], X[1,0:10], 'o')
+plt.plot(X[0,10:], X[1,10:], 'o', color='red')
+plt.plot(xx,yy,linewidth=3)
+plt.show()
+\end{ipythonnb}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{images/logloss.png}
+\end{figure}
+
+Of course, we would like to know how our classifier does with a {\em test set} generated according to the same distribution. The result is seen the following plot.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{images/testcloud.png}
+\end{figure}
+
+The given example is unproblematic, since the two sets of points are generated in a way that makes it unlikely that they can't be separated using a linear classifier. With real data, the situation may not be as favourable.
+
+It is also interesting to see how fast the objective function (the {\em empirical risk}) approaches the minimum. While the value of the objective function decreases very quickly at the beginning, the decrease slows down dramatically and the algorithm does not reach the desired accuracy within the limit we set for the number of iterations. Now, however, that for the classification task we are interested, we don't need the best possible precision! In fact, the noise in the data makes too much precision meaningless, and we can safely use the result obtained after 100 iterations. Other algorithms and approaches may perform better for this problem.
+
+\begin{ipythonnb}
+risk = np.zeros(W.shape[1])
+for i in range(W.shape[1]):
+    risk[i] = f(W[:,i])
+    
+plt.plot(range(W.shape[1]), risk, linewidth=3)
+plt.xlabel('Number of iterations')
+plt.ylabel('Empirical risk')
+plt.show()
+\end{ipythonnb}
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.8\textwidth]{images/iterrisk.png}
+\end{figure}
 \end{example}
 
 We have seen how a machine learning problem can be turned into an optimization problem. Unfortunately, when the amount of data is large, computing gradients and Hessians of the resulting functions can be very expensive. Suppose the function $h$ depends on parameters $\vct{w}$ which we want to optimize over, $h=h(\vct{x}; \vct{w})$, and denote the composition of the loss function $\ell$ with $h$ on the data $\vct{x}_i$ by
@@ -146,7 +260,7 @@ The gradient is then
 \end{equation*}
 For large datasets (for example, $m>10^6$ is not uncommon), computing all the gradients in each step is highly ineffective.
 
-An old algorithm that has recently been revived in light of big data is \textbf{stochastic gradient descent}. The idea is to compute, at each step, only the gradient of {\em one} of the summands of the loss function:
+An old algorithm that has recently been revived in light of big data is \textbf{stochastic gradient descent}. The idea is to compute, at each step, only the gradient of {\em one} (or sometimes a few) of the summands of the loss function:
 
 \begin{equation*}
   \vct{w}_{k+1} = \vct{w}_k-\alpha_k \nabla f_{i_k}(\vct{w}_k),
