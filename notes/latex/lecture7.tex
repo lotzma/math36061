@@ -103,7 +103,7 @@ such that $\lambda_i\geq 0$ and $\sum_{i=1}^k \lambda_i = 1$. It can be shown in
 \end{lemma}
 
 \begin{example}
-A hyperplane, defined as the solution set of one linear equations,
+A hyperplane, defined as the solution set of one linear equation,
 \begin{equation*}
  H = \{\vct{x} \mid \ip{\vct{a}}{\vct{x}} = b\},
 \end{equation*}
@@ -157,12 +157,12 @@ A Euclidean unit ball is the special case $\mtx{P}=\mtx{I}$.
  A {\em convex cone} is a set $C$ such that for all $\vct{x},\vct{y}$ and $\lambda\geq 0, \mu\geq 0$,
  $\lambda \vct{x}+\mu \vct{y}\in C$. It is easily verified that such a set is convex. Three important cones are the following:
  \begin{enumerate}
-  \item The non-negative orthant $\R^d_{+}=\{\vct{x}\in \R^d \mid x_i\geq 0, 1\leq i\leq d\}$,
+  \item The non-negative orthant $\R^n_{+}=\{\vct{x}\in \R^n \mid x_i\geq 0, 1\leq i\leq n\}$,
   \item The second order (ice cream) cone (or Lorentz cone)
   \begin{equation*}
-   C_{\alpha} = \{\vct{x} \mid \sum_{i=1}^{d-1}x_i^2\leq x_d^2\},
+   C_{\alpha} = \{\vct{x} \mid \sum_{i=1}^{n-1}x_i^2\leq x_n^2\},
   \end{equation*}
-  \item The cone $\mathcal{S}_{+}^d$ of positive semidefinite symmetric matrices.
+  \item The cone $\mathcal{S}_{+}^n$ of positive semidefinite symmetric matrices.
  \end{enumerate}
 \begin{figure}[h!]
 \centering
@@ -201,7 +201,7 @@ In words, the vectors $\vct{z}-\vct{y}$ and $\vct{x}-\vct{y}$ form an obtuse ang
 \end{figure}
 
 \begin{proof}
- Since $C\neq \emptyset$, there exists $r>0$ such that the ball $B(\vct{x},r):=\{\vct{y}\in \R^d \mid \norm{\vct{y}-\vct{x}}\leq \e\}$ intersected with $C$ is not empty. Since $K:=C\cap B(\vct{x},r)$ is compact (closed and bounded) and the function $\norm{\vct{y}-\vct{x}}$ is continuous on $K$, it has a minimizer $\vct{y}\in K$. For the second claim, note that since $C$ is convex, for every $\lambda\in [0,1]$,
+ Since $C\neq \emptyset$, there exists $r>0$ such that the ball $B(\vct{x},r):=\{\vct{y}\in \R^n \mid \norm{\vct{y}-\vct{x}}\leq \e\}$ intersected with $C$ is not empty. Since $K:=C\cap B(\vct{x},r)$ is compact (closed and bounded) and the function $\norm{\vct{y}-\vct{x}}$ is continuous on $K$, it has a minimizer $\vct{y}\in K$. For the second claim, note that since $C$ is convex, for every $\lambda\in [0,1]$,
  \begin{equation*}
   \vct{w} = \lambda \vct{z}+(1-\lambda)\vct{y} \in C.
  \end{equation*}
@@ -264,7 +264,7 @@ Therefore,
 \begin{equation*}
  \ip{\vct{a}}{\vct{z}-\vct{y}} = \ip{\vct{a}}{\vct{z}}-\ip{\vct{a}}{\vct{y}} > b-b = 0,
 \end{equation*}
-but this contradict Lemma~\ref{le:obtuse}. We therefore conclude $\ip{\vct{a}}{\vct{z}}<b$. The separating hyperplane $H$ is thus defined by the equation $\ip{\vct{a}}{\vct{x}}=b$. 
+but this contradicts Lemma~\ref{le:obtuse}. We therefore conclude $\ip{\vct{a}}{\vct{z}}<b$. The separating hyperplane $H$ is thus defined by the equation $\ip{\vct{a}}{\vct{x}}=b$. 
 \end{proof}
 
 % %-----------------------------------------------------------------------
