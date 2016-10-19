@@ -1,0 +1,151 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+\usetikzlibrary{calc}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{3}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{October 20, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:4} 
+\begin{itemize}
+ \item[(a)] Let $\vct{x},\vct{y}\in B(\vct{p},r)$ and $\lambda\in [0,1]$. Then
+ \begin{align*}
+  \norm{\lambda \vct{x}+(1-\lambda)\vct{y}-\vct{p}} &= \norm{\lambda \vct{x}+(1-\lambda)\vct{y}-(\lambda \vct{p}+(1-\lambda)\vct{p})}\\
+  &= \norm{\lambda (\vct{x}-\vct{p})+(1-\lambda)(\vct{y}-\vct{p})}\\
+  &\leq \norm{\lambda (\vct{x}-\vct{p})}+\norm{(1-\lambda)(\vct{y}-\vct{p})}\\
+  &=\lambda\norm{\vct{x}-\vct{p}}+(1-\lambda)\norm{\vct{y}-\vct{p}}\\
+  &\leq \lambda r+(1-\lambda)r = r.
+ \end{align*}
+Therefore, $\lambda \vct{x}+(1-\lambda)\vct{y}\in B(\vct{p},r)$.
+\item[(b)] Let $\vct{x},\vct{y}\in C^*$. Then for all $\vct{z}\in C$,
+\begin{equation*}
+ \ip{\lambda \vct{x}+(1-\lambda)\vct{y}}{\vct{z}} = \lambda\ip{ \vct{x}}{\vct{z}}+(1-\lambda)\ip{\vct{y}}{\vct{z}}\leq (1-\lambda)+\lambda = 1.
+\end{equation*}
+Therefore, $\lambda \vct{x}+(1-\lambda)\vct{y}\in C^*$.
+\item[(c)] Denote $B_p=B(\vct{0},1)$ the unit ball with respect to the $p$-norm, where $p\in \{1,2,\infty\}$. For the $2$-norm, the polar is
+\begin{equation*}
+ B_2^* = \{\vct{y}\in \R^d \mid \forall \vct{x}, \norm{\vct{x}}_2\leq 1\Rightarrow \ip{\vct{x}}{\vct{y}}\leq 1\}.
+\end{equation*}
+We claim that $B_2^* = B_2$. To show that $B_2\subseteq B_2^*$, let $\vct{y}\in B_2$, so that $\norm{\vct{y}}_2\leq 1$. 
+By the Cauchy-Schwarz inequality, for all $\vct{x}\in B_2$, 
+\begin{equation*}
+ \ip{\vct{x}}{\vct{y}}\leq \norm{\vct{x}}_2\norm{\vct{y}}_2\leq 1,
+\end{equation*}
+so that $\vct{y}\in B_2^*$. To show the converse inclusion $B_2^*\subseteq B_2$, note that for any $\vct{y}\in B_2^*$ we have
+\begin{equation*}
+ \norm{\vct{y}}_2 = \ip{\frac{\vct{y}}{\norm{\vct{y}}_2}}{\vct{y}}\leq 1,
+\end{equation*}
+since $\vct{y}/\norm{\vct{y}}_2\in B_2$, from which $\vct{y}\in B_2$ follows. 
+
+For the $1$-norm, 
+\begin{equation*}
+ B_1^* = \{\vct{y}\in \R^d \mid \forall \vct{x}, \sum_{i=1}^d |x_i|\leq 1\Rightarrow \sum_{i=1}^d x_i y_i\leq 1\}.
+\end{equation*}
+We claim that $B_1^*=B_{\infty}$. For the inclusion $B_\infty\subseteq B_1^*$, let $\vct{y}\in B_\infty$, i.e., $\norm{\vct{y}}_\infty = \max_{1\leq i\leq d}|y_i|\leq 1$. Then for all $\vct{x}\in B_1$, i.e., with $\sum_{i=1}^d |x_i|\leq 1$, we clearly have 
+\begin{equation*}
+ \ip{\vct{x}}{\vct{y}} = \sum_{i=1}^d x_iy_i\leq \sum_{i=1}^d x_i \leq 1,
+\end{equation*}
+so that $\vct{y}\in B_1^*$. Now let $\vct{y}\in B_1^*$. For every $1\leq i\leq d$ and $\vct{x}=\pm \vct{e}_i=(0,\dots,\pm 1,\dots,0)^{\trans}$ ($\pm 1$ in $i$-th coordinate) we have that $\norm{\vct{x}}_1=1$, and so 
+\begin{equation*}
+ \pm y_i = \ip{\vct{x}}{\vct{y}}\leq 1, 
+\end{equation*}
+from which $\norm{\vct{y}}_\infty\leq 1$ and $\vct{y}\in B_\infty$ follows.
+
+For the $\infty$-norm,
+\begin{equation*}
+ B_\infty^* = \{\vct{y}\in \R^d \mid \forall \vct{x}, \max_{1\leq i\leq d}\leq 1\Rightarrow \sum_{i=1}^d x_iy_i \leq 1\}.
+\end{equation*}
+For the inclusion $B_1\subseteq B_\infty$, let $\vct{y}\in B_1$, i.e., $\sum_{i=1}^d |y_i|\leq 1$. Then for all $\vct{x}$ with $\max_{1\leq i\leq d}|x_i|\leq 1$, we have that
+\begin{equation*}
+ \ip{\vct{x}}{\vct{y}} = \sum_{i=1}^d x_iy_i\leq \max_{1\leq i\leq d}|x_i|\sum_{i=1}^d y_i \leq 1,
+\end{equation*}
+so that $\vct{y}\in B_\infty^*$. To show $B_\infty^*\subseteq B_1$, let $\vct{y}\in B_\infty^*$. Let $\vct{x}=\mathrm{sign}(\vct{y})$ be the vectors with $x_i = \mathrm{sign}(y_i)$. Then $\norm{\vct{x}}_\infty = 1$, and
+\begin{equation*}
+ \sum_{i=1}^d |y_i| = \sum_{i=1}^d x_iy_i = \ip{\vct{x}}{\vct{y}} \leq 1,
+\end{equation*}
+so that $\vct{y}\in B_1$.
+\end{itemize}
+
+\solution{pr:5} Consider the set $C-D$. Since $C$ and $D$ are disjoint, $\zerovct\not\in C-D$. If $C$ and $D$ are bounded and, say, contained in balls of radius $r_1$ and $r_2$, then $C-D$ is contained in a ball of radius $r_1+r_2$ (since $\norm{\vct{x}-\vct{y}}\leq \norm{\vct{x}}+\norm{\vct{y}}$), and bounded. Therefore there exists a hyperplane $H$ such that $C-D\in \inter H_-$ and $\zerovct\in \inter H_+$.
+
+For an example where the statement fails if $C$ and $D$ are not bounded, consider
+\begin{equation*}
+ C = \{\vct{x}\in \R^2 \mid x_1\leq 0\}, \quad D=\{\vct{x}\in \R^2 \mid x_1x_2\geq 1\}.
+\end{equation*}
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.5]
+\tikzset{func/.style={thick,color=red}}
+\fill[fill=red!10,color=red!10] (5,5)--(5,0.2)-- plot[samples=200,domain=5:0.2](\x,{1/\x}) -- cycle;
+ \draw[func,domain=0.2:5] plot [samples=200] (\x,{1/\x});
+\draw[color=black!0,fill=blue!5] (0,-1)--(0,5)--(-2,5)--(-2,-1)--(0,-1);\draw[color=blue,thick] (0,-1)--(0,5);
+\end{tikzpicture}
+\caption{Non-strict separation}
+\end{figure}
+Any affine hyperplane that does not touch $C$ has to be of the form $\{\vct{x}\mid x_1=a\}$ for $a>0$ (a vertical line), but any such hyperplane touches $D$ at the point $\vct{x}=(a,1/a)$. However, both sets are clearly disjoint. The only separating hyperplane is $\{\vct{x}\mid x_1=0\}$, but this is not a strict separation.
+
+\solution{pr6} 
+\begin{itemize}
+ \item[(a)] We work in two dimension, the general case is mathematically the same, and assume grid length $\ell=1$. If the points $\vct{x}$ and $\vct{y}$ are $s$ horizontal units and $t$ vertical units away, then any path from $\vct{x}$ to $\vct{y}$ has to move $s$ units to the left and $t$ units up (assuming that $\vct{y}$ is to the north-east of $\vct{x}$). The distance in the $1$-norm is
+ \begin{equation*}
+  \norm{\vct{y}-\vct{x}}_1 = |y_1-x_1|+|y_2-x_2| = s+t. 
+ \end{equation*}
+ \item[(b)] The problem here is that the objective function
+ \begin{equation}\label{eq:obj}\tag{1}
+  \sum_{i=1}^N\norm{\vct{p}_i-\vct{x}}_1 = \sum_{i=1}^N|p_{i,1}-x_1|+|p_{i,2}-x_2|
+ \end{equation}
+ is not a linear function. To get a linear function, we have to find a way to get rid of the absolute values. To do this, we note that
+ \begin{equation*}
+  |x|\leq t \Leftrightarrow -t\leq x\leq t
+ \end{equation*}
+holds for any numbers $x,t$ with $\geq 0$. For the $1$-norm, we get the equivalence
+\begin{equation*}
+ \norm{\vct{x}}_1 \leq t \Leftrightarrow \exists t_1,\dots,t_d\geq 0, -t_i\leq x_i\leq t_i \text{ and } \sum_{i=1}^d t_i\leq t.
+\end{equation*}
+A minimization problem of the form
+\begin{equation*}
+ \minimize \norm{\vct{x}}_1 \ \subjto \mtx{A}\vct{x}\leq \vct{b}
+\end{equation*}
+can therefore be written as
+\begin{align*}
+ \minimize &\sum_{i=1}^d t_i\\
+ \subjto & -t_i\leq x_i \leq t_i\\
+ &t_i\geq 0\\
+ & \mtx{A}\vct{x}\leq \vct{b}.
+\end{align*}
+This is a linear programming problem with twice as many variables as the original problem. We can apply this to the objective function~\eqref{eq:obj}, which gives the form
+\begin{align*}
+ \minimize & \sum_{i=1}^d t_i+\sum_{j=1}^d s_j\\
+ \subjto & t_i, s_j\geq 0\\
+ & -t_i\leq p_{i,1}-x_1\leq t_i\\
+ & -s_j\leq p_{j,2}-x_2\leq s_j\\
+ & \mtx{A}\vct{x}\leq \vct{b}.
+\end{align*}
+
+\end{itemize}
+
+ 
+\end{document}
