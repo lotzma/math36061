@@ -1,6 +1,6 @@
 \documentclass{article}
 % Include macros here
-\input{../../../Work/macros/macros}
+\input{macros}
 \usepackage{fancyhdr}
 %\include{macros}
 \usepackage{pifont}
@@ -23,22 +23,77 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Analysis}
-\rhead{October 23, 2015}
+\rhead{October 23, 2016}
 
 \begin{document} 
 \begin{center}
 {\Large {\bf Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-Problems in Part A come with solutions and should be tried at home. Problems in Part B will be discussed in class.
+Problems in Part A will be discussed in class.
+Problems in Part B come with solutions and should be tried at home. 
 
 \section*{Part A}
+
+\problem For the following linear programming problems,
+\begin{align}\label{eq:ex1}\tag{LP1}
+\begin{split}
+ \maximize & x_1+2x_2 \\
+ \subjto &x_1+x_2\leq 2\\
+ & x_1-x_2\leq 1\\
+ &x_1\geq -1
+\end{split}
+\end{align}
+\begin{align}\label{eq:ex1}\tag{LP2}
+\begin{split}
+ \maximize & x_1+x_2 \\
+ \subjto
+ & x_2-x_1\leq 2\\
+ & x_1+x_2\leq 8\\
+ &x_1+2x_2\leq 10\\
+ &x_1\leq 4\\
+ &x_1\geq 0\\
+ &x_2\geq 0.
+\end{split}
+\end{align}
+
+\begin{itemize}
+ \item[(a)] Sketch the polyhedron of feasible points and find the vertices;
+ \item[(b)] Find a solution, if it exists (you can find the solution visually, but you may use a computer program such as CVXPY in Python or CVX in MATLAB to verify the result).
+\end{itemize}
+
+\problem Given a matrix $\mtx{A}\in \R^{m\times n}$ and $\vct{b}\in \R^m$ such that the polyhedron $P=\{\vct{x}\in \R^n\mid \mtx{A}\vct{x}\leq \vct{b}\}$ is not empty and bounded. 
+Show that if the optimal value of
+\begin{equation*}
+ \maximize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}\leq \vct{b}
+\end{equation*}
+is finite, it is attained at a vertex $\vct{x}^*$ of $P$. 
+
+\problem Formulate the following optimization problem as a linear programming problem,
+\begin{equation*}
+ \minimize \norm{\vct{x}}_1 \quad \subjto \mtx{A}\vct{x}=\vct{b},
+\end{equation*}
+and describe the dual problem.
+
+\problem Show that there exists a vector $\vct{x}\neq \zerovct$ satisfying 
+\begin{equation}\label{eq:primal}\tag{P}
+ \vct{x}\geq 0, \quad \mtx{A}\vct{x}=\zerovct
+\end{equation}
+if and only if there is no vector $\vct{y}$ such that
+\begin{equation}\label{eq:dual}\tag{D}
+ \mtx{A}^{\trans}\vct{y}>\zerovct.
+\end{equation}
+Give a geometric interpretation of this fact.
+
+\newpage
+
+\section*{Part B}
 \problem (Compressive Sensing) Consider a signal $f\colon [0,2\pi]\to \R$
 with the property that $f(0)=f(2\pi)$. In practice, one often does not see the whole signal, but only samples certain values at discrete time intervals. It turns out that optimization can help to reconstruct a signal using much fewer samples than commonly thought possible.
 
 \begin{figure}[h!]
  \centering
- \includegraphics[width=0.6\textwidth]{subsample_cropped.pdf}
+ \includegraphics[width=0.6\textwidth]{images/subsample_cropped.pdf}
  \caption{Signal sampled at 30 points, and reconstructed from these.}
 \label{fig:subsample}
 \end{figure}
@@ -82,7 +137,7 @@ Vectors $\vct{f}$ that come from the discretisation of signals like~\eqref{eq:si
 
 \begin{figure}[h!]
  \centering
- \includegraphics[width=0.6\textwidth]{fourier_cropped.pdf}
+ \includegraphics[width=0.6\textwidth]{images/fourier_cropped.pdf}
  \caption{Sparse DFT for signal from Figure~\ref{fig:subsample}.}\label{fig:fourierex}
 \end{figure}
 
@@ -110,67 +165,13 @@ In words, we are looking for a vector $\vct{c}$ of minimal $1$-norm that satisfi
 \item[(b)] Solve the optimization problem~\eqref{eq:l1min} as follows.
 \begin{itemize}
 \item Set $n=512$ and generate points $x_i=2\pi j/n$ with corresponding values $f_j=f(x_j)$. 
-\item Generate the matrix $\mtx{D}$ (in MATLAB, {\tt D=ifft(eye(n));}) and
-choose a random set of $50$ indices (using {\tt randperm(n)}) to generate a matrix $\mtx{D}_I$ and $\vct{f}_I$. 
+\item Generate the matrix $\mtx{D}$ (in Python, using {\tt numpy.ifft;}) and
+choose a random set of $50$ indices to generate a matrix $\mtx{D}_I$ and $\vct{f}_I$. 
 \item Using CVX, solve the optimization problem~\eqref{eq:l1min} and compare the computed vector $\hat{\vct{f}}$ with the original $\vct{f}$.
 \end{itemize}
 \item[(c)] Repeat the experiment in Part (b) with different values of $m$ in order to determine how many samples are necessary to reconstruct the vector $\vct{f}$ accurately.
 \item[(d)] Reformulate~\eqref{eq:l1min} as a linear programming problem.
 \end{itemize}
-
-\newpage
-
-\section*{Part B}
-
-\problem Show that there exists a vector $\vct{x}\neq \zerovct$ satisfying 
-\begin{equation}\label{eq:primal}\tag{P}
- \vct{x}\geq 0, \quad \mtx{A}\vct{x}=\zerovct
-\end{equation}
-if and only if there is no vector $\vct{y}$ such that
-\begin{equation}\label{eq:dual}\tag{D}
- \mtx{A}^{\trans}\vct{y}>\zerovct.
-\end{equation}
-Give a geometric interpretation of this fact.
-
-\problem Given a matrix $\mtx{A}\in \R^{m\times d}$ and $\vct{b}\in \R^m$ such that the polyhedron $P=\{\vct{x}\in \R^d\mid \mtx{A}\vct{x}\leq \vct{b}\}$ is not empty and bounded. 
-Show that if the optimal value of
-\begin{equation*}
- \maximize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}\leq \vct{b}
-\end{equation*}
-finite, it is attained at a vertex $\vct{x}^*$ of $P$. 
-
-\problem For the following linear programming problems,
-\begin{align}\label{eq:ex1}\tag{LP1}
-\begin{split}
- \maximize & x_1+2x_2 \\
- \subjto &x_1+x_2\leq 2\\
- & x_1-x_2\leq 1\\
- &x_1\geq -1
-\end{split}
-\end{align}
-\begin{align}\label{eq:ex1}\tag{LP2}
-\begin{split}
- \maximize & x_1+x_2 \\
- \subjto
- & x_2-x_1\leq 2\\
- & x_1+x_2\leq 8\\
- &x_1+2x_2\leq 10\\
- &x_1\leq 4\\
- &x_1\geq 0\\
- &x_2\geq 0.
-\end{split}
-\end{align}
-
-\begin{itemize}
- \item[(a)] Sketch the polyhedron of feasible points and find the vertices;
- \item[(b)] Write down the dual problems;
- \item[(c)] Find a solution, if it exists.
-\end{itemize}
-
-\problem Find the dual problem to the optimization problem
-\begin{equation*}
- \minimize \norm{\vct{x}}_1 \quad \subjto \mtx{A}\vct{x}=\vct{b}.
-\end{equation*}
 
 
 \end{document}
