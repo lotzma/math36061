@@ -95,17 +95,17 @@ It turns out that Condition~\eqref{eq:dual} is not only sufficient but also nece
 \begin{definition}
  A polyhedron (plural: polyhedra) is a set defined as the solution of linear equalities and inequalities,
  \begin{equation}\label{eq:polyhedron}
-  P = \{\vct{x}\in \R^d \mid \mtx{A}\vct{x}\leq \vct{b}\},
+  P = \{\vct{x}\in \R^n \mid \mtx{A}\vct{x}\leq \vct{b}\},
  \end{equation}
-where $\mtx{A}\in \R^{m\times d}$, $\vct{b}\in \R^m$. 
+where $\mtx{A}\in \R^{m\times n}$, $\vct{b}\in \R^m$. 
 \end{definition}
 
 More classically, we can write out the equations.
 \begin{align}\label{eq:eq}
 \begin{split}
- a_{11}x_1+\cdots +a_{1d}x_d &\leq b_1,\\
+ a_{11}x_1+\cdots +a_{1n}x_d &\leq b_1,\\
  \cdots& \\
- a_{m1}x_1+\cdots +a_{md}x_d & \leq b_m.
+ a_{m1}x_1+\cdots +a_{mn}x_d & \leq b_m.
  \end{split}
 \end{align}
 
