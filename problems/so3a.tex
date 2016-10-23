@@ -47,10 +47,10 @@ Therefore, $\lambda \vct{x}+(1-\lambda)\vct{y}\in B(\vct{p},r)$.
 Therefore, $\lambda \vct{x}+(1-\lambda)\vct{y}\in C^*$.
 \item[(c)] Denote $B_p=B(\vct{0},1)$ the unit ball with respect to the $p$-norm, where $p\in \{1,2,\infty\}$. For the $2$-norm, the polar is
 \begin{equation*}
- B_2^* = \{\vct{y}\in \R^d \mid \forall \vct{x}, \norm{\vct{x}}_2\leq 1\Rightarrow \ip{\vct{x}}{\vct{y}}\leq 1\}.
+ B_2^* = \{\vct{y}\in \R^n \mid \forall \vct{x}, \norm{\vct{x}}_2\leq 1\Rightarrow \ip{\vct{x}}{\vct{y}}\leq 1\}.
 \end{equation*}
 We claim that $B_2^* = B_2$. To show that $B_2\subseteq B_2^*$, let $\vct{y}\in B_2$, so that $\norm{\vct{y}}_2\leq 1$. 
-By the Cauchy-Schwarz inequality, for all $\vct{x}\in B_2$, 
+By the Cauchy-Schwarz inequality (or the characterization $\ip{\vct{x}}{\vct{y}}=\norm{\vct{x}}_2\norm{\vct{y}}_2\cos(\theta)$), for all $\vct{x}\in B_2$, 
 \begin{equation*}
  \ip{\vct{x}}{\vct{y}}\leq \norm{\vct{x}}_2\norm{\vct{y}}_2\leq 1,
 \end{equation*}
@@ -62,13 +62,13 @@ since $\vct{y}/\norm{\vct{y}}_2\in B_2$, from which $\vct{y}\in B_2$ follows.
 
 For the $1$-norm, 
 \begin{equation*}
- B_1^* = \{\vct{y}\in \R^d \mid \forall \vct{x}, \sum_{i=1}^d |x_i|\leq 1\Rightarrow \sum_{i=1}^d x_i y_i\leq 1\}.
+ B_1^* = \{\vct{y}\in \R^n \mid \forall \vct{x}, \sum_{i=1}^n |x_i|\leq 1\Rightarrow \sum_{i=1}^n x_i y_i\leq 1\}.
 \end{equation*}
-We claim that $B_1^*=B_{\infty}$. For the inclusion $B_\infty\subseteq B_1^*$, let $\vct{y}\in B_\infty$, i.e., $\norm{\vct{y}}_\infty = \max_{1\leq i\leq d}|y_i|\leq 1$. Then for all $\vct{x}\in B_1$, i.e., with $\sum_{i=1}^d |x_i|\leq 1$, we clearly have 
+We claim that $B_1^*=B_{\infty}$. For the inclusion $B_\infty\subseteq B_1^*$, let $\vct{y}\in B_\infty$, i.e., $\norm{\vct{y}}_\infty = \max_{1\leq i\leq n}|y_i|\leq 1$. Then for all $\vct{x}\in B_1$, i.e., with $\sum_{i=1}^n |x_i|\leq 1$, we clearly have 
 \begin{equation*}
- \ip{\vct{x}}{\vct{y}} = \sum_{i=1}^d x_iy_i\leq \sum_{i=1}^d x_i \leq 1,
+ \ip{\vct{x}}{\vct{y}} = \sum_{i=1}^n x_iy_i\leq \sum_{i=1}^n x_i \leq 1,
 \end{equation*}
-so that $\vct{y}\in B_1^*$. Now let $\vct{y}\in B_1^*$. For every $1\leq i\leq d$ and $\vct{x}=\pm \vct{e}_i=(0,\dots,\pm 1,\dots,0)^{\trans}$ ($\pm 1$ in $i$-th coordinate) we have that $\norm{\vct{x}}_1=1$, and so 
+so that $\vct{y}\in B_1^*$. Now let $\vct{y}\in B_1^*$. For every $1\leq i\leq n$ and $\vct{x}=\pm \vct{e}_i=(0,\dots,\pm 1,\dots,0)^{\trans}$ ($\pm 1$ in $i$-th coordinate) we have that $\norm{\vct{x}}_1=1$, and so 
 \begin{equation*}
  \pm y_i = \ip{\vct{x}}{\vct{y}}\leq 1, 
 \end{equation*}
@@ -76,15 +76,15 @@ from which $\norm{\vct{y}}_\infty\leq 1$ and $\vct{y}\in B_\infty$ follows.
 
 For the $\infty$-norm,
 \begin{equation*}
- B_\infty^* = \{\vct{y}\in \R^d \mid \forall \vct{x}, \max_{1\leq i\leq d}\leq 1\Rightarrow \sum_{i=1}^d x_iy_i \leq 1\}.
+ B_\infty^* = \{\vct{y}\in \R^n \mid \forall \vct{x}, \max_{1\leq i\leq n}\leq 1\Rightarrow \sum_{i=1}^n x_iy_i \leq 1\}.
 \end{equation*}
-For the inclusion $B_1\subseteq B_\infty$, let $\vct{y}\in B_1$, i.e., $\sum_{i=1}^d |y_i|\leq 1$. Then for all $\vct{x}$ with $\max_{1\leq i\leq d}|x_i|\leq 1$, we have that
+For the inclusion $B_1\subseteq B_\infty$, let $\vct{y}\in B_1$, i.e., $\sum_{i=1}^n |y_i|\leq 1$. Then for all $\vct{x}$ with $\max_{1\leq i\leq n}|x_i|\leq 1$, we have that
 \begin{equation*}
- \ip{\vct{x}}{\vct{y}} = \sum_{i=1}^d x_iy_i\leq \max_{1\leq i\leq d}|x_i|\sum_{i=1}^d y_i \leq 1,
+ \ip{\vct{x}}{\vct{y}} = \sum_{i=1}^n x_iy_i\leq \max_{1\leq i\leq n}|x_i|\sum_{i=1}^n y_i \leq 1,
 \end{equation*}
 so that $\vct{y}\in B_\infty^*$. To show $B_\infty^*\subseteq B_1$, let $\vct{y}\in B_\infty^*$. Let $\vct{x}=\mathrm{sign}(\vct{y})$ be the vectors with $x_i = \mathrm{sign}(y_i)$. Then $\norm{\vct{x}}_\infty = 1$, and
 \begin{equation*}
- \sum_{i=1}^d |y_i| = \sum_{i=1}^d x_iy_i = \ip{\vct{x}}{\vct{y}} \leq 1,
+ \sum_{i=1}^n |y_i| = \sum_{i=1}^n x_iy_i = \ip{\vct{x}}{\vct{y}} \leq 1,
 \end{equation*}
 so that $\vct{y}\in B_1$.
 \end{itemize}
@@ -123,7 +123,7 @@ Any affine hyperplane that does not touch $C$ has to be of the form $\{\vct{x}\m
  \end{equation*}
 holds for any numbers $x,t$ with $\geq 0$. For the $1$-norm, we get the equivalence
 \begin{equation*}
- \norm{\vct{x}}_1 \leq t \Leftrightarrow \exists t_1,\dots,t_d\geq 0, -t_i\leq x_i\leq t_i \text{ and } \sum_{i=1}^d t_i\leq t.
+ \norm{\vct{x}}_1 \leq t \Leftrightarrow \exists t_1,\dots,t_n\geq 0, -t_i\leq x_i\leq t_i \text{ and } \sum_{i=1}^n t_i\leq t.
 \end{equation*}
 A minimization problem of the form
 \begin{equation*}
@@ -131,14 +131,14 @@ A minimization problem of the form
 \end{equation*}
 can therefore be written as
 \begin{align*}
- \minimize &\sum_{i=1}^d t_i\\
+ \minimize &\sum_{i=1}^n t_i\\
  \subjto & -t_i\leq x_i \leq t_i\\
  &t_i\geq 0\\
  & \mtx{A}\vct{x}\leq \vct{b}.
 \end{align*}
 This is a linear programming problem with twice as many variables as the original problem. We can apply this to the objective function~\eqref{eq:obj}, which gives the form
 \begin{align*}
- \minimize & \sum_{i=1}^d t_i+\sum_{j=1}^d s_j\\
+ \minimize & \sum_{i=1}^n t_i+\sum_{j=1}^n s_j\\
  \subjto & t_i, s_j\geq 0\\
  & -t_i\leq p_{i,1}-x_1\leq t_i\\
  & -s_j\leq p_{j,2}-x_2\leq s_j\\

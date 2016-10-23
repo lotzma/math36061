@@ -1,0 +1,130 @@
+\documentclass{article}
+% Include macros here
+\input{../../../Work/macros/macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{4}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{3}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{October 24, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} 
+\begin{itemize}
+ \item[(a)] Given complex numbers $z_1=a+ib$ and $z_2=c+id$, we can express the real and imaginary parts of the product $z_3=z_1z_2$ as
+ \begin{equation*}
+  \begin{pmatrix}
+   \mathrm{re}(z_3)\\
+   \mathrm{im}(z_3)
+  \end{pmatrix}=
+  \begin{pmatrix}
+   a & -b\\
+   b & a
+  \end{pmatrix}
+\begin{pmatrix}
+ c \\ d
+\end{pmatrix}.
+ \end{equation*}
+In the same fashion, a system of equations $\mtx{A}\vct{x}=\vct{b}$, with $\mtx{A}$ and $\vct{x}$ complex, we can be written as
+\begin{equation*}
+ \begin{pmatrix}
+  \mathrm{re}(\vct{b})\\
+  \mathrm{im}(\vct{b})
+ \end{pmatrix}=
+ \begin{pmatrix}
+  \mathrm{re}(\mtx{A}) & -\mathrm{im}(\mtx{A})\\
+  \mathrm{im}(\mtx{A}) & \mathrm{re}(\mtx{A})
+ \end{pmatrix}
+ \begin{pmatrix}
+  \mathrm{re}(\vct{c})\\
+  \mathrm{im}(\vct{c})
+ \end{pmatrix}.
+\end{equation*}
+Since we know that the target vector $\vct{b}$ is real, we only need the upper half of this system. Once this is solved, we can assemble the complex $\vct{c}$ from it.
+
+\item[(b)+(c)] The code could look something like this:
+
+{\small
+\begin{lstlisting}[frame=single]
+% Define signal on interval [0,2\pi]
+f = @(x)(1.7*sin((30)*x)+0.5*cos((9)*x)+0.5*sin((6)*x)-...
+    1*cos((11)*x)+0.2*sin((13)*x));
+
+% Set up vector f
+n = 512;
+T = 2*pi/n;
+xx = linspace(0,2*pi-T,n)';
+yy = f(xx);
+
+% Determine points to subsample from
+m = 30;
+p = randperm(n);
+points = xx(p(1:m));
+samples = f(points);
+
+% Plot curve and sample points
+subplot(2,1,1);
+plot(xx,yy,'LineWidth',2);
+hold on;
+plot(points,samples,'or','MarkerFaceColor','r');
+
+% Inverse DFT matrix and split into real and imaginary parts
+D = ifft(eye(n));
+rD = [real(D),-imag(D)];
+A = rD(p(1:m),:);
+
+fy = fft(yy);
+b = A*[real(fy);imag(fy)];
+
+cvx_begin
+    variable x(2*n);
+    minimize ( norm(x,1) );
+    subject to
+        A*x == b;
+cvx_end;
+
+% Test whether what we did worked
+
+newy = real(ifft(x(1:n)+1i*x(n+1:end)));
+subplot(2,1,2);
+plot(xx,newy,'LineWidth',2);
+norm(newy-yy)
+\end{lstlisting}}
+\item[(d)] Repeating the experiments for different values of $m$ and plotting the success probability, we get the following diagram.
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.8\textwidth]{thresh_cropped.pdf}
+\caption{Probability of recovering the whole signal from $m$ samples}.
+ \end{figure}
+The interpretation is as follows: 
+
+{\bf We can  recover the values of the specific signal at $512$ points from sampling the signal at only about 45 random locations!}
+\item[(e)] The linear programming formulation is
+\begin{align*}
+ \minimize & \sum_{i=1}^n t_i\\
+ \subjto & -t_i\leq c_i\leq t_i\\
+ & t_i\geq 0\\
+ & \mtx{D}_I\vct{c}=\vct{f}_I.
+\end{align*}
+
+\end{itemize}
+\end{document}

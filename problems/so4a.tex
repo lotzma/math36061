@@ -1,0 +1,239 @@
+\documentclass{article}
+% Include macros here
+\input{../../../Work/macros/macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+\usetikzlibrary{calc}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{4}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{3}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{October 29, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:4} Suppose that there exists a nonzero $\vct{x}\geq \zerovct$ such that $\mtx{A}\vct{x}=\sum_{i=1}^d x_i\vct{a}_i=\zerovct$, where the $\vct{a}_i$ are the rows of $\mtx{A}$. Now if there was a $\zerovct\neq \vct{y}\in \R^m$ such that $\mtx{A}^{\trans}\vct{y}>0$, then $\ip{\vct{a}_i}{\vct{y}}>0$ for all $1\leq i\leq d$, so that
+\begin{equation*}
+ 0 =\ip{\vct{0}}{\vct{y}} = \sum_{i=1}^d x_i \ip{\vct{a}_i}{\vct{y}} >0,
+\end{equation*}
+which is absurd. Therefore, such a $\vct{y}$ does not exist. Now assuming there is $\vct{y}$ with $\mtx{A}^{\trans}\vct{y}>0$, then, for all nonzero $\vct{x}\geq \zerovct$,
+\begin{equation*}
+ \ip{\vct{x}}{\mtx{A}^{\trans}\vct{y}} = \ip{\mtx{A}\vct{x}}{\vct{y}} \neq 0, 
+\end{equation*}
+which shows that $\mtx{A}\vct{x}\neq \zerovct$ for all such $\vct{x}$. 
+
+For the geometric interpretation, consider the following two diagrams.
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=1]
+\draw[color=blue,dashed] (-2,-1)--(2,1);
+\draw[color=black,thick,->] (0,0)--(-2,2);
+\draw[color=black,thick,->] (0,0)--(0,1);
+\draw[color=black,thick,->] (0,0)--(1,2);
+\draw[color=red,thick,->] (0,0)--(-1,2);
+\node (A1) at (-2,2)  [label=120:{$\vct{a}_1$}] {};
+\node (A2) at (0,1)  [label=90:{$\vct{a}_2$}] {};
+\node (A3) at (1,2)  [label=60:{$\vct{a}_3$}] {};
+\node (A4) at (-1,2)  [label=120:{$\vct{y}$}] {};
+\end{tikzpicture}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=1]
+\filldraw[color=black!0,fill=blue!5] (-2,2)--(0,-1)--(1,2)--(-2,2);
+\draw[color=black,thick,->] (0,0)--(-2,2);
+\draw[color=black,thick,->] (0,0)--(0,-1);
+\draw[color=black,thick,->] (0,0)--(1,2);
+\node (A1) at (-2,2)  [label=120:{$\vct{a}_1$}] {};
+\node (A2) at (0,-1)  [label=0:{$\vct{a}_2$}] {};
+\node (A3) at (1,2)  [label=60:{$\vct{a}_3$}] {};
+\node (A4) at (0,0)  [label=90:{$\vct{0}$}] {};
+\end{tikzpicture}
+\end{minipage}
+\end{figure}
+
+The interpretation is that either the columns of $\mtx{A}$, $\vct{a}_1,\dots,\vct{a}_d$, are all on one side of a hyperplane, or $\zerovct$ can be written as convex combination of the $\vct{a}_i$. 
+
+\solution{pr2} Set
+\begin{equation*}
+ \mu := \max_{\vct{x}\in P} \ip{\vct{c}}{\vct{x}}.
+\end{equation*}
+Then the set $H\cap P$, with $H=\{\vct{x}\in \R^d\mid \ip{\vct{x}}{\vct{c}}=\mu\}$ is a face of $P$, and this is itself a bounded polyhedron (just add the equation $\ip{\vct{c}}{\vct{x}}=\mu$ to the equations for $P$). As a bounded polyhedron, it is the convex hull of its vertices. What remains to be seen is that the vertices of $P\cap H$ are also vertices of $P$. 
+So assume $\vct{x}$ is a vertex of $P\cap H$ but not of $P$. Then there exist points $\vct{y},\vct{z}\in P$, with (say) $\vct{y}\not\in H$, such that $\vct{x}$ lives on the line segment joining $\vct{y}$ and $\vct{z}$. But this would mean that $\vct{x}\not\in H$, as otherwise the whole line segment would be in $H$. It follows that $\vct{x}$ is a vertex of $P$.
+
+\solution{pr3} The data for the first linear programming problem is
+\begin{equation*}
+ \mtx{A} = \begin{pmatrix} 1 & 1\\ 1 & -1\\ -1 & 0\end{pmatrix}, \quad
+ \vct{b} = \begin{pmatrix} 2\\1\\1 \end{pmatrix}, \quad
+ \vct{c} = \begin{pmatrix} 1\\2\end{pmatrix}.
+\end{equation*}
+The minors are
+\begin{equation*}
+ \mtx{A}_{\{1,2\}} = \begin{pmatrix} 1 & 1 \\ 1&-1 \end{pmatrix}, \ 
+ \mtx{A}_{\{1,3\}} = \begin{pmatrix} 1 & 1 \\ -1&0 \end{pmatrix}, \
+ \mtx{A}_{\{2,3\}} = \begin{pmatrix} 1 & -1 \\ -1&0 \end{pmatrix}.
+\end{equation*}
+The minors are all invertible, so that the corresponding systems of linear equations $\mtx{A}_I\vct{x}=\vct{b}_I$ have unique solutions, given by
+\begin{equation*}
+ \vct{x}_{\{1,2\}} = \begin{pmatrix} 1.5\\0.5\end{pmatrix}, \ 
+ \vct{x}_{\{1,3\}} = \begin{pmatrix} -1\\3\end{pmatrix}, \
+ \vct{x}_{\{2,3\}} = \begin{pmatrix} -1\\-2\end{pmatrix}.
+\end{equation*}
+One easily verifies that each of these solutions also satisfies the remaining inequality, so that they are indeed vertices. This can also easily be seen by drawing the resulting polyhedron as intersection of halfspaces, as in the figure.
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1]\
+\draw[color=black, fill=blue!5, thick] (-1,-2)--(1.5,0.5)--(-1,3)--(-1,-2);
+\draw[color=black, ->] (0,-1.1)--(0,3);
+\draw[color=black, ->] (-2.1,0)--(2.5,0);
+
+\draw[color=black] (-1.1,3.1)--(3,-1);
+\draw[color=black] (-1.1,-2.1)--(2.1,1.1);
+\draw[color=black] (-1,-2)--(-1,3.5);
+\draw[color=black,very thick,->] (0,0)--(1.5,3);
+\draw[color=blue,dashed] (-1,3)--(2,1.5);
+\filldraw[red] (-1,3) circle (2pt);
+\node (A1) at (-1,3)  [label=15:{$\vct{x}_{\{1,3\}}$}] {};
+\node (A2) at (1.5,3)  [label=30:{$\vct{c}$}] {};
+\node (A3) at (1.5,0.5)  [label=0:{$\vct{x}_{\{1,2\}}$}] {};
+\node (A4) at (-1,-2)  [label=-15:{$\vct{x}_{\{2,3\}}$}] {};
+\end{tikzpicture}
+\end{figure}
+The objective values $\ip{\vct{c}}{\vct{x}}$ at these points are
+\begin{equation*}
+ \ip{\vct{c}}{\vct{x}_{\{1,2\}}} = 2.5, \ \ip{\vct{c}}{\vct{x}_{\{1,3\}}} = 5, \ \ip{\vct{c}}{\vct{x}_{\{2,3\}}} = -5.
+\end{equation*}
+The optimal point is therefore $\vct{x}_{\{1,3\}}=(-1,3)^{\trans}$. 
+Finally, we write down the dual problem
+\begin{equation*}
+ \minimize \ip{\vct{b}}{\vct{y}} \quad \subjto \mtx{A}^{\trans}\vct{y}=\vct{c}, \ \vct{y}\geq \zerovct.
+\end{equation*}
+In our case,
+\begin{align*}
+ \minimize & 2y_1+y_2+y_3\\
+ \subjto & y_1+y_2-y_3= 1\\
+ & y_1-y_2=2\\
+ & y_i\geq 0, \ 1\leq i\leq 3.
+\end{align*}
+
+For the second optimization problem, we begin by sketching the feasible set; this will make it easier to identify the vertices. 
+\begin{equation*}
+ \mtx{A} = \begin{pmatrix} -1 & 1\\1 & 1\\1 & 2\\ 1 & 0\\ -1 & 0\\ 0 & -1\end{pmatrix}, \quad
+ \vct{b} = \begin{pmatrix} 2\\8\\10\\4\\0\\0 \end{pmatrix}, \quad
+ \vct{c} = \begin{pmatrix} 1\\1\end{pmatrix}.
+\end{equation*}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=0.5]\
+\draw[color=black, fill=blue!5, thick] (0,0)--(0,2)--(2,4)--(4,3)--(4,0)--(0,0);
+\draw[color=black, ->] (0,-1.1)--(0,8.5);
+\draw[color=black, ->] (-2.1,0)--(10.5,0);
+
+\draw[color=black] (-2,0)--(6,8);
+\draw[color=black] (0,8)--(8,0);
+\draw[color=black] (0,5)--(10,0);
+\draw[color=black] (0,5)--(10,0);
+\draw[color=black] (4,-1)--(4,8.5);
+
+\draw[color=black,very thick,->] (0,0)--(2,2);
+
+\draw[color=blue,dashed] (0,7)--(7,0);
+
+\filldraw[red] (4,3) circle (4pt);
+
+%\node (A1) at (-1,3)  [label=15:{$\vct{x}_{\{1,3\}}$}] {};
+\node (A2) at (2,2)  [label=0:{$\vct{c}$}] {};
+%\node (A3) at (1.5,0.5)  [label=0:{$\vct{x}_{\{1,2\}}$}] {};
+%\node (A4) at (-1,-2)  [label=-15:{$\vct{x}_{\{2,3\}}$}] {};
+\end{tikzpicture}
+\end{figure}
+
+What we see from the sketch is that we can get rid of inequality 2 altogether, as it doesn't contribute to the polyhedron. Among the other inequalities, any two non-parallel lines intersect and therefore give rise to a non-singular minor, but there are only
+five of these pairs that give rise to points {\em in} $P$, and therefore define vertices. These vertices are
+\begin{equation*}
+ \vct{x}_{\{5,6\}}=(0,0)^{\trans}, \ \vct{x}_{\{1,5\}} = (0,2)^{\trans}, \  \vct{x}_{\{1,3\}} = (2,4)^{\trans}, \ \vct{x}_{\{3,4\}} = (4,3)^{\trans}, \ \vct{x}_{\{4,6\}} = (4,0)^{\trans}.
+\end{equation*}
+Evaluating the objective functions on these gives the values (in the order of the vertices given above)
+\begin{equation*}
+ 0, \ 2, \ 6, \ 7, \ 4.
+\end{equation*}
+As seen in the sketch, the optimal value is attained at $\vct{x}_{\{3,4\}}=(4,3)^{\trans}$.
+Finally, the dual problem is given by
+\begin{align*}
+ \minimize & 2y_1+8y_2+10y_3+4y_4\\
+ \subjto & -1y_1+y_2+y_3+y_4-y_5=1\\
+ & y_1+y_2+2y_3-y_6=1\\
+ & y_i\geq 0, \ 1\leq i\leq 6.
+\end{align*}
+
+\solution{pr3} The first step is to rewrite the problem as a linear programming one,
+\begin{align*}
+\minimize & t_1+\cdots +t_d\\
+\subjto & -t_1\leq x_1\leq t_1\\
+& \cdots\\
+& -t_d\leq x_d\leq t_d\\
+& t_i\geq 0, \ 1\leq i\leq d,
+\end{align*}
+see also problem (4.1)(d) or (3.5) for a derivation. Note that there are now $2d$ variables, the $t_i$ and the $x_j$, collected in vectors $\vct{t}$ and $\vct{x}$. Writing this problem in the form
+\begin{equation*}
+ \maximize \ip{\vct{c}}{\vct{z}}, \quad \subjto \mtx{A}'\vct{z}\leq \vct{b}',
+\end{equation*}
+with $\vct{z}=(\vct{t},\vct{x})$, we see that the matrix $\mtx{A}'$ and the vectors $\vct{b}'$ and $\vct{c}$ are given by
+\begin{equation*}
+ \mtx{A}' = \begin{pmatrix} 
+            -\mtx{1} & -\mtx{1}\\
+            -\mtx{1} & \mtx{1}\\
+            -\mtx{1} & \zerovct\\
+            \zerovct & \mtx{A}\\
+            \zerovct & -\mtx{A}
+           \end{pmatrix}, \ 
+ \vct{b}' = \begin{pmatrix}
+             \zerovct\\ \zerovct \\ \zerovct \\ \vct{b} \\ -\vct{b}
+            \end{pmatrix}, \
+ \vct{c} = \begin{pmatrix}
+            -\vct{e}\\ \zerovct
+           \end{pmatrix},
+\end{equation*}
+were again $\vct{e}$ denotes the vector consisting of only $1$'s.
+The dual has the form
+\begin{equation*}
+ \minimize \ip{\vct{b'}}{\vct{y}'} \ \subjto \mtx{A}'^{\trans}\vct{y}' =\vct{c}, \ \vct{y}'\geq \zerovct.
+\end{equation*}
+Writing $\vct{y}'=(\vct{y}_1,\vct{y}_2,\vct{y}_3,\vct{y}_4,\vct{y}_5)$, where the blocks correspond to the block-rows of $\mtx{A}'$, we can write the dual as
+\begin{align*}
+ \minimize & \ip{\vct{b}}{\vct{y}_4-\vct{y}_5}\\
+ \subjto & -(\vct{y}_1+\vct{y}_2+\vct{y}_3) = -\vct{e}\\
+ & -\vct{y}_1+\vct{y}_2 +\mtx{A}^{\trans}(\vct{y}_4-\vct{y}_5) = \zerovct\\
+ & \vct{y}_i\geq \zerovct, \ 1\leq i\leq 5.
+\end{align*}
+Set $\vct{y}=\vct{y}_4-\vct{y}_5$. From the first equality and the inequalities, we get that the entries of $\vct{y}_i$, for $1\leq i\leq 3$, are between $0$ and $1$, so that $\vct{y}_1-\vct{y}_2$ have entries between $-1$ and $1$. This means that we have the equivalence for the second condition
+\begin{equation*}
+ \mtx{A}^{\trans}\vct{y} = \vct{y}_1-\vct{y}_2 \Leftrightarrow \norm{\mtx{A}^{\trans}\vct{y}}_\infty \leq 1. 
+\end{equation*}
+The whole dual optimization problem can therefore be written as
+\begin{align*}
+ \minimize & \ip{\vct{b}}{\vct{y}}\\
+ \subjto & \norm{\mtx{A}^{\trans}\vct{y}}_\infty\leq 1.
+\end{align*}
+Note that the $\infty$-norm that appears in the constraints is the dual norm of the $1$-norm that appears in the objective of the original problem.
+
+\end{document}
