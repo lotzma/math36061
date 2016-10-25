@@ -1,0 +1,147 @@
+\documentclass{article}
+\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{3}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\newcommand{\problem}[1]{\paragraph{(\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\ifx\marks\undefined
+             \newcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\else
+             \renewcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\fi
+\newcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH20602}
+\chead{Numerical Analysis 1}
+\rhead{March 17, 2014}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Midterm test}}
+\end{center}
+
+\begin{center} 
+\emph{Closed book.\quad Attempt all questions.\quad Calculators permitted. \quad 12:00-12:50}\\
+{\em Please write your name and student identity number on the front page.}
+\end{center}
+
+%-- 
+\problem{p0} Evaluate the expression
+\begin{equation*}
+  x^2-1
+\end{equation*}
+for $x=1.001$ by computing every step to four significant figures, and determine the relative error of the solution.
+Rewrite the above equation in order to avoid cancellation errors. 
+
+\marks[-6mm]{2}
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p2} Let $L_i(x)$, $0\leq i\leq n$, denote the Lagrange basis functions associated to interpolation nodes $x_0,\dots,x_n$, with $x_i=2i+1$ for $i=0,\dots,n$. Show that for all $x\in \R$,
+\begin{equation*}
+  L_1(x)+2L_2(x)+3L_3(x)+\dots +nL_n(x) = \frac{x-1}{2}.
+\end{equation*}\marks[-6mm]{2}
+
+\newpage
+\mbox{}
+\newpage
+%-- 
+\problem{p2} 
+Compute the polynomial $p(x)$ that  interpolates the data 
+\begin{equation*} 
+(x_i, y_i)= (0, 0), (1, 1), (2,4), (3,9) 
+\end{equation*} 
+by use of a divided difference table. What is the degree of the resulting polynomial?
+
+In general, given $n+1$ interpolation points $(x_i,y_i)$, $0\leq i\leq n$, how many arithmetic operations are needed to a) create the the divided difference table, and b) evaluate
+the corresponding Newton interpolation polynomial?
+\marks{3} 
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p3} Consider the function $f(x)=\cos(x)$ on the interval $[0,\pi]$. 
+State the formula for the composite trapezium rule for approximating the integral $\int_{0}^{\pi} \cos(x) \ dx$.
+
+Find, with justification, a number of intervals $n$ such that the integration error of the trapezium rule will be less than $10^{-2}$.
+\marks{3} 
+
+\newpage
+\mbox{}
+\newpage
+ 
+\problem{p4} Define the degree of precision of a quadrature rule 
+$I(f)$ that approximates $\int_a^b f(x)\,dx$. Determine a value of 
+$\alpha$ such that the degree of precision of the following quadrature rule is at least $1$.
+\begin{equation*} 
+I(f)= \frac 13 \left( f(0)+ f(\alpha) +f(1)\right)\approx \int_0^1  f(x)\,dx.  
+\end{equation*}
+What is the degree of precision of the resulting quadrature rule? \marks{3} 
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p5}
+Carry out two iterations of the Jacobi method for the system of equations
+\begin{equation*}
+  \begin{pmatrix} 2 & -1\\ -1 & 2 \end{pmatrix} \begin{pmatrix} x_1\\ x_2 \end{pmatrix} = \begin{pmatrix} 3\\3\end{pmatrix}
+\end{equation*}
+with starting vector $\vct{x}^{(0)} = (0,0)^{\top}$ (that is, $x_1^{(0)}=0, x_2^{(0)}=0$).
+
+Compare the possible benefits and drawbacks of using the Gauss-Seidel method as opposed to the Jacobi method for large systems of equations.\marks{3}
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p6}
+Define the operator norm of a matrix and show that a $2\times 2$ matrix $\mtx{A}$ satisfies the inequality
+\begin{equation*}
+\frac{1}{\sqrt{2}}\norm{\mtx{A}}_\infty \leq \norm{\mtx{A}}_2.
+\end{equation*} 
+You may use the fact that for $n$-vectors we have $\norm{\vct{x}}_\infty\leq \norm{\vct{x}}_2\leq \sqrt{n}\norm{\vct{x}}_\infty$. \marks{2}
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p7}
+Determine the vector norms $\norm{\vct{x}}_2$ and $\norm{\vct{x}^{\top}}_1$ and the matrix norms $\norm{\mtx{A}}_\infty$ and $\norm{\mtx{A}}_1$ for
+\begin{equation*}
+  \vct{x} = \begin{pmatrix} -3\\ 2\\ 4 \end{pmatrix}, \quad
+\mtx{A} =  \begin{pmatrix}
+  1 & 0 & 1\\
+  -2 & 4 & 3\\
+  3 & -1 & 8
+\end{pmatrix}.
+\end{equation*}
+Show that for any $n\times n$ matrix $\mtx{A}$, 
+\begin{equation*}
+  \norm{\mtx{A}}_1 = \norm{\mtx{A}^{\top}}_\infty,
+\end{equation*}
+where $\mtx{A}^{\top}$ denotes the matrix transpose.
+\marks{3}
+
+\newpage
+\mbox{}
+\newpage
+
+\end{document} 
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
