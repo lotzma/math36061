@@ -63,68 +63,89 @@ Since we know that the target vector $\vct{b}$ is real, we only need the upper h
 
 \item[(b)+(c)] The code could look something like this:
 
-{\small
-\begin{lstlisting}[frame=single]
-% Define signal on interval [0,2\pi]
-f = @(x)(1.7*sin((30)*x)+0.5*cos((9)*x)+0.5*sin((6)*x)-...
-    1*cos((11)*x)+0.2*sin((13)*x));
+\begin{ipythonnb}
+import numpy as np
+import numpy.linalg as la
+import numpy.random as rnd
+import numpy.fft as fft
+import matplotlib.pyplot as plt
+import cvxpy as cvx
+\end{ipythonnb}
 
-% Set up vector f
-n = 512;
-T = 2*pi/n;
-xx = linspace(0,2*pi-T,n)';
-yy = f(xx);
+\begin{ipythonnb}
+def f(x):
+    return 1.7*np.sin(30.*x)+0.5*np.cos(9.*x)+0.5*np.sin(6.*x)
+    -np.cos(11.*x)+0.2*np.sin(13.*x)
+\end{ipythonnb}
 
-% Determine points to subsample from
-m = 30;
-p = randperm(n);
-points = xx(p(1:m));
-samples = f(points);
+\begin{ipythonnb}
+n = 512
+T = 2*np.pi/n
+xx = np.linspace(0,2*np.pi-T,n)
+yy = f(xx)
+% matplotlib inline
+plt.plot(xx,yy,linewidth=3)
+plt.show()
+\end{ipythonnb}
 
-% Plot curve and sample points
-subplot(2,1,1);
-plot(xx,yy,'LineWidth',2);
-hold on;
-plot(points,samples,'or','MarkerFaceColor','r');
+\includegraphics[width=0.5\textwidth]{images/41.png}
 
-% Inverse DFT matrix and split into real and imaginary parts
-D = ifft(eye(n));
-rD = [real(D),-imag(D)];
-A = rD(p(1:m),:);
+\begin{ipythonnb}
+m = 30
+p = rnd.permutation(n)
+points = xx[p[:m]]
+samples = f(points)
+plt.plot(xx,yy,linewidth=2)
+plt.plot(points,samples,'o', color='red')
+plt.show()
+\end{ipythonnb}
 
-fy = fft(yy);
-b = A*[real(fy);imag(fy)];
+The red dots indicate the points that we see. We know nothing else about the signal!
 
-cvx_begin
-    variable x(2*n);
-    minimize ( norm(x,1) );
-    subject to
-        A*x == b;
-cvx_end;
+\includegraphics[width=0.5\textwidth]{images/42.png}
 
-% Test whether what we did worked
+We now show how to reconstruct the whole blue curve from the knowledge of the red dots alone. We do this by setting up an optimization problem of the form
 
-newy = real(ifft(x(1:n)+1i*x(n+1:end)));
-subplot(2,1,2);
-plot(xx,newy,'LineWidth',2);
-norm(newy-yy)
-\end{lstlisting}}
-\item[(d)] Repeating the experiments for different values of $m$ and plotting the success probability, we get the following diagram.
-\begin{figure}[h!]
- \centering
- \includegraphics[width=0.8\textwidth]{images/thresh_cropped.pdf}
-\caption{Probability of recovering the whole signal from $m$ samples}.
- \end{figure}
-The interpretation is as follows: 
+\begin{equation*}
+  \minimize \|\vct{x}\|_1 \quad \subjto \mtx{A}\vct{x}=\vct{b}
+\end{equation*}
 
-{\bf We can  recover the values of the specific signal at $512$ points from sampling the signal at only about 45 random locations!}
-\item[(e)] The linear programming formulation is
-\begin{align*}
- \minimize & \sum_{i=1}^n t_i\\
- \subjto & -t_i\leq c_i\leq t_i\\
- & t_i\geq 0\\
- & \mtx{D}_I\vct{c}=\vct{f}_I.
-\end{align*}
+for suitable matrix $\mtx{A}$ and vector $\vct{b}$. How $\mtx{A}$ and $\vct{b}$ are constructed is described in the problem description. Below is the implementation.
+
+\begin{ipythonnb}
+D = fft.ifft(np.eye(n))
+rD = np.concatenate((D.real, D.imag), axis=1)
+A = rD[p[:m],:]
+fy = fft.fft(yy)
+b = np.dot(A,np.concatenate((fy.real, fy.imag), axis=0))
+\end{ipythonnb}
+
+\begin{ipythonnb}
+x = cvx.Variable(2*n)
+constraints = [A*x == b]
+obj = cvx.Minimize(cvx.norm(x,1))
+prob = cvx.Problem(obj, constraints)
+prob.solve()
+
+x = np.array(x.value).transpose()[0]
+\end{ipythonnb}
+
+\begin{ipythonnb}
+newy_im = fft.ifft(x[:n]+1j*x[n:])
+newy = newy_im.real
+print la.norm(newy-yy,1)
+
+plt.subplot(2,1,1)
+plt.plot(xx,yy,linewidth=3)
+plt.subplot(2,1,2)
+plt.plot(xx,newy,linewidth=3)
+plt.show()
+\end{ipythonnb}
+
+\includegraphics[width=0.8\textwidth]{images/43.png}
+
+The error obtained is of order $10^{-7}$. Now the interesting question is: \textbf{how much undersampling can we get away with?} To find out, we can repeat the previous experiment with values of m between $1$ and $512$ and find out where the method starts working. Obviously sampling only one point will not work (not enough information), and sampling all 512 points will work (we have all the information). As we say, $30$ points is already sufficient, but can we do with less?
+
 
 \end{itemize}
 \end{document}
