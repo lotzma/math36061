@@ -22,62 +22,12 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{October 29, 2015}
+\rhead{October 27, 2016}
 
 \begin{document} 
 \begin{center}
-{\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
 \end{center}
-
-\solution{pr:4} Suppose that there exists a nonzero $\vct{x}\geq \zerovct$ such that $\mtx{A}\vct{x}=\sum_{i=1}^d x_i\vct{a}_i=\zerovct$, where the $\vct{a}_i$ are the rows of $\mtx{A}$. Now if there was a $\zerovct\neq \vct{y}\in \R^m$ such that $\mtx{A}^{\trans}\vct{y}>0$, then $\ip{\vct{a}_i}{\vct{y}}>0$ for all $1\leq i\leq d$, so that
-\begin{equation*}
- 0 =\ip{\vct{0}}{\vct{y}} = \sum_{i=1}^d x_i \ip{\vct{a}_i}{\vct{y}} >0,
-\end{equation*}
-which is absurd. Therefore, such a $\vct{y}$ does not exist. Now assuming there is $\vct{y}$ with $\mtx{A}^{\trans}\vct{y}>0$, then, for all nonzero $\vct{x}\geq \zerovct$,
-\begin{equation*}
- \ip{\vct{x}}{\mtx{A}^{\trans}\vct{y}} = \ip{\mtx{A}\vct{x}}{\vct{y}} \neq 0, 
-\end{equation*}
-which shows that $\mtx{A}\vct{x}\neq \zerovct$ for all such $\vct{x}$. 
-
-For the geometric interpretation, consider the following two diagrams.
-
-\begin{figure}[h!]
-\centering
-\begin{minipage}{0.5\textwidth}
-\begin{tikzpicture}[scale=1]
-\draw[color=blue,dashed] (-2,-1)--(2,1);
-\draw[color=black,thick,->] (0,0)--(-2,2);
-\draw[color=black,thick,->] (0,0)--(0,1);
-\draw[color=black,thick,->] (0,0)--(1,2);
-\draw[color=red,thick,->] (0,0)--(-1,2);
-\node (A1) at (-2,2)  [label=120:{$\vct{a}_1$}] {};
-\node (A2) at (0,1)  [label=90:{$\vct{a}_2$}] {};
-\node (A3) at (1,2)  [label=60:{$\vct{a}_3$}] {};
-\node (A4) at (-1,2)  [label=120:{$\vct{y}$}] {};
-\end{tikzpicture}
-\end{minipage}%
-\begin{minipage}{0.5\textwidth}
-\begin{tikzpicture}[scale=1]
-\filldraw[color=black!0,fill=blue!5] (-2,2)--(0,-1)--(1,2)--(-2,2);
-\draw[color=black,thick,->] (0,0)--(-2,2);
-\draw[color=black,thick,->] (0,0)--(0,-1);
-\draw[color=black,thick,->] (0,0)--(1,2);
-\node (A1) at (-2,2)  [label=120:{$\vct{a}_1$}] {};
-\node (A2) at (0,-1)  [label=0:{$\vct{a}_2$}] {};
-\node (A3) at (1,2)  [label=60:{$\vct{a}_3$}] {};
-\node (A4) at (0,0)  [label=90:{$\vct{0}$}] {};
-\end{tikzpicture}
-\end{minipage}
-\end{figure}
-
-The interpretation is that either the columns of $\mtx{A}$, $\vct{a}_1,\dots,\vct{a}_d$, are all on one side of a hyperplane, or $\zerovct$ can be written as convex combination of the $\vct{a}_i$. 
-
-\solution{pr2} Set
-\begin{equation*}
- \mu := \max_{\vct{x}\in P} \ip{\vct{c}}{\vct{x}}.
-\end{equation*}
-Then the set $H\cap P$, with $H=\{\vct{x}\in \R^d\mid \ip{\vct{x}}{\vct{c}}=\mu\}$ is a face of $P$, and this is itself a bounded polyhedron (just add the equation $\ip{\vct{c}}{\vct{x}}=\mu$ to the equations for $P$). As a bounded polyhedron, it is the convex hull of its vertices. What remains to be seen is that the vertices of $P\cap H$ are also vertices of $P$. 
-So assume $\vct{x}$ is a vertex of $P\cap H$ but not of $P$. Then there exist points $\vct{y},\vct{z}\in P$, with (say) $\vct{y}\not\in H$, such that $\vct{x}$ lives on the line segment joining $\vct{y}$ and $\vct{z}$. But this would mean that $\vct{x}\not\in H$, as otherwise the whole line segment would be in $H$. It follows that $\vct{x}$ is a vertex of $P$.
 
 \solution{pr3} The data for the first linear programming problem is
 \begin{equation*}
@@ -185,15 +135,22 @@ Finally, the dual problem is given by
  & y_i\geq 0, \ 1\leq i\leq 6.
 \end{align*}
 
+\solution{pr2} Set
+\begin{equation*}
+ \mu := \max_{\vct{x}\in P} \ip{\vct{c}}{\vct{x}}.
+\end{equation*}
+Then the set $H\cap P$, with $H=\{\vct{x}\in \R^n\mid \ip{\vct{x}}{\vct{c}}=\mu\}$ is a face of $P$, and this is itself a bounded polyhedron (just add the equation $\ip{\vct{c}}{\vct{x}}=\mu$ to the equations for $P$). As a bounded polyhedron, it is the convex hull of its vertices. What remains to be seen is that the vertices of $P\cap H$ are also vertices of $P$. 
+So assume $\vct{x}$ is a vertex of $P\cap H$ but not of $P$. Then there exist points $\vct{y},\vct{z}\in P$, with (say) $\vct{y}\not\in H$, such that $\vct{x}$ lives on the line segment joining $\vct{y}$ and $\vct{z}$. But this would mean that $\vct{x}\not\in H$, as otherwise the whole line segment would be in $H$. It follows that $\vct{x}$ is a vertex of $P$.
+
 \solution{pr3} The first step is to rewrite the problem as a linear programming one,
 \begin{align*}
-\minimize & t_1+\cdots +t_d\\
+\minimize & t_1+\cdots +t_n\\
 \subjto & -t_1\leq x_1\leq t_1\\
 & \cdots\\
-& -t_d\leq x_d\leq t_d\\
-& t_i\geq 0, \ 1\leq i\leq d,
+& -t_n\leq x_n\leq t_n\\
+& t_i\geq 0, \ 1\leq i\leq n.
 \end{align*}
-see also problem (4.1)(d) or (3.5) for a derivation. Note that there are now $2d$ variables, the $t_i$ and the $x_j$, collected in vectors $\vct{t}$ and $\vct{x}$. Writing this problem in the form
+Note that there are now $2n$ variables, the $t_i$ and the $x_j$, collected in vectors $\vct{t}$ and $\vct{x}$. Writing this problem in the form
 \begin{equation*}
  \maximize \ip{\vct{c}}{\vct{z}}, \quad \subjto \mtx{A}'\vct{z}\leq \vct{b}',
 \end{equation*}
@@ -235,5 +192,51 @@ The whole dual optimization problem can therefore be written as
  \subjto & \norm{\mtx{A}^{\trans}\vct{y}}_\infty\leq 1.
 \end{align*}
 Note that the $\infty$-norm that appears in the constraints is the dual norm of the $1$-norm that appears in the objective of the original problem.
+
+\solution{pr:4} Suppose that there exists a nonzero $\vct{x}\geq \zerovct$ such that $\mtx{A}\vct{x}=\sum_{i=1}^n x_i\vct{a}_i=\zerovct$, where the $\vct{a}_i$ are the rows of $\mtx{A}$. Now if there was a $\zerovct\neq \vct{y}\in \R^m$ such that $\mtx{A}^{\trans}\vct{y}>0$, then $\ip{\vct{a}_i}{\vct{y}}>0$ for all $1\leq i\leq n$, so that
+\begin{equation*}
+ 0 =\ip{\vct{0}}{\vct{y}} = \sum_{i=1}^n x_i \ip{\vct{a}_i}{\vct{y}} >0,
+\end{equation*}
+which is absurd. Therefore, such a $\vct{y}$ does not exist. Now assuming there is $\vct{y}$ with $\mtx{A}^{\trans}\vct{y}>0$, then, for all nonzero $\vct{x}\geq \zerovct$,
+\begin{equation*}
+ \ip{\vct{x}}{\mtx{A}^{\trans}\vct{y}} = \ip{\mtx{A}\vct{x}}{\vct{y}} \neq 0, 
+\end{equation*}
+which shows that $\mtx{A}\vct{x}\neq \zerovct$ for all such $\vct{x}$. 
+
+For the geometric interpretation, consider the following two diagrams.
+
+\begin{figure}[h!]
+\centering
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=1]
+\draw[color=blue,dashed] (-2,-1)--(2,1);
+\draw[color=black,thick,->] (0,0)--(-2,2);
+\draw[color=black,thick,->] (0,0)--(0,1);
+\draw[color=black,thick,->] (0,0)--(1,2);
+\draw[color=red,thick,->] (0,0)--(-1,2);
+\node (A1) at (-2,2)  [label=120:{$\vct{a}_1$}] {};
+\node (A2) at (0,1)  [label=90:{$\vct{a}_2$}] {};
+\node (A3) at (1,2)  [label=60:{$\vct{a}_3$}] {};
+\node (A4) at (-1,2)  [label=120:{$\vct{y}$}] {};
+\end{tikzpicture}
+\end{minipage}%
+\begin{minipage}{0.5\textwidth}
+\begin{tikzpicture}[scale=1]
+\filldraw[color=black!0,fill=blue!5] (-2,2)--(0,-1)--(1,2)--(-2,2);
+\draw[color=black,thick,->] (0,0)--(-2,2);
+\draw[color=black,thick,->] (0,0)--(0,-1);
+\draw[color=black,thick,->] (0,0)--(1,2);
+\node (A1) at (-2,2)  [label=120:{$\vct{a}_1$}] {};
+\node (A2) at (0,-1)  [label=0:{$\vct{a}_2$}] {};
+\node (A3) at (1,2)  [label=60:{$\vct{a}_3$}] {};
+\node (A4) at (0,0)  [label=90:{$\vct{0}$}] {};
+\end{tikzpicture}
+\end{minipage}
+\end{figure}
+
+The interpretation is that either the columns of $\mtx{A}$, $\vct{a}_1,\dots,\vct{a}_n$, are all on one side of a hyperplane, or $\zerovct$ can be written as convex combination of the $\vct{a}_i$. 
+
+
+
 
 \end{document}
