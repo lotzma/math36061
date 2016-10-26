@@ -1,0 +1,141 @@
+%-----------------------------------------------------------------------
+% Beginning of chapter.tex
+%-----------------------------------------------------------------------
+%
+%  This is a sample file for use with AMS-LaTeX.  It provides an example
+%  of how to set up a file for a book to be typeset with AMS-LaTeX.
+%
+%  This is the driver file.  Separate chapters should be included at
+%  the end of this file.
+%
+%  ***** DO NOT USE THIS FILE AS A STARTER FOR YOUR BOOK. *****
+%  Follow the guidelines in the file chapter.template.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[11pt,a4paper]{memoir}
+\chapterstyle{demo}
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{8cm}
+\setlength\epigraphrule{0pt}
+\epigraphfontsize{\small\itshape}
+%\includeonly{preface,chap1,biblio}
+
+%\numberwithin{section}{chapter}
+%\numberwithin{equation}{chapter}
+
+% Include macros here
+\input{macros}
+
+%\renewcommand{\chaptername}{}
+%\renewcommand{\thechapter}{}
+
+\begin{document}
+\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+
+%\frontmatter
+%\title{Convex Optimization}
+
+%    Information for first author
+%\author{Martin Lotz}
+%    Address of record for the research reported here
+
+%\address{School of Mathematics\\ The University of Manchester\\ Alan Turing Building, Oxford Road\\ Manchester M139PL}
+
+%\email{martin.lotz@manchester.ed.uk}
+%\urladdr{http://www.maths.manchester.ac.uk/\textasciitilde mlotz}
+
+%\date{\today}
+
+%\maketitle
+
+%\newpage 
+
+%\tableofcontents
+
+%\include{preface}
+
+\mainmatter
+
+%\include{notation}
+
+\section*{Overview}
+
+\begin{enumerate}
+\item Introduction (Lecture 1 + Introductory slides)
+\begin{itemize}
+ \item What is an optimization problem?
+ \item Examples of optimization problems.
+\end{itemize}
+\item Unconstrained optimization and iterative algorithms (Lectures 2-6)
+\begin{itemize}
+ \item Unconstrained optimization
+ \item Convex functions
+ \item Gradient descent (steepest descent, step length, linear least squares)
+ \item Convergence of iterative methods
+ \item Convergence of gradient descent
+ \item Newton's method
+ \item Machine learning / supervised learning
+\end{itemize}
+\item Linear Programming Theory (Lectures 7-10)
+\begin{itemize}
+ \item Convex sets
+ \item Linear programming duality: a first glance
+ \item Polyhedra
+ \item Farkas' Lemma
+ \item Linear programming duality
+ \item A first algorithm
+ \item Optimality condition for linear programming
+\end{itemize}
+
+\end{enumerate}
+
+\newpage
+
+\section*{Questions and Answers}
+
+\noindent {\em Q}: Which lectures are relevant for the test?\\
+
+\noindent {\em A}: Weeks 1-5 (lectures 1-10). \\
+
+\noindent {\em Q}: What do we have to know from the lectures?\\
+
+\noindent {\em A}: The following {\em will not} be asked, though the statements should be known:
+\begin{itemize}
+\item Python code will not be part of the test;
+\item Proofs in Section 4.3 on the convergence of gradient descent. What needs to be remembered from this section is that gradient descent has {\em linear} convergence (implied by the last Theorem in that section).
+\item Proof of Theorem 5.6 (quadratic convergence of Newton's method), though the statement should be known.
+\item Section 5.2 (Quasinewton methods)
+\item Proof of Lemma 7.8.
+\item Proof of Corollary 9.3.
+\end{itemize}
+
+As a rule of thumb, it is beneficial for the understanding to know the proof ideas, though precise reconstruction of proofs will not be asked.\\
+
+\noindent {\em Q}: Which problems are relevant?\\
+
+\noindent {\em A}: Problem that use Python or require cutting a shape out of paper will not be relevant to the test. More precisely, the following problems will not feature:
+
+\begin{itemize}
+\item Part B problems.
+\item Problem 2.1(c) (the derivation).
+\item Problem 2.3
+\item Problem 3.2
+\end{itemize}
+
+
+%\include{lecture2}
+
+%\appendix
+%\include{appendix1}
+
+%\backmatter
+%\include{biblio}
+%\include{index}
+\end{document}
+
+%-----------------------------------------------------------------------
+% End of chapter.tex
+%-----------------------------------------------------------------------

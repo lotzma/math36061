@@ -1,0 +1,269 @@
+\documentclass{article}
+\input{macros}
+\usepackage{fancyhdr}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{1}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\ifx\marks\undefined
+             \newcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\else
+             \renewcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\fi
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 10, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Midterm test}}
+\end{center}
+
+\begin{center} 
+\emph{Closed book.\quad Attempt all questions.\quad Calculators permitted. \quad 13:00-13:50}\\
+{\em Please write your name and student identity number on the front page.}
+\end{center}
+
+%-- 
+\problem{p0} Determine the order of convergence of each of the following sequences (if they converge at all). You may assume $k\geq 1$.
+
+\begin{equation*}
+ \text{(a) } \ x_k = \frac{1}{\sqrt{k}}, \quad \text{(b) } \ x_k = 1+(0.2)^{3^k}, \quad \text{(c) } \ x_k=k^{-k}, \quad \text{(d) } \ x_k = 1
+\end{equation*}
+
+\marks[-6mm]{4}
+
+%\newpage
+%\mbox{}
+%\newpage
+
+\problem{p1} Consider the function on $\R^2$, $f(\vct{x}) = (2x_1+x_2^2)^2$. Show that $\vct{p}=(-1,0)^{\trans}$ is a descent direction at $\vct{x}_0=(0,1)^{\trans}$, and find a step length $\alpha$ that minimizes $f(\vct{x}_0+\alpha p)$. 
+
+\marks[-4mm]{4}
+
+%\newpage
+%\mbox{}
+%\newpage
+%-- 
+
+\problem{p2} Determine, with justification, which of the following functions is convex ($\ln(x)$ refers to the natural logarithm).
+\begin{itemize}
+ \item[(a)] $\displaystyle f(x)=\ln(x)$ for $x>0$;
+ \item[(b)] $\displaystyle f(x)=\frac{1}{x}$ for $x>0$;
+ \item[(c)] $\displaystyle f(x,y,z) = z^2-x^2-y^2$ for $x\in \R$;
+ \item[(d)] $\displaystyle f(\vct{x}) = \norm{\vct{x}}_1+\norm{\vct{x}}_\infty$.
+ \end{itemize}
+You may used criteria for convexity seen in the lecture and problem sessions.
+\marks[-6mm]{4} 
+
+\problem{p3} Consider the following linear programming problem
+\begin{align*}
+ \maximize & x_1-x_2 \\
+ \subjto & x_1\leq 1\\
+	 & x_2\leq 2\\
+         & 2x_1+x_2\geq 2
+\end{align*}
+\begin{itemize}
+ \item[(a)] Determine the vertices of the polyhedron of feasible points;
+ \item[(b)] Find an optimizer and the optimal value;
+ \item[(c)] Write down the dual to this problem.
+\end{itemize}
+
+\marks[-6mm]{4} 
+
+\problem{p4} Consider the function
+\begin{equation*}
+ f(x,y) = \sqrt{1+x^2+y^2}
+\end{equation*}
+By computing the gradient and Hessian, show that this function is convex and determine the unique minimum. Write down the form of one iteration of Newton's method for this function.
+\marks[-4mm]{4}
+
+\newpage
+
+\setcounter{problems}{0}
+
+\solution{so1} 
+\begin{itemize}
+                \item[(a)] The sequence converges to $0$. We have the identity
+\begin{equation*}
+ x_{k+1} = \frac{1}{\sqrt{k+1}} = \sqrt{\frac{k}{k+1}} \frac{1}{\sqrt{k}}=\sqrt{\frac{k}{k+1}} x_k,
+\end{equation*}
+which means that for any fixed constant $c<1$ there is a $k$ such that $1>\sqrt{k/(k+1)}>c$, and therefore $x_{k+1} > cx_k$. It follows that the sequence does not converge linearly (or to any higher order).
+\item[(b)] The sequence converges to $1$. We have
+\begin{equation*}
+ |x_{k+1}-1| = (0.2)^{3^{k+1}} = \left((0.2)^{3^{k}}\right)^3 = |x_k-1|^3,
+\end{equation*}
+so that the convergence is cubic.
+\item[(c)] The sequence converges to $0$. 
+We can write $k^{-k}=2^{-k\log(k)}$. For $k\geq 1$,
+\begin{equation*}
+ x_{k+1} = \frac{1}{(k+1)^{k+1}} = \frac{1}{(k+1)^k \cdot (k+1)} =\frac{1}{2^{k\log(k+1)}(k+1)} \leq \frac{1}{k+1} x_k,
+\end{equation*}
+which shows that the sequence converges superlinearly.
+\item[(d)] The sequence converges to $1$. Moreover, $|x_{k+1}-1|=0\leq M|x_k-1|^p$ for any $M>0$ and $p>0$, so this sequence convergences to any order. 
+\end{itemize}
+
+\solution{so2} The gradient is
+\begin{equation*}
+ \nabla f(x_1,x_2) = \begin{pmatrix}
+                      4(2x_1+x_2^2)\\
+                      4x_2(2x_1+x_2^2)
+                     \end{pmatrix}.
+\end{equation*}
+At $\vct{x}_0=(0,1)^{\trans}$, $\nabla f(0,1) = (4,4)^{\trans}$. The direction $\vct{p}=(-1,0)^{\trans}$ is a descent direction, if $\ip{\nabla f(\vct{x}_0)}{\vct{p}}<0$. In our case,
+$\ip{\nabla f(\vct{x}_0)}{\vct{p}} = -4<0$.
+The optimal step length along $\vct{p}$ is the minimizer of
+\begin{equation*}
+ f(\vct{x}_0+\alpha\vct{p}) = (1-2\alpha)^2.
+\end{equation*}
+Computing the derivative and setting it to zero, $2\alpha-1=0$, we get the optimal step length $\alpha=1/2$.
+
+\solution{so3} 
+\begin{itemize}
+ \item[(a)] The function is not convex. The derivative is $1/x$, which for $x>0$ is positive. The second derivative is $-1/x^2<0$.
+ \item[(b)] The function is convex. The second derivative is $2/x^3>0$.
+ \item[(c)] This function is not convex. The Hessian is given by
+ \begin{equation*}
+  \begin{pmatrix} -2 & 0 & 0 \\
+   0 & -2 & 0\\
+   0 & 0 & 2
+  \end{pmatrix},
+ \end{equation*}
+ which is not positive definite.
+ \item[(d)] This function is, as the sum of two norms, convex. Precisely, for $\lambda \in [0,1]$,
+ \begin{align*}
+  \norm{\lambda \vct{x}+(1-\lambda)\vct{y}}_1+\norm{\lambda \vct{x}+(1-\lambda)\vct{y}}_\infty &\leq \lambda\norm{ \vct{x}}_1+(1-\lambda)\norm{\vct{y}}_1+\lambda\norm{ \vct{x}}_\infty+(1-\lambda)\norm{\vct{y}}_\infty\\
+  &\leq \lambda(\norm{ \vct{x}}_1+\norm{ \vct{x}}_\infty)+(1-\lambda)(\norm{\vct{y}}_1+\norm{\vct{y}}_\infty).
+ \end{align*}
+
+\end{itemize}
+
+\solution{p4} The matrix and the vectors associated to this problem are
+\begin{equation*}
+ \mtx{A} = \begin{pmatrix}
+            1 & 0\\
+            0 & 1\\
+            -2 & -1
+           \end{pmatrix}, \
+ \vct{b} = \begin{pmatrix}
+            1 \\ 2 \\ -2
+           \end{pmatrix}, \
+ \vct{c} = \begin{pmatrix}
+            1 \\ -1
+           \end{pmatrix}.
+\end{equation*}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.5]\
+\draw[color=black, fill=blue!5, thick] (0,2)--(1,2)--(1,0)--(0,2);
+\draw[color=black, ->] (0,-0.1)--(0,2.5);
+\draw[color=black, ->] (-0.1,0)--(1.5,0);
+
+\draw[color=black] (1,-0.1)--(1,2.1);
+\draw[color=black] (-0.1,2)--(1.1,2);
+\draw[color=black] (-0.1,2.2)--(1.1,-0.2);
+
+\draw[color=blue,very thick,->] (0,0)--(1,-1);
+
+\draw[color=blue,dashed] (0,-1)--(2,1);
+
+\filldraw[red] (1,0) circle (2pt);
+
+\node (A1) at (0,2)  [label=120:{$\vct{x}_{\{2,3\}}$}] {};
+\node (A2) at (1,0)  [label=15:{$\vct{x}_{\{1,3\}}$}] {};
+\node (A3) at (1,2)  [label=30:{$\vct{x}_{\{1,2\}}$}] {};
+\node (A4) at (1,-1)  [label=0:{$\vct{c}$}] {};
+\end{tikzpicture}
+\end{figure}
+
+\begin{itemize}
+ \item[(a)] To determine the vertices, we can read them off the diagram and then verify analytically that these are indeed the vertices. We get:
+ \begin{equation*}
+ \vct{x}_{\{1,2\}} = (1,2)^{\trans}, \ \vct{x}_{\{1,3\}} = (1,0)^{\trans}, \ \vct{x}_{\{2,3\}} = (0,2)^{\trans}.
+\end{equation*}
+ 
+ Multiplying $\mtx{A}$ with each of these vertices we get
+ \begin{equation*}
+\mtx{A}\vct{x}_{\{1,2\}} = \begin{pmatrix}
+                              1\\2\\-4
+                             \end{pmatrix}, \ 
+                             \mtx{A}\vct{x}_{\{1,3\}} = \begin{pmatrix}
+                              1\\0\\-2
+                             \end{pmatrix}, \
+  \mtx{A}\vct{x}_{\{2,3\}} = \begin{pmatrix}
+                              0\\2\\-2
+                             \end{pmatrix}.    
+ \end{equation*}
+ We see that each of the vertex candidates satisfies all three inequalities, with three as equalities, and we therefore have vertices. 
+ \item[(b)] The optimal values can be found among the vertices:
+ \begin{equation*}
+  \ip{\vct{c}}{\vct{x}_{\{1,2\}}} = -1, \  \ip{\vct{c}}{\vct{x}_{\{1,3\}}} = 1, \ \ip{\vct{c}}{\vct{x}_{\{2,3\}}} = -2. 
+ \end{equation*}
+As the picture shows, the optimal value is attained at $\vct{x}_{\{1,3\}}$ and the optimal value is $1$.
+ \item[(c)] The dual of the problem is
+ \begin{equation*}
+  \minimize \ip{\vct{b}}{\vct{y}} \quad \subjto \mtx{A}^{\trans}\vct{y}=\vct{c}, \ \vct{y}\geq \zerovct.
+ \end{equation*}
+Applying this to our data,
+\begin{align*}
+\minimize & y_1+2y_2-2y_3\\
+\subjto & y_1-2y_3 = 1\\
+& y_2-y_3 = -1\\
+& y_i\geq 0, \quad 1\leq i\leq 3.
+\end{align*}
+\end{itemize}
+
+\solution{p5} We first compute the gradient and the Hessian of this function.
+\begin{equation}\label{eq:grad}\tag{1}
+ \nabla f(x_1,x_2) = \frac{1}{\sqrt{1+x^2+y^2}}\begin{pmatrix}
+                                  x\\y
+                                 \end{pmatrix},
+\end{equation}
+\begin{equation*}
+ \nabla^2 f(x_1,x_2) = \frac{1}{(1+x^2+y^2)^{3/2}} \begin{pmatrix}
+                         1+y^2 & -xy\\
+                         -xy & 1+x^2
+                       \end{pmatrix}.
+\end{equation*}
+We have a stationary point at $(0,0)$ which is a minimizer, as the function can never fall below $f(0,0)=1$. This means that the Hessian is positive definite at $(0,0)$. There are various ways of verifying that the Hessian is positive definite everywhere, and the function therefore convex. One is direct verification:
+\begin{equation*}
+ \vct{v}^{\trans} \nabla^2f(x,y)\vct{v}
+                                        = v_1^2(1+y^2)-2v_1v_2xy+v_2^2(1+x^2) = v_1^2+v_2^2+(v_1y_1-v_2x_2)^2>0.
+\end{equation*}
+
+Newton's method starts with a point $(x_{(0)},y_{(0)})$, and then for every $k\geq 0$, first solves the system of equations
+\begin{equation*}
+               \frac{1}{(1+x_{(k)}^2+y_{(k)}^2)^{3/2}} \begin{pmatrix}
+                         1+y_{(k)}^2 & -x_{(k)}y^{(k)}\\
+                         -x_{(k)}y_{(k)} & 1+x_{(k)}^2
+                       \end{pmatrix}         
+ \begin{pmatrix}
+  \Delta x\\ \Delta y
+ \end{pmatrix}
+= \frac{1}{\sqrt{1+x_{(k)}^2+y_{(k)}^2}}\begin{pmatrix}
+                                  x_{(k)}\\y_{(k)}
+                                 \end{pmatrix},
+\end{equation*}
+and then computes
+\begin{equation*}
+ (x_{(k+1)},y_{(k+1)}) = (x_{(k)},y_{(k)}) + (\Delta x,\Delta y).
+\end{equation*}
+\end{document} 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
