@@ -44,12 +44,12 @@
 \end{figure}
 We explain the construction of this function:
 \begin{enumerate}
- \item Start out with $g(x) = \cos(1/x)+2$ for $x\neq 0$ and $g(0)=1$. This function has minimizers $x_0=0$ and $x_k = 1/(\pi k)$ for $k>0$, with values $g(x_k)=1$ at all minimizers. Therefore, any open interval around $0$ contains (infinitely many) local minimizers $x_k$ other than $x_0=0$. 
+ \item Start out with $g(x) = \cos(1/x)+2$ for $x\neq 0$ and $g(0)=1$. This function has minimizers $x_0=0$ and $x_k = 1/(\pi (2k+1)$ for $k\geq 0$, with values $g(x_k)=1$ at all minimizers. Therefore, any open interval around $0$ contains (infinitely many) local minimizers $x_k$ other than $x_0=0$. 
  \item Multipy $x^4$ to the function: $f(x) = x^4g(x)$. This ensures that $f(0)=0$ and $f(x)>0$ for $x\neq 0$. There are still local minima in every neighbourhood of $0$. To see this, compute the derivative
  \begin{equation}\label{eq:der}\tag{1}
   f'(x) = x^2(4x\cos(1/x)+\sin(1/x)+8x).
  \end{equation}
- Set $z_m=1/(\pi/2+m\pi)$ for $m>0$. Since $\sin(1/z_m)=\sin(\pi/2+m\pi)= 1$ for $m$ even and $-1$ for $m$ odd, for $m$ sufficiently large the derivative~\eqref{eq:der} changes signs between successive $z_m$. Since $f'(x)$ is continuous, it has roots between any $z_m$ and $z_{m+1}$ for large enough $m$, and these correspond to maxima and minima of $f$.
+ Set $z_m=1/(\pi/2+m\pi)$ for $m>0$. Since $\sin(1/z_m)=\sin(\pi/2+m\pi)= 1$ for $m$ even and $-1$ for $m$ odd, and for $m$ sufficiently large the contribution of the other terms is negligible (as the $z_m$ become arbitrary small), the derivative~\eqref{eq:der} changes signs between successive $z_m$. Since $f'(x)$ is continuous, it has roots between any $z_m$ and $z_{m+1}$ for large enough $m$, and these correspond to maxima and minima of $f$.
 \end{enumerate}
 The function is in $C^2(\R)$. For $x\neq 0$ this is clear, and to verify this at $x=0$, one shows that the right and left limits as $x\to 0$ of $f'(x)$ and $f''(x)$ coincide (they are in fact $0$).
 
@@ -92,8 +92,9 @@ so that the function~\eqref{eq:least} is convex. From~\eqref{eq:normquad} we als
 \begin{equation*}
  \mtx{A}^{\trans}(\mtx{A}\vct{x}-\vct{b}).
 \end{equation*}
+Note that the matrix $\mtx{A}$ in~\eqref{eq:quad} is not the same as the matrix $\mtx{A}$ in~\eqref{eq:least}!
 
-\solution{pr:1} 
+\solution{pr:1} The general procedure is as follows: we first make an educated guess as to whether the function could be convex or not. If we think it is not convex, then it is enough to find a {\em counterexample}: find points in $S$ for which the line segment joining them is not completely contained in $S$. If we think it is convex, then we can show that for any two points the line segment joining them is in $S$.
 \begin{itemize}
  \item[(a)] This set is not convex: take $\vct{x}=(1,0,0)^{\trans}$ and $\vct{y}=(-1,0,0)^{\trans}$, then $\frac{1}{2}\vct{x}+\frac{1}{2}\vct{y}=\zerovct \not\in S$.
  \item[(b)] This set is convex: if $\vct{x},\vct{y}\in S$, then $1\leq x_1-x_2<2$ and $1\leq y_1-y_2<2$, and
@@ -103,7 +104,7 @@ so that the function~\eqref{eq:least} is convex. From~\eqref{eq:normquad} we als
  with the same argument giving the lower bound. 
  \item[(c)] This set is convex. In fact, $S$ is the unit ball of the $1$-norm
  \begin{equation*}
-  \norm{\vct{x}}_1 = \sum_{i=1}^d |x_i|.
+  \norm{\vct{x}}_1 = \sum_{i=1}^n |x_i|.
  \end{equation*}
  Given $\vct{x},\vct{y}\in S$,
  \begin{equation*}
@@ -125,14 +126,14 @@ which shows that positive definiteness is also preserved.
  \begin{equation*}
   \log(\lambda x+(1-\lambda)y) > \lambda \log(x)+(1-\lambda)\log(y).
  \end{equation*}
- Let's choose $y=0$. Then what needs to be shown is that for the points $\vct{p}_1=(1,0)$ and $\vct{p}_2=(x,\log(x))$,
+ Let's choose $y=1$. Then what needs to be shown is that for the points $\vct{p}_1=(1,0)$ and $\vct{p}_2=(x,\log(x))$,
  the line joining $\vct{p}_1$ and $\vct{p}_2$ lies {\em below} the curve $(t,\log(t))$ between $1$ and $x$. The line is given by the equation
  \begin{equation*}
   \ell(t) = \frac{\log(x)}{x-1}(t-1).
  \end{equation*}
  Evaluating this, for example, at $x=2$ and $t=1.5$, one sees that $\ell(t)>\log(t)$, which is enough evidence that $\log(t)$ is not convex.
  With a little more effort one can deduce that the function is actually concave.
-\item[(b)] The function $f(x)=x^4$ is convex, as we will verify using Theorem 2.4. First, note that the derivative $4x^3$ is an increasing function with $x$. 
+\item[(b)] The function $f(x)=x^4$ is convex, as we will verify using Theorem 2.10. First, note that the derivative $4x^3$ is an increasing function with $x$. 
 Given two points $(x,x^4)$ and $(y,y^4)$ with $y>x$, the line connecting them has slope $(y^4-x^4)/(y-x)$. By the mean value theorem, there exists a $z\in (x,y)$ such that
 \begin{equation*}
  \frac{y^4-x^4}{y-x} = f'(z) = 4z^3 \geq 4x^3.
@@ -141,8 +142,8 @@ Rearranging this inequality, we get
 \begin{equation*}
  f(y)-f(x) = y^4-x^4 \geq 4x^3(y-x) = f'(x)(y-x),
 \end{equation*}
-which is precisely the criterium for convexity in Theorem 2.4(1).
-\item[(c)] Using Theorem 2.4(2), we compute the Hessian as
+which is precisely the criterium for convexity in Theorem 2.10(1).
+\item[(c)] Using Theorem 2.10(2), we compute the Hessian as
 \begin{equation*}
  \nabla^2f(\vct{x}) = \begin{pmatrix}
                        0 & 1\\
@@ -162,8 +163,8 @@ It follows that the function $f(\vct{x})=x_1x_2$ is convex.
                       \end{pmatrix}.
 \end{equation*}
 This matrix is not positive semidefinite for all valid values of $\vct{x}$ (take for example $\vct{x}=(1,1)^{\trans}$, which leads to a negative eigenvalue).
-\item[(e)] The function $e^x-1$ is convex, as is easily seen using Theorem 2.4(2) by computing the second derivative.
-\item[(f)] The function $f(\vct{x})=\max_i x_i$ is convex. Here, we can't use the criteria from Theorem 2.4 since the function is not differentiable, so we have to verify convexity directly:
+\item[(e)] The function $e^x-1$ is convex, as is easily seen using Theorem 2.10(2) by computing the second derivative.
+\item[(f)] The function $f(\vct{x})=\max_i x_i$ is convex. Here, we can't use the criteria from Theorem 2.10 since the function is not differentiable, so we have to verify convexity directly:
 \begin{equation*}
  \max_i \lambda x_i+(1-\lambda)y_i \leq \lambda \max_i x_i+(1-\lambda) \max_i y_i.
 \end{equation*}

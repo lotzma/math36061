@@ -67,7 +67,7 @@ This is negative if the vector $\vct{p}$ forms and angle greater than $\pi/2$ wi
 \caption{A descent direction}
 \end{figure}
 
-Any multiple $\alpha \nabla f(\vct{x}_k)$ points in the direction of steepest descent, but we have to choose a sensible parameter $\alpha$ to ensure that we make sufficient progress, but at the same time don't overshoot. Ideally, we would choose the value $\alpha_k$ that minimizes $f(\vct{x}_k-\alpha_k \nabla f(\vct{x}_k))$. While finding such a minimizer is in general not easy (see Section~\ref{sec:steplength} for alternatives), for quadratic functions in can be given in closed form.
+Any multiple $\alpha \nabla f(\vct{x}_k)$ points in the direction of steepest descent, but we have to choose a sensible parameter $\alpha$ to ensure that we make sufficient progress, but at the same time don't overshoot. Ideally, we would choose the value $\alpha_k$ that minimizes $f(\vct{x}_k-\alpha_k \nabla f(\vct{x}_k))$. While finding such a minimizer is in general not easy (see Section Lecture 4 for alternatives), for quadratic functions in can be given in closed form.
 
 \subsection{Linear least squares} Consider a function of the form
 \begin{equation*}
@@ -105,6 +105,13 @@ Does this work? How do we know when to stop? It is worth noting that the residua
 
 \begin{example}
 We plot the trajectory of gradient descent with the data
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.5\textwidth]{images/graddescent.png}
+\caption{Trajectory of gradient descent}
+\end{figure}
+
 \begin{equation*}
 \mtx{A} = \begin{pmatrix}
 2 & 0\\
@@ -116,11 +123,7 @@ We plot the trajectory of gradient descent with the data
 \end{pmatrix}.
 \end{equation*}
 
-\begin{figure}[h!]
-\centering
-\includegraphics[width=0.6\textwidth]{images/graddescent.png}
-\caption{Trajectory of gradient descent}
-\end{figure}
+
 As can be seen from the plot, we always move in the direction orthogonal to a level set, and stop at a point where we are tangent to a level set.
 \end{example}
 

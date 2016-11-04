@@ -31,8 +31,9 @@ A general mathematical optimization problem is a problem of the form
  \subjto & \vct{x}\in \Omega
  \end{split}
 \end{align}
+
 where $f\colon \R^n\to \R$ are real-valued \textbf{objective function} and $\Omega\subseteq \R^n$ is a set defining the \textbf{constraints}.
-Among all those vectors $\vct{x}\in \Omega$ that satisfy the given inequalities, we seek one with smallest $f$-value. Typically, the constraint set $\Omega$ will consist of such $\vct{x}\in \R^n$ that satisfy certain equations and inequalities,
+Among all $\vct{x}\in \Omega$, we seek one with smallest $f$-value. Typically, the constraint set $\Omega$ will consist of such $\vct{x}\in \R^n$ that satisfy certain equations and inequalities,
 
 \begin{equation*}
 f_1(\vct{x})\leq 0, \dots, f_m(\vct{x})\leq 0, g_1(\vct{x})=0, \dots, g_p(\vct{x})=0.
@@ -41,8 +42,8 @@ f_1(\vct{x})\leq 0, \dots, f_m(\vct{x})\leq 0, g_1(\vct{x})=0, \dots, g_p(\vct{x
 A vector $\vct{x}^*$ satisfying the constraints is called an {\em optimum}, a {\em solution}, or a {\em minimizer} of the problem~\eqref{eq:opt-form}, if $f(\vct{x}^*)\leq f(\vct{x})$ for all other $\vct{x}$ that satisfy the constraints. Note that replacing $f$ by $-f$, we could equivalently state the problem as a maximization problem. In this course we are mostly concerned with functions and constraint sets that are \textbf{convex}.
 
 \begin{itemize}
-\item A set $C\subseteq \R^n$ is \textbf{convex}, if for all $\vct{x},\vct{y}\in C$ and $\lambda\in [0,1]$, $\lambda \vct{x}+(1-\lambda)\vct{y}\in C$. That is, if for any two points in $C$, the line segment connecting them is also in $C$. 
-\item A function $f\colon C\to \R$ is convex, if $C$ is convex and for all $\vct{x}\in C$ and $\lambda\in [0,1]$, $f(\lambda \vct{x}+(1-\lambda)\vct{y})\leq \lambda f(\vct{x})+(1-\lambda)f(\vct{y})$. 
+\item A set $C\subseteq \R^n$ is \textbf{convex}, if for all $\vct{x},\vct{y}\in C$ and $\lambda\in [0,1]$, $\lambda \vct{x}+(1-\lambda)\vct{y}\in C$. That is, for any two points in $C$, the line segment connecting them is also in $C$. 
+\item A function $f\colon C\to \R$ is convex, if $C$ is convex and for all $\vct{x}, \vct{y}\in C$ and $\lambda\in [0,1]$, $f(\lambda \vct{x}+(1-\lambda)\vct{y})\leq \lambda f(\vct{x})+(1-\lambda)f(\vct{y})$. 
 \end{itemize}
 
 \begin{figure}
@@ -74,10 +75,10 @@ Countless problems from science and engineering can be cast as optimization prob
 \begin{example}\label{ex:1}
 Suppose we want to understand the relationship of a quantity $Y$ (for example, sales data) to a series of {\em predictors} $X_1,\dots,X_p$ (for example, advertising budget in different media). We can often assume the relationship to be {\em approximately linear},
 
+\addtocounter{equation}{1}
 \begin{equation}\label{eq:linreg1}
  Y = \beta_0+\beta_1 X_1 + \cdots + \beta_p X_p + \varepsilon, 
 \end{equation}
-
 where $\varepsilon$ is some error or noise term. The goal is to determine the {\em model parameters} $\beta_0,\dots,\beta_p$.
 To determine these, we can collect $n\geq p$ sample realizations (from observations or experiments),
 

@@ -28,7 +28,12 @@
 {\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-\solution{pr:1} We implement the function $f(x)$ in Python as follows
+\solution{pr:1} In order to apply Newton's method, we need to know the derivatives of $f$. These are given by
+\begin{equation*}
+  f'(x) = 6(x-1)^5, \quad f''(x) = 30(x-1)^4.
+\end{equation*}
+
+We implement the function $f(x)$ and its derivatives in Python as follows
 
 \begin{ipythonnb}
 def f(x):
@@ -45,6 +50,12 @@ def ddf(x):
  \centering
  \includegraphics[width=0.4\textwidth]{images/flat_cropped.pdf}
 \end{figure}
+
+Newton's method is then the iteration
+\begin{equation*}
+  x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} = x_k - \frac{1}{5}\frac{1}{x_k-1}.
+\end{equation*}
+To run Newton's method by hand, we choose a starting point $x_0$ and then compute $x_1, x_2$, etc. 
 
 We then run Newton's method, implemented as follows, with the three stopping criteria and with tolerance $\e=10^{-6}$. 
 
@@ -79,7 +90,24 @@ shows that the difference of successive iterates gives a good bound on the error
 
 This issue is related to the notion of conditioning of the function $f$. Criterium (c) always has the same running time, and 100 iterations would normally be more than enough for Newton's method. However, this is a very pessimistic bound, and takes much longer than necessary.
 
-\solution{pr:2} The code is recreated below. We first define the methods, then the function, after that the parameters and run the code. In the end, the results are plotted.
+\solution{pr:2} The code is recreated below. We first define the methods, then the function, after that the parameters and run the code. In the end, the results are plotted. 
+The code uses the first and second derivatives of the function $f$, which are rather complicated. They are given as
+
+\begin{equation*}
+\nabla f(\vct{x}) = \begin{pmatrix}
+e^{x_1+3x_2-0.1} + e^{x_1-3x_2-0.1} - e^{-x_1-0.1}\\
+3e^{x_1+3x_2-0.1} - 3e^{x_1-3x_2-0.1}
+\end{pmatrix},
+\end{equation*}
+
+and
+
+\begin{equation*}
+ \nabla^2 f(\vct{x}) = \begin{pmatrix}
+ e^{x_1+3x_2-0.1} + e^{x_1-3x_2-0.1} + e^{-x_1-0.1} & 3e^{x_1+3x_2-0.1} - 3e^{x_1-3x_2-0.1}\\
+ 3e^{x_1+3x_2-0.1} - 3e^{x_1-3x_2-0.1} & 9e^{x_1+3x_2-0.1} + 9e^{x_1-3x_2-0.1}
+ \end{pmatrix}.
+\end{equation*}
 
 \begin{ipythonnb}
 def newton(f, df, ddf, x0, tol, maxiter=100):
