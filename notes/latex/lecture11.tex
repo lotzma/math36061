@@ -1,0 +1,173 @@
+%-----------------------------------------------------------------------
+% Beginning of chap2.tex
+%-----------------------------------------------------------------------
+%
+%  AMS-LaTeX sample file for a chapter of a monograph, to be used with
+%  an AMS monograph document class.  This is a data file input by
+%  chapter.tex.
+%
+%  Use this file as a model for a chapter; DO NOT START BY removing its
+%  contents and filling in your own text.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter*{Lecture 11}
+\addcontentsline{toc}{chapter}{Lecture 11}
+\addtocounter{chapter}{1}
+\addtocounter{section}{0}
+%\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+
+%\epigraph{}{--- \textup{}}
+
+We continue the study of algorithms for linear programming. Before doing so, we introduce a \textbf{standard form} for a linear programming problem, namely
+\begin{equation}\label{eq:standard}\tag{P}
+ \minimize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct.
+\end{equation}
+for a matrix $\mtx{A}\in \R^{m\times n}, \vct{b}\in \R^m$ and $\vct{c}\in \R^n$.
+Any linear programming problem can be brought into this standard for. Start, for example, with
+the problem
+\begin{equation}\label{eq:old}
+ \maximize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}\leq \vct{b},
+\end{equation}
+in the form that we are used to. We first add a \textbf{slack variable} $\vct{s}\in \R^m$, so that we can reformulate the problem into an equalent one of the form
+\begin{equation}\label{eq:old}
+ \maximize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}+\vct{s} = \vct{b}, \vct{s}\geq \zerovct.
+\end{equation}
+Define the big matrix $\mtx{A}'\in \R^{m\times (n+n+m)}$ by
+\begin{equation*}
+ \mtx{A}' := \begin{pmatrix} \mtx{A} & - \mtx{A} & \mtx{I} \end{pmatrix}, 
+\end{equation*}
+consider the big vector $\vct{x}' = (\vct{x}^+,\vct{x}^-,\vct{s})^{\trans}$, where $\vct{x}^+$ is the {\em positive part}, with entries $x_i$ if $x_i\geq 0$ and $0$ else, and $\vct{x}^-$ is the {\em negative part}, with entries $-x_i$ if $x_i<0$ and $0$ else (so that $\vct{x}=\vct{x}^+-\vct{x}^-$), and set $\vct{c}'= (\vct{c},-\vct{c},\zerovct)^{\trans}\in \R^{2n+m}$.
+
+Then $\vct{x}$ is a solution of~\eqref{eq:old} if and only if $\vct{x}'$ is a solution of the 
+problem 
+\begin{equation*}
+  \minimize \ip{\vct{c}'}{\vct{x}'} \quad \subjto \mtx{A}'\vct{x}'=\vct{b}, \ \vct{x}'\geq \zerovct,
+\end{equation*}
+which is in standard form~\eqref{eq:standard}. Note that since~\eqref{eq:standard} has the form of a dual problem as derived in Lecture 9 and 10, its dual, in turn, has the form of a primal problem,
+\begin{equation}\label{eq:dual}\tag{D}
+\maximize \ip{\vct{b}}{\vct{y}} \quad \subjto \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \vct{s}\geq \zerovct.
+\end{equation}
+For everything that follows, we assume $m\leq n$, as otherwise~\eqref{eq:dual} is unbounded and~\eqref{eq:standard} empty.
+
+\section{An optimality condition}
+We now work with a primal dual system {\em in standard form},
+\begin{equation}\label{eq:primal1}\tag{P}
+  \minimize \ip{\vct{c}}{\vct{x}} \ \subjto \mtx{A}\vct{x}=\vct{b}, \  \vct{x}\geq \zerovct,
+\end{equation}
+and
+\begin{equation}\label{eq:dual1}\tag{D}
+\maximize \ip{\vct{b}}{\vct{y}} \ \subjto \mtx{A}^{\trans}\vct{y}+\vct{s}= \vct{c}, \ \vct{s}\geq \zerovct.
+\end{equation}
+
+A useful consequence of the duality theorem, which states that a primal optimal solution is also dual optimal, is a characterisation of solution tuples $(\vct{x}^*,\vct{y}^*,\vct{s}^*)$. Note that for such an optimal pair,
+\begin{equation*}
+ \ip{\vct{c}}{\vct{x}^*} = \ip{\vct{y}^*}{\vct{b}} = \ip{\vct{y}^*}{\mtx{A}\vct{x}^*} = \ip{\mtx{A}^{\trans}\vct{y}^*}{\vct{x}^*},
+\end{equation*}
+where the first equality holds because of the duality theorem. By subtracting the last from the first expression above, we conclude
+\begin{equation}\label{eq:slack}\tag{PD}
+ \ip{\vct{x}^*}{\vct{c}-\mtx{A}^{\trans}\vct{y}^*}=\ip{\vct{x}^*}{\vct{s}^*}=0.
+\end{equation}
+Since $\vct{x}^*\geq \zerovct$ and $\vct{s}^*\geq \zerovct$, each summand in~\eqref{eq:slack} is zero. This means that the individual components of $\vct{s}^*$ and $\vct{x}^*$ satisfy
+\begin{equation*}
+ x^*_i \cdot s^*_i = 0, \ 1\leq i\leq m.
+\end{equation*}
+Summarising, we have the following {\em optimality conditions} for linear programming:
+if vectors $(\vct{x},\vct{y},\vct{s})$ are primal/dual optimal solutions to a linear programming problem, then
+\begin{align}\label{eq:opt}
+\begin{split}
+ \mtx{A}\vct{x}+\vct{s}-\vct{b} & = \zerovct\\
+ \mtx{A}^{\trans}\vct{y}-\vct{c} & = \zerovct\\
+ y_is_i &= 0, \ 1\leq i\leq m\\
+ \vct{y}& \geq \zerovct\\
+ \vct{s}& \geq \zerovct.
+ \end{split}
+\end{align}
+
+We simplify this expression a bit further. Define the diagonal matrices
+\begin{equation*}
+  \mtx{X} = \begin{pmatrix}
+   x_1 & 0 & \cdots & 0\\
+   0 & x_2 & \cdots & 0\\
+   \vdots & \vdots & \ddots & \vdots \\
+   0 & 0 & \cdots & x_n
+  \end{pmatrix},
+  \quad
+  \mtx{S} = \begin{pmatrix}
+   s_1 & 0 & \cdots & 0\\
+   0 & s_2 & \cdots & 0\\
+   \vdots & \vdots & \ddots & \vdots \\
+   0 & 0 & \cdots & s_n
+  \end{pmatrix}
+\end{equation*}
+and the vector $\vct{e}=(1,1,\dots,1)^{\trans}$.
+Then the condition $x_is_i=0$ for $1\leq i\leq n$ can be written concisely as $\mtx{X}\mtx{S}\vct{e}=\mtx{0}$, and the whole system as
+\begin{align}\label{eq:opt}
+ \begin{split}
+  \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c} &= \zerovct\\
+  \mtx{A}\vct{x}-\vct{b} & = \zerovct\\
+  \mtx{X}\mtx{S}\vct{e} &= \zerovct\\
+  \vct{x}&\geq \zerovct\\
+  \vct{s}&\geq \zerovct,
+ \end{split}
+\end{align}
+Just as the optimality condition $\nabla f(\vct{x})=\zerovct$ serves as the basis for algorithms for unconstraint optimization, the optimality conditions for linear programming form the basis of the simplex method and of interior point methods. In the simplex method, the conditions are used to verify whether a candidate vertex is an optimal point, while primal/dual interior point methods view~\eqref{eq:opt} as a multivariate function in $(\vct{x},\vct{y},\vct{s})$ for which a root satisfying the inequality constraints is sought using Newton's method or similar algorithms.
+
+\section{Newton's method for solving equations}
+Recall that we have seen Newton's method in two forms: as a minimization algorithm, and as a method for finding roots of a non-linear equation. In the latter, in the one-dimensional setting we want to solve an equation
+\begin{equation*}
+  f(x) = 0
+\end{equation*}
+and proceed by starting with an initial guess $x_0$, and then computing successively
+\begin{equation*}
+  x_{k+1} = x_k - \frac{f(x_k)}{f'(x_k)}.
+\end{equation*}
+If $f$ is the derivative of another function $g$, then this method is used to find a local minimizer of $g$. For a function $F=(f_1,\dots,f_n)^{\trans}\colon \R^n\to \R^n$ we can use the same method, only that dividing by the derivative is replaced with multiplying with the inverse of the Jacobian matrix,
+\begin{equation*}
+  \mtx{J} F(\vct{x}) = \begin{pmatrix}
+    \frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n}\\
+    \vdots & \ddots & \vdots \\
+    \frac{\partial f_n}{\partial x_1} & \cdots & \frac{\partial f_n}{\partial x_n}
+  \end{pmatrix}.
+\end{equation*}
+Newton's method then starts with an initial guess $\vct{x}_0$, and proceeds by
+\begin{equation*}
+  \vct{x}_{k+1} =\vct{x}_k - \alpha_k \mtx{J}F(\vct{x}_k)^{-1}F(\vct{x}_k).
+\end{equation*}
+In practise, one does not compute the inverse, but solves a system of equations to get the update,
+\begin{equation}\label{eq:update}
+  \mtx{J}F(\vct{x}_k) \Delta\vct{x}_k = F(\vct{x}_k), \quad \vct{x}_{k+1} = \vct{x}_k-\alpha_k\Delta\vct{x}_k.
+\end{equation}
+Note that we allow for adjusting the step length in Newton's method. This can be rather convenient.
+
+We can apply the multivariate Newton's method to the equalities in the optimality condition~\eqref{eq:opt}, by considering the function $F\colon \R^{2n+m}\to \R^{2n+m}$ defined by
+\begin{equation*}
+ F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+                               \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c}\\
+                               \mtx{A}\vct{x}-\vct{b}\\
+                               \mtx{X}\mtx{S}\vct{e} 
+                              \end{pmatrix}
+\end{equation*}
+We are then looking for a root $(\vct{x}^*,\vct{y}^*,\vct{s}^*)$ of this function that in addition satisfies the inequality constraints in~\eqref{eq:opt}. Before we get into the non-trivial issue enrusing non-negativity, we first have a look at what the {\em update step}~\eqref{eq:update} looks like. Computing the Jacobian for $F$, the updates are computed by solving
+\begin{equation*}
+ \begin{pmatrix}
+  \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S} & \zerovct & \mtx{X}
+ \end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix}
+                               \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c}\\
+                               \mtx{A}\vct{x}-\vct{b}\\
+                               \mtx{X}\mtx{S}\vct{e} 
+                              \end{pmatrix}
+\end{equation*}
+Interior point method change the condition the condition $\mtx{X}\mtx{S}\mtx{e}=\zerovct$ to $\mtx{X}\mtx{S}\mtx{e}=\tau \vct{e}$ for some $\tau >0$, thus ensuring that we get non-negative solutions. Solving this problem for values $\tau\to 0$ then gives an approximation of the true solution. We discuss this in more detail in the next lecture.
+
+
+
+% %-----------------------------------------------------------------------
+% % End of chap1.tex
+% %-----------------------------------------------------------------------

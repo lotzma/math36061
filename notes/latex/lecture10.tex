@@ -157,42 +157,7 @@ The simplex algorithm is a way to search through the vertices in a more clever w
 \end{figure}
 The simplex algorithm is one of the most successful algorithms around and usually very fast, even though there examples that show that its worst case running time can be exponential.
 
-\section{An optimality condition}
-Recall again the primal/dual pair of linear programming problems,
-\begin{equation}\label{eq:primal1}\tag{P}
- \maximize \ip{\vct{c}}{\vct{x}} \ \subjto \mtx{A}\vct{x}+\vct{s}= \vct{b}, \ \vct{s}\geq \zerovct
-\end{equation}
-and
-\begin{equation}\label{eq:dual1}\tag{D}
- \minimize \ip{\vct{b}}{\vct{y}} \ \subjto \mtx{A}^{\trans}\vct{y}=\vct{c}, \  \vct{y}\geq \zerovct,
-\end{equation}
-where we reformulated the primal version to include a set of {\em slack variables} $\vct{s}$.
 
-A useful consequence of the duality theorem is a characterisation of solution tuples $(\vct{x}^*,\vct{s}^*,\vct{y}^*)$. Note that for such an optimal pair,
-\begin{equation*}
- \ip{\vct{y}^*}{\vct{b}} = \ip{\vct{c}}{\vct{x}^*} = \ip{\mtx{A}^{\trans}\vct{y}^*}{\vct{x}^*} = \ip{\vct{y}^*}{\mtx{A}\vct{x}^*},
-\end{equation*}
-where the first equality holds because of the duality theorem. From this we conclude
-\begin{equation}\label{eq:slack}\tag{PD}
- \ip{\vct{y}^*}{\vct{b}-\mtx{A}\vct{x}^*}=\ip{\vct{y}^*}{\vct{s}^*}=0.
-\end{equation}
-Since $\vct{y}^*\geq \zerovct$ and $\vct{s}^*\geq \zerovct$, each summand in~\eqref{eq:slack} is zero. This means that the individual components of $\mtx{A}\vct{x}^*-\vct{b}$ and $\vct{y}^*$ satisfy
-\begin{equation*}
- y^*_i \cdot s^*_i = 0, \ 1\leq i\leq m.
-\end{equation*}
-In words, whenever an inequality in~\eqref{eq:primal} is an equality at a maximizer $\vct{x}^*$, the corresponding component in the {\em dual} minimizer is zero.
-Summarising, we have the following {\em optimality conditions} for linear programming:
-if vectors $(\vct{x},\vct{s},\vct{y})$ are primal/dual optimal solutions to a linear programming problem, then
-\begin{align}\label{eq:opt}
-\begin{split}
- \mtx{A}\vct{x}+\vct{s}-\vct{b} & = \zerovct\\
- \mtx{A}^{\trans}\vct{y}-\vct{c} & = \zerovct\\
- y_is_i &= 0, \ 1\leq i\leq m\\
- \vct{y}& \geq \zerovct\\
- \vct{s}& \geq \zerovct.
- \end{split}
-\end{align}
-Just as the optimality condition $\nabla f(\vct{x})=\zerovct$ serves as the basis for algorithms for unconstraint optimization, the optimality conditions for linear programming form the basis of the simplex method and of interior point methods. In the simplex method, the conditions are used to verify whether a candidate vertex is an optimal points, while primal/dual interior point methods view~\eqref{eq:opt} as a multivariate function in $(\vct{x},\vct{s},\vct{y})$ for which a root satisfying the inequality constraints is sought using Newton's method or similar algorithms.
 
 % To implement this idea more rigorously, we transform the linear programming problem
 % \begin{equation}\label{eq:opt}

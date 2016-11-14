@@ -1,0 +1,213 @@
+%-----------------------------------------------------------------------
+% Beginning of chap2.tex
+%-----------------------------------------------------------------------
+%
+%  AMS-LaTeX sample file for a chapter of a monograph, to be used with
+%  an AMS monograph document class.  This is a data file input by
+%  chapter.tex.
+%
+%  Use this file as a model for a chapter; DO NOT START BY removing its
+%  contents and filling in your own text.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter*{Lecture 12}
+\addcontentsline{toc}{chapter}{Lecture 12}
+\addtocounter{chapter}{12}
+%\addtocounter{section}{-1}
+%\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+
+%\epigraph{}{--- \textup{}}
+
+Recall the following primal dual standard forms of linear programming,
+\begin{equation}\label{eq:standard}\tag{P}
+ \minimize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct.
+\end{equation}
+for a matrix $\mtx{A}\in \R^{m\times n}, \vct{b}\in \R^m$ and $\vct{c}\in \R^n$, 
+and
+\begin{equation}\label{eq:dual}\tag{D}
+\maximize \ip{\vct{b}}{\vct{y}} \quad \subjto \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \vct{s}\geq \zerovct.
+\end{equation}
+For what follows, we assume $m\leq n$, as otherwise~\eqref{eq:dual} is unbounded and~\eqref{eq:standard} empty.
+
+Based on~\eqref{eq:standard} and~\eqref{eq:dual}, we get the optimality conditions (see Lecture 11)
+\begin{align}\label{eq:opt2}\tag{O}
+ \begin{split}
+  \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c} &= \zerovct\\
+  \mtx{A}\vct{x}-\vct{b} & = \zerovct\\
+  \mtx{X}\mtx{S}\vct{e} &= \zerovct\\
+  \vct{x}&\geq \zerovct\\
+  \vct{s}&\geq \zerovct,
+ \end{split}
+\end{align}
+where $\vct{X}$ is the diagonal matrix with the $x_i$ in the diagonal, $\mtx{S}$ the diagonal matrix with the $s_i$ on the diagonal, and $\vct{e}$ the vector with all ones ($\mtx{X}\mtx{S}\vct{e}$ is just a compact way of writing the vector with entries $x_is_i$).
+If we define the function $\R^{2n+m}\to \R^{2n+m}$
+\begin{equation}\label{eq:F}
+ F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+                               \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c}\\
+                               \mtx{A}\vct{x}-\vct{b}\\
+                               \mtx{X}\mtx{S}\vct{e} 
+                              \end{pmatrix}
+\end{equation}
+then what we are looking for is a {\em root} $(\vct{x}^*,\vct{y}^*,\vct{s}^*)$ of this function, i.e., a point with $F(\vct{x}^*,\vct{y}^*,\vct{s}^*)=\zerovct$, with the additional property that $\vct{x}^*$ and $\vct{s}^*$ be non-negative. For later reference, we record the form of the {\em Jacobian} matrix of $F$,
+
+\begin{equation*}
+ DF(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+\zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S} & \zerovct & \mtx{X}
+ \end{pmatrix}.
+\end{equation*}
+
+\section{Towards an efficient interior-point method}
+The challenge is to find an iterative method of solving this rootfinding problem while preserving the non-negativity constraints. We discuss three approaches, in increasing order of sophistication. The third of these approaches forms the basis of {\em primal dual interior point methods}. 
+
+\subsection{A first attempt}
+A first attempt at solving the problem $F(\vct{x},\vct{y},\vct{s})=\zerovct$, with $\vct{x}\geq \zerovct, \vct{s}\geq \zerovct$, is to apply Newton's method with really small steps.
+For that, at each step we solve
+\begin{equation*}
+\begin{pmatrix}
+  \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
+ \end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \vct{c}-\vct{s}^{(k)}-\mtx{A}^{\trans}\vct{y}^{(k)}\\ \vct{b}-\mtx{A}\vct{x}^{(k)}\\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}\end{pmatrix}.
+\end{equation*}
+and then compute
+\begin{equation*}
+\begin{pmatrix} \vct{x}^{k+1}\\ \vct{y}^{k+1}\\ \vct{s}^{k+1}\end{pmatrix}= \begin{pmatrix} \vct{x}^{k}\\ \vct{y}^{k}\\ \vct{s}^{k}\end{pmatrix} +\alpha_k \begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix},
+ \end{equation*}
+ choosing the step length $\alpha_k$ so that the non-negativity of $\vct{x}$ and $\vct{s}$ remains. Note that above we have a + sign in front of alpha. That is because in the system of equations above, we took the negative $-F(\vct{x}_k,\vct{y}_k,\vct{s}_k)$. 
+
+ \begin{example}
+  Consider the linear programming problem
+  \begin{align*}
+   \minimize & x_1+2x_2-2x_3\\
+   & x_1-2x_3\\
+   & x_2-x_3=-1\\
+   & x_1\geq 0, \ x_2\geq 0, \ x_3\geq 0.
+  \end{align*}
+The data for this problem is given by
+\begin{equation*}
+ \mtx{A} = \begin{pmatrix} 1 & 0 & -2\\ 0 & 1 & -1\end{pmatrix}, \ 
+ \vct{b} = \begin{pmatrix} 1 \\ -1 \end{pmatrix}, \ 
+ \vct{c} = \begin{pmatrix} 1 \\ 2 \\ -2 \end{pmatrix},
+\end{equation*}
+with the function $F$ given by
+\begin{equation*}
+ F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+                               y_1+s_1-1\\
+                               y_2+s_2-2\\
+                               -2y_1-y_2+s_3+2\\
+                               x_1-2x_3-1\\
+                               x_2-x_3+1\\
+                               x_1s_1\\
+                               x_2s_2\\
+                               x_3s_3
+                              \end{pmatrix}
+\end{equation*}
+and the Jacobian matrix
+\begin{equation*}
+ DF(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+                                0 & 0 & 0 & 1 & 0 & 1 & 0 & 0\\
+                                0 & 0 & 0 & 0 & 1 & 0 & 1 & 0\\
+                                0 & 0 & 0 & -2 & -1 & 0 & 0 & 1\\
+                                1 & 0 & -2 & 0 & 0 & 0 & 0 & 0 \\
+                                0 & 1 & -1 & 0 & 0 & 0 & 0 & 0 \\
+                                s_1 & 0 & 0 & 0 & 0 & x_1 & 0 & 0 \\
+                                0 & s_2 & 0 & 0 & 0 & 0 & x_2 & 0\\
+                                0 & 0 & s_3 & 0 & 0 & 0 & 0 & x_3
+                               \end{pmatrix}.
+\end{equation*}
+With this data at hand, we can easily program MATLAB to solve the problem for us, making sure that the steplength is small enough. Starting with $\vct{x}^{(0)}=\vct{s}^{(0)}=(1,1,1)^\trans$, we get the sequence of step lengths
+\begin{equation*}
+ \alpha_0 = 0.5455, \ \alpha_1=0.5455, \ \alpha_2 = 1,
+\end{equation*}
+with the corresponding sequence of $\vct{x}$ vectors
+\begin{equation*}
+ \vct{x}^{(1)} = \begin{pmatrix}
+                  1.1818\\ 0\\ 0.5455
+                 \end{pmatrix}, \ 
+ \vct{x}^{(2)} = \begin{pmatrix}
+                  2.1736\\ 0 \\ 0.7934
+                 \end{pmatrix}, \
+ \vct{x}^{(3)} = \begin{pmatrix}
+                  3 \\ 0 \\ 1
+                 \end{pmatrix}.
+\end{equation*}
+One verifies that $\vct{x}^{(3)}$ is in fact a vertext of the feasible set, and $\ip{\vct{x}^{(3)}}{\vct{c}}=1$ gives the optimal value. 
+ \end{example}
+
+\subsection{A second attempt}
+In general, the method of choosing small step lengths can be slow. A variation would be to solve for
+\begin{equation}\label{eq:ap2}
+ F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+                               \vct{0}\\ \vct{0} \\ \tau \vct{e}
+                              \end{pmatrix},
+\end{equation}
+for a parameter $\tau>0$. Given some fixed initial values $\vct{x}\geq 0$ and $\vct{s}\geq 0$, compute the {\em duality measure}
+\begin{equation*}
+ \mu = \frac{1}{d} \sum_{i=1}^d x_is_i
+\end{equation*}
+as the average of the products and using the {\em centering parameter} $\sigma\in (0,1)$, set $\tau = \sigma \mu$. When aiming to solve~\eqref{eq:ap2} using Newton's method, we are aiming towards a solution $(\vct{x}^*,\vct{y}^*,\vct{s}^*)$ where instead of 
+asking that $x_i^*s_i^*=0$, we want that $x_i^*s_i^*=\sigma \mu$, a value that is strictly positive, but smaller than average of the initial value.
+
+In an additional twist to this approach, after starting with an initial guess $(\vct{x},\vct{y},\vct{s})$, we perform only {\em one} Newton step, and then update the duality measure $\mu$ with the new values of $\vct{x}$ and $\vct{s}$. This way we arrive at the following algorithm: 
+\begin{itemize}
+ \item Start with $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})$;
+ \item For each $k\geq 0$, compute 
+ \begin{equation*}
+  \mu^{(k)} = \frac{1}{d} \sum_{i=1}^d x_is_i
+ \end{equation*}
+and $\sigma_k$. Solve
+\begin{equation*}
+ \begin{pmatrix}
+  \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
+ \end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \vct{c}-\vct{s}^{(k)}-\mtx{A}^{\trans}\vct{y}^{(k)}\\ \vct{b}-\mtx{A}\vct{x}^{(k)}\\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\end{pmatrix}
+\end{equation*}
+and compute
+\begin{equation*}
+\begin{pmatrix} \vct{x}^{k+1}\\ \vct{y}^{k+1}\\ \vct{s}^{k+1}\end{pmatrix}= \begin{pmatrix} \vct{x}^{k}\\ \vct{y}^{k}\\ \vct{s}^{k}\end{pmatrix} +\alpha_k \begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix},
+ \end{equation*}
+for a small enough $\alpha_k>0$ to ensure non-negativity.
+\end{itemize}
+
+\subsection{A third approach}
+For the purpose of analysis, it is convenient to let an interior point method operate on vectors that satisfy the first two equalities in~\eqref{eq:opt2} exactly. Define the feasible and strictly feasible sets as
+\begin{align*}
+ \mathcal{F} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
+ \mathcal{F}^{\circ} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}> \zerovct, \ \vct{s}> \zerovct\}\\
+\end{align*}
+Restricting to points in $\mathcal{F}^{\circ}$, the computation of the Newton update in the second approach would change to
+\begin{equation*}
+ \begin{pmatrix}
+  \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
+ \end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\end{pmatrix}
+\end{equation*}
+
+In each iteration, a Newton step is taken in the direction of the {\em central path}. This is a curve in $\mathcal{F}^{\circ}$ defined as the set of solutions of
+\begin{align}\label{eq:cpopt}
+ \begin{split}
+  \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c} &= \zerovct\\
+  \mtx{A}\vct{x}-\vct{b} & = \zerovct\\
+  \mtx{X}\mtx{S}\vct{e} &= \tau \vct{e}\\
+  \vct{x}&> \zerovct\\
+  \vct{s}&> \zerovct,
+ \end{split}
+\end{align}
+where $\tau>0$. As $\tau\to 0$, any solution of this system will converge to an optimal primal-dual vector $(\vct{x},\vct{y},\vct{s})$ for the original linear programming problem. As we will see, practical primal-dual interior point methods will try to ensure that we always move within a neighbourhood of the central path. While this third approach lends itself well to analysis, one problem is that a starting point $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})\in \mathcal{F}^{\circ}$ may be hard to find.
+
+
+
+% %-----------------------------------------------------------------------
+% % End of chap1.tex
+% %-----------------------------------------------------------------------

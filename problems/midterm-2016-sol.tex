@@ -1,0 +1,279 @@
+\documentclass{article}
+\input{macros}
+\usepackage{fancyhdr}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{1}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\ifx\marks\undefined
+             \newcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\else
+             \renewcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\fi
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 8, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Midterm test - Solutions}}
+\end{center}
+
+\begin{center} 
+\emph{Closed book.\quad Attempt all questions.\quad Calculators permitted. \quad 13:00-13:50}\\
+{\em Please write your name and student identity number on the front page.}
+\end{center}
+
+%-- 
+\problem{p0} Determine the order of convergence of each of the following sequences (if they converge at all).
+
+\begin{equation*}
+ \text{(a) } \ x_k = \frac{1}{k!}, \quad \text{(b) } \ x_k = 1+(0.3)^{2^k}, \quad \text{(c) } \ x_k=2^{-k}, \quad \text{(d) } \ x_k = 1/k
+\end{equation*}
+
+\marks[-6mm]{4}
+
+%\newpage
+%\mbox{}
+%\newpage
+
+\problem{p1} Consider the function on $\R^2$, $f(\vct{x}) = (x_1^2+x_2)^2$. Show that the direction $\vct{p}=(1,-1)^{\trans}$ is a descent direction at $\vct{x}_0=(0,1)^{\trans}$, and determine a step length $\alpha$ that minimizes $f(\vct{x}_0+\alpha \vct{p})$. 
+
+\marks[-6mm]{4}
+
+%\newpage
+%\mbox{}
+%\newpage
+%-- 
+
+\problem{p2} Determine, with justification, which of the following sets is convex.
+\begin{itemize}
+ \item[(a)] $\displaystyle \{(x,y)\mid x>1, \ y>\log(x)\}$;
+ \item[(b)] $\displaystyle \{(x,y) \mid x>0,y>0,xy<1\}$;
+ \item[(c)] $\displaystyle \{(x,y,1) \mid x^2+y^2\leq 2\}$;
+ \item[(d)] $\displaystyle \{\vct{x}\in \R^d \mid \norm{\vct{x}}_\infty+\norm{\vct{x}}_1\leq 1\}$.
+ \end{itemize}
+
+\marks[-6mm]{4} 
+
+\problem{p3} Consider the following linear programming problem
+\begin{align*}
+ \maximize & x_1+2x_2 \\
+ \subjto & x_1\geq 0\\
+	 & x_1\leq 1\\
+         & x_1+2x_2\leq 2\\
+         & x_1+x_2\geq 1
+\end{align*}
+\begin{itemize}
+ \item[(a)] Sketch the feasible set and determine the vertices of the polyhedron of feasible points from the diagram or from the inequalities;
+ \item[(b)] Find an optimizer and the optimal value;
+\end{itemize}
+
+\marks[-6mm]{4} 
+
+\problem{p4} Consider the function
+\begin{equation*}
+ f(x_1,x_2) = 100(x_2-x_1^2)^2+(1-x_1)^2.
+\end{equation*}
+Formulate Newton's method for finding a minimizer. By inspecting the gradient, show that $(1,1)^{\trans}$ is the only local minimizer of this function.
+\marks[-4mm]{4}
+
+\newpage
+
+\setcounter{problems}{0}
+
+\solution{so1} 
+\begin{itemize}
+                \item[(a)] The sequence converges to $0$. We have
+                \begin{equation*}
+                 x_{k+1} = \frac{1}{(k+1)!} = \frac{1}{k+1} x_k,
+                \end{equation*}
+                so that $\lim_{k\to \infty} \frac{x_{k+1}}{x_k} = 0$. The convergence is {\em superlinear}.
+\item[(b)] The sequence converges to $1$. We have
+\begin{equation*}
+ |x_{k+1}-1| = (0.3)^{2^{k+1}} = \left((0.3)^{2^{k}}\right)^2 = |x_k-1|^2,
+\end{equation*}
+so that the convergence is quadratic.
+\item[(c)] The sequence converges to $0$. Moreover,
+\begin{equation*}
+ x_{k+1} = \frac{1}{2^{k+1}} = \frac{1}{2} x_k,
+\end{equation*}
+so that the sequence converges linearly.
+\item[(d)] The sequence converges to $0$. We have the identity
+\begin{equation*}
+ x_{k+1} = \frac{1}{k+1} = \frac{k}{k+1} \frac{1}{k} = \frac{k}{k+1}x_k,
+\end{equation*}
+which means that for any fixed constant $c<1$ there is a $k$ such that $1>k/(k+1)>c$, and therefore $x_{k+1} > cx_k$. It follows that the sequence does not converge linearly (or to any higher order).
+\end{itemize}
+
+\solution{so2} The gradient is
+\begin{equation*}
+ \nabla f(x_1,x_2) = \begin{pmatrix}
+                      4(x_1^2+x_2)x_1\\
+                      2(x_1^2+x_2)
+                     \end{pmatrix}.
+\end{equation*}
+At $\vct{x}_0=(0,1)^{\trans}$, $\nabla f(0,1) = (0,2)^{\trans}$. The direction $\vct{p}$ is a descent direction, if $\ip{\nabla f(\vct{x}_0)}{\vct{p}}<0$. In our case,
+$\ip{\nabla f(\vct{x}_0)}{\vct{p}} = -2<0$.
+The optimal step length along $\vct{p}$ is the minimizer of
+\begin{equation*}
+ f(\vct{x}_0+\alpha\vct{p}) = (\alpha^2+1-\alpha)^2.
+\end{equation*}
+The minimum is the minimum of the quadratic function $\alpha^2+1-\alpha$. Computing the derivative and setting it to zero, $2\alpha-1=0$, we get the optimal step length $\alpha=1/2$.
+
+\solution{so3} 
+\begin{itemize}
+ \item[(a)] This set is not convex, as becomes clear by looking at the region that this set defines. One way to show this is to find a line segment between two points in the set that contains a point not in the set. A natural choice would be to take the tangent line at a point, say $(2,\log(2))^{\trans}$ (a point not in the set) and take two points slightly to the left and to the right of this point along the tangent. The tangent line is given by the equation
+ \begin{equation*}
+  y=f(x) = \frac{1}{2} x+(\log(2)-1).
+ \end{equation*}
+For example, $(1.9,f(1.9))$ and $(2.1,f(2.1))$ are two points on the set (check the differences $f(1.9)-\log(1.9)$ and $f(2.1)-\log(2.1)$), for which the line segment joining them contains $(2,\log(2))$. It follows that the set is not convex. 
+ \item[(b)] This set is not convex, as should become clear when looking at it as the region under a hyperbola. For example, the line segment joining $(0.1,9)^{\trans}$ and $(9,0.1)$ contains the point $(4,5.1)^{\trans}$, which is not part of the set.
+ \item[(c)] This set is convex: it describes a circle of radius $2$ suspended at height $1$ in the $z$ direction. To see this more formally, consider points $\vct{p}=(x_1,y_1,1)^{\trans}$ and $\vct{q}=(x_2,y_2,1)^{\trans}$ in the set, and consider a convex combination $\lambda \vct{p}+(1-\lambda)\vct{q}$, with $\lambda\in (0,1)$. Then
+ \begin{align*}
+  (\lambda x_1&+(1-\lambda)x_2)^2 + (\lambda y_1+(1-\lambda)y_2)^2\\ &=\lambda^2(x_1^2+x_2^2)+(1-\lambda)^2(y_1^2+y_2^2)+2\lambda (1-\lambda)(x_1x_2+y_1y_2)\\
+  &\stackrel{(*)}{\leq} \lambda^2(x_1^2+x_2^2)+(1-\lambda)^2(y_1^2+y_2^2)+2\lambda (1-\lambda)\sqrt{x_1^2+y_1^2}\cdot \sqrt{x_2^2+y_2^2}\\
+  &\leq \lambda^2(x_1^2+x_2^2)+(1-\lambda)^2(y_1^2+y_2^2)+4\lambda (1-\lambda)\\
+  &= (\lambda 2+(1-\lambda)2)^2 = 4,
+ \end{align*}
+ so that $\lambda\vct{p}+(1-\lambda)\vct{q}$ also is in that set. You can also argue with the convexity of the circle and then use the property that a linear image of a convex set is convex.
+ \item[(d)] This set is convex. For $\lambda \vct{x}+(1-\lambda)\vct{y}$ with $\vct{x}$ and $\vct{y}$ such that $\norm{\vct{x}}_\infty+\norm{\vct{x}}_1\leq 1$ and $\norm{\vct{y}}_\infty+\norm{\vct{y}}_1\leq 1$ we get, using the norm properties,
+ \begin{align*}
+  \norm{\lambda \vct{x}+(1-\lambda)\vct{y}}_\infty&+\norm{\lambda \vct{x}+(1-\lambda)\vct{y}}_1 \\
+  &\leq \lambda \norm{\vct{x}}_\infty+(1-\lambda)\norm{\vct{y}}_\infty+\lambda \norm{\vct{x}}_1+(1-\lambda)\norm{\vct{y}}_1\\
+  &= \lambda (\norm{\vct{x}}_\infty+\norm{\vct{x}}_1)+(1-\lambda)(\norm{\vct{y}}_\infty+\norm{\vct{y}}_1) \\
+  &\leq \lambda + (1-\lambda) = 1.
+ \end{align*}
+This shows that the set is convex.
+\end{itemize}
+
+\solution{p4} The matrix and the vectors associated to this problem are
+\begin{equation*}
+ \mtx{A} = \begin{pmatrix}
+            -1 & 0\\
+            1 & 0\\
+            1 & 2\\
+            -1 & -1
+           \end{pmatrix}, \
+ \vct{b} = \begin{pmatrix}
+            0 \\ 1 \\ 2 \\ -1
+           \end{pmatrix}, \
+ \vct{c} = \begin{pmatrix}
+            1 \\ 2
+           \end{pmatrix}.
+\end{equation*}
+
+\begin{figure}[h!]
+\centering
+\begin{tikzpicture}[scale=1.5]\
+\draw[color=black, fill=blue!5, thick] (0,1)--(1,0.5)--(1,0)--(0,1);
+\draw[color=black, ->] (0,-0.1)--(0,3.5);
+\draw[color=black, ->] (-0.1,0)--(2.5,0);
+
+\draw[color=black] (1,-0.1)--(1,3.1);
+\draw[color=black] (-0.1,1.05)--(2.1,-0.05);
+%\draw[color=black] (-0.1,3)--(2,3);
+\draw[color=black] (-0.1,1.1)--(1.1,-0.1);
+
+\draw[color=blue,very thick,->] (0,0)--(1,2);
+
+\draw[color=blue,dashed] (-1,1.5)--(3,-0.5);
+
+\filldraw[red] (0,1) circle (2pt);
+\filldraw[red] (1,0.5) circle (2pt);
+
+\node (A1) at (0,1)  [label=120:{$\vct{x}_{\{3,4\}}$}] {};
+\node (A2) at (1,0.5)  [label=15:{$\vct{x}_{\{2,3\}}$}] {};
+\node (A3) at (1,0)  [label=-90:{$\vct{x}_{\{2,4\}}$}] {};
+\node (A4) at (1,2)  [label=15:{$\vct{c}$}] {};
+\end{tikzpicture}
+\end{figure}
+
+\begin{itemize}
+ \item[(a)] To determine the vertices, we can use the diagram to reduce the number of minors we need to consider. From the diagram we see that $P$ is determined by equations $2,3,5$. The minors are
+ \begin{equation*}
+  \mtx{A}_{\{2,3\}} = \begin{pmatrix}
+                       1 & 0\\ 1 & 2
+                      \end{pmatrix}, \ 
+\mtx{A}_{\{2,4\}} = \begin{pmatrix}
+                       1 & 0\\ -1 & -1
+                      \end{pmatrix}, \
+\mtx{A}_{\{3,4\}} = \begin{pmatrix}
+                       1 & 2\\ -1 & -1
+                      \end{pmatrix},
+ \end{equation*}
+ and the subsets of the vector $\vct{b}$ are
+ \begin{equation*}
+  \vct{b}_{\{2,3\}} =  \begin{pmatrix}
+                        1\\ 2
+                       \end{pmatrix}, \ 
+\vct{b}_{\{2,4\}} =  \begin{pmatrix}
+                        1\\ -1
+                       \end{pmatrix}, \ 
+\vct{b}_{\{3,4\}} =  \begin{pmatrix}
+                        2\\ -1
+                       \end{pmatrix}. 
+ \end{equation*}
+Solving the three systems $\mtx{A}_I\vct{x}=\vct{b}_I$, we get the solutions (which may also be read off the diagram)
+\begin{equation*}
+ \vct{x}_{\{2,3\}} = (1,0.5)^{\trans}, \ \vct{x}_{\{2,4\}} = (1,0)^{\trans}, \ \vct{x}_{\{3,4\}} = (0,1)^{\trans}.
+\end{equation*}
+ \item[(b)] The optimal values can be found among the vertices:
+ \begin{equation*}
+  \ip{\vct{c}}{\vct{x}_{\{2,3\}}} = 2, \  \ip{\vct{c}}{\vct{x}_{\{2,4\}}} = 1, \ \ip{\vct{c}}{\vct{x}_{\{3,4\}}} = 2. 
+ \end{equation*}
+As the picture shows, the optimal value is attained at two of the vertices. 
+
+\end{itemize}
+
+\solution{p5} We first compute the gradient and the Hessian of this function.
+\begin{equation}\label{eq:grad}\tag{1}
+ \nabla f(x_1,x_2) = \begin{pmatrix}
+                                  -400 x_1(x_2-x_1^2)-2(1-x_1)\\
+                                  200(x_2-x_1^2)
+                                 \end{pmatrix},
+\end{equation}
+\begin{equation*}
+ \nabla^2 f(x_1,x_2) = \begin{pmatrix}
+                        1200x_1^2-400x_2+2 & -400x_1\\
+                        -400x_1 & 200
+                       \end{pmatrix}.
+\end{equation*}
+Newton's method starts with a point $(x_1^{(0)},x_2^{(0)})$, and then for every $k\geq 0$, first solves the system of equations
+\begin{equation*}
+ \begin{pmatrix}
+                        1200(x_1^{(k)})^2-400x_2^{(k)}+2 & -400x_1^{(k)}\\
+                        -400x_1^{(k)} & 200
+                       \end{pmatrix} 
+ \begin{pmatrix}
+  \Delta x_1\\ \Delta x_2
+ \end{pmatrix}
+= \begin{pmatrix}
+   -400 x_1^{(k)}(x_2^{(k)}-(x_1^{(k)})^2)-2(1-x_1^{(k)})\\
+                                  200(x_2^{(k)}-(x_1^{(k)})^2)
+  \end{pmatrix}
+\end{equation*}
+and then computes
+\begin{equation*}
+ (x_1^{(k+1)},x_2^{(k+1)}) = (x_1^{(k)},x_2^{(k)}) + (\Delta x_1,\Delta x_2).
+\end{equation*}
+
+Since $\nabla f(1,1)=\zerovct$, the point $(1,1)^{\trans}$ is a stationary point. Looking at the gradient, we see that if $(x_1,x_2)^{\trans}$ is a stationary point, then necessarily $x_2=x_1^2$ (from the second equation) and $x_1=1$ (from the first equation). This gives only the choice $(1,1)^{\trans}$ for stationary point. The function itself satisfies $f(1,1)=0$ and is positive for all other values $(x_1,x_2)^{\trans}$, from which we deduce that $(1,1)$ is indeed a local (and global) minimum and not a saddle point or maximum. 
+\end{document} 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 

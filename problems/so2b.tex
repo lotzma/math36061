@@ -53,9 +53,9 @@ def ddf(x):
 
 Newton's method is then the iteration
 \begin{equation*}
-  x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} = x_k - \frac{1}{5}\frac{1}{x_k-1}.
+  x_{k+1} = x_k - \frac{f'(x_k)}{f''(x_k)} = x_k - \frac{1}{5}(x_k-1) = 0.8x_k+0.2.
 \end{equation*}
-To run Newton's method by hand, we choose a starting point $x_0$ and then compute $x_1, x_2$, etc. 
+To run Newton's method by hand, we choose a starting point $x_0$ and then compute $x_1, x_2$, etc. For example, if we start with $x_0=2$, we get the iterates $x_1=1.8, x_2 = 1.64$, and so on. Eventually the iterates will approach $1$, but the process is slow.
 
 We then run Newton's method, implemented as follows, with the three stopping criteria and with tolerance $\e=10^{-6}$. 
 

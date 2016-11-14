@@ -1,0 +1,111 @@
+\documentclass{article}
+\input{macros}
+\usepackage{fancyhdr}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{1}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\ifx\marks\undefined
+             \newcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\else
+             \renewcommand{\marks}[2][0mm]{\hspace{30mm}\mbox{}\vskip #1\hspace{-30mm}\hfill{\sf [#2 marks]}\\[-\baselineskip]}
+\fi
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 8, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Midterm test}}
+\end{center}
+
+\begin{center} 
+\emph{Closed book.\quad Attempt all questions.\quad Calculators permitted. \quad 13:00-13:50}\\
+{\em Please write your name and student identity number on the front page.}
+\end{center}
+
+%-- 
+\problem{p0} Determine the order of convergence of each of the following sequences (if they converge at all).
+
+\begin{equation*}
+ \text{(a) } \ x_k = \frac{1}{k!}, \quad \text{(b) } \ x_k = 1+(0.3)^{2^k}, \quad \text{(c) } \ x_k=2^{-k}, \quad \text{(d) } \ x_k = 1/k
+\end{equation*}
+
+\marks[-6mm]{4}
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p1} Consider the function on $\R^2$, $f(\vct{x}) = (x_1^2+x_2)^2$. Show that the direction $\vct{p}=(1,-1)^{\trans}$ is a descent direction at $\vct{x}_0=(0,1)^{\trans}$, and determine a step length $\alpha$ that minimizes $f(\vct{x}_0+\alpha \vct{p})$. 
+
+\marks[-6mm]{4}
+
+\newpage
+\mbox{}
+\newpage
+%-- 
+
+\problem{p2} Determine, with justification, which of the following sets is convex.
+\begin{itemize}
+ \item[(a)] $\displaystyle \{(x,y) \mid x>1, \ y>\log(x)\}$;
+ \item[(b)] $\displaystyle \{(x,y) \mid x>0,y>0,xy<1\}$;
+ \item[(c)] $\displaystyle \{(x,y,1) \mid x^2+y^2\leq 2\}$;
+ \item[(d)] $\displaystyle \{\vct{x}\in \R^n \mid \norm{\vct{x}}_\infty+\norm{\vct{x}}_1\leq 1\}$.
+ \end{itemize}
+Recall that $\norm{\vct{x}}_\infty = \max_{i} |x_i|$ and $\norm{\vct{x}}_1 = \sum_i |x_i|$.
+
+\marks[-6mm]{4} 
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p3} Consider the following linear programming problem
+\begin{align*}
+ \maximize & x_1+2x_2 \\
+ \subjto & x_1\geq 0\\
+	 & x_1\leq 1\\
+         & x_1+2x_2\leq 2\\
+         & x_1+x_2\geq 1
+\end{align*}
+\begin{itemize}
+ \item[(a)] Sketch the feasible set and determine the vertices of the polyhedron of feasible points from the diagram or from the inequalities;
+ \item[(b)] Find an optimizer and the optimal value.
+\end{itemize}
+
+\marks[-6mm]{4} 
+
+\newpage
+\mbox{}
+\newpage
+
+\problem{p4} Consider the function
+\begin{equation*}
+ f(x_1,x_2) = 100(x_2-x_1^2)^2+(1-x_1)^2.
+\end{equation*}
+Formulate Newton's method for finding a local minimizer. By inspecting the gradient, show that $(1,1)^{\trans}$ is the only local minimizer of this function.
+\marks[-4mm]{4}
+
+\newpage
+\mbox{}
+\newpage
+ 
+\end{document} 
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
