@@ -1,0 +1,104 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{5}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}}
+
+%\theoremstyle{remark}
+%\newtheorem{problem}[problemSheetNumber]{}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 14, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+Problems in Part A will be discussed in class. The Problem in Part B can be tried at home.
+
+
+\section*{Part A}
+
+\problem Let $(\Delta \vct{x},\Delta \vct{y},\Delta \vct{s})\in \R^{2n+m}$ be given as the solution 
+of the system of equations
+\begin{equation*}
+ \begin{pmatrix}
+  \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S} & \zerovct & \mtx{X}
+ \end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}\mtx{S}\vct{e}+\sigma \mu\end{pmatrix},
+\end{equation*}
+with $\mtx{A}\in \R^{m\times n}$, $\vct{x}\in \R^n$, $\vct{s}\in \R^n$, $\vct{X}=\mathrm{diag}(x_1,\dots,x_n)$, $\vct{S}=\mathrm{diag}(s_1,\dots,s_n)$, $\sigma\in (0,1)$, and $\mu=1/n \sum_{i=1}^n x_is_i$.
+Show that $\ip{\Delta\vct{x}}{\Delta\vct{s}}=0$.
+
+\problem Consider the linear programming problem
+\begin{equation*}
+ \minimize x_1 \ \subjto x_1+x_2=1, \ x_1\geq 0, \ x_2\geq 0.
+\end{equation*}
+\begin{itemize}
+ \item[(a)] Write down the equation $F(\vct{x},\vct{y},\vct{s})$ and the Jacobian $\mtx{J}F$, and write down Newton's method for this system.
+ \item[(b)] Solve the optimization problem graphically, or by any other means.
+ \item[(c)] Compute the solution to $F(\vct{x},\vct{y},\vct{s})=\zerovct$ (either using Newton's method or by any other means) and conclude that it is unrelated to the solution of the optimization problem.
+\end{itemize}
+
+\problem A \textbf{linear programming feasibility problem} is the problem of finding a point that satisfies the constraints of the problem (not necessarily optimal with respect to the objective function).
+
+Suppose we are given $p$ data points $\vct{x}_1,\dots,\vct{x}_p$ with associated labels $y_i\in \{-1,1\}$. We would like to fine a linear hyperplane
+$h(\vct{x}) = \vct{w}^{\trans}\vct{x}+b$ so that $h(\vct{x}_i)>0$ if $y_i=1$ and
+$h(\vct{x}_j)<0$ if $y_j=-1$. Show that this problem can be formulated as a linear programming feasibility problem.
+
+\newpage
+%\problem 
+%
+\section*{Part B}
+\problem (Practical considerations.) 
+Most of the computational cost of interior point methods is taken up by solving systems of linear equations. Luckily, these systems are sparse and can be solved efficiently in practice. A few tricks can make the tasks easier.
+
+Show that the system of equations
+ \begin{equation*}
+  \begin{pmatrix}
+  \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
+  \mtx{A} & \zerovct & \zerovct \\
+  \mtx{S} & \zerovct & \mtx{X}
+ \end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}\mtx{S}\vct{e}+\sigma \mu\end{pmatrix},
+ \end{equation*}
+is equivalent to the {\em normal equations}
+\begin{align*}
+ \mtx{A}\mtx{D}^2\mtx{A}^{\trans} \Delta \vct{y} &= \vct{b}-\sigma \mu \mtx{A}\mtx{S}^{-1}\vct{e},\\
+ \Delta \vct{s} &= -\mtx{A}^{\trans}\Delta \vct{y},\\
+ \Delta \vct{x} &= -\vct{x}+\sigma \mu \mtx{S}^{-1}\vct{e}-\mtx{D}^{2}\Delta\vct{s},
+\end{align*}
+where $\mtx{D}=\mtx{S}^{-1/2}\mtx{X}^{1/2}$, and $\mtx{X}^{1/2}$ denotes the diagonal matrix whose entries are the square roots of those of $\mtx{X}$. Argue how this form can be used to increase performance.
+
+%\problem Consider the following linear programming problem
+%\begin{align*}
+% \maximize & y_1+y_2\\
+% \subjto & 0.2p\cdot y_1+y_2+s_p=1+0.01p^2,\\
+% & s_p\geq 0, 0\leq p\leq 10.
+%\end{align*}
+%\begin{itemize}
+% \item[(a)] Formulate the primal version of this problem, and determine the matrix $\mtx{A}$ and the vectors $\vct{b}$, $\vct{c}$.
+% \item[(b)] Using MATLAB, solve this problem using the long-step primal-dual method with parameters $\sigma=0.1, 0.5, 0.9$. Plot the corresponding trajectories in the $x_2s_2-x_5s_5$ plane and in the $y_1-y_2$ plane. 
+% \item[(c)] Describe the central path in the $y_1-y_2$ plane for this problem.
+%\end{itemize}
+
+
+\end{document}

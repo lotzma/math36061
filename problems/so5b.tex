@@ -1,0 +1,124 @@
+\documentclass{article}
+% Include macros here
+\input{../../../Work/macros/macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{5}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{3}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\setcounter{MaxMatrixCols}{20}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 23, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} 
+\begin{itemize}
+ \item[(a)] We first write down the matrix $\mtx{A}$:
+{\small 
+ \begin{equation*}
+ \mtx{A} = \begin{pmatrix}
+            0 & 0.2 & 0.4 & 0.6 & 0.8 & 1 & 1.2 & 1.4&1.6&1.8&2 \\
+            1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1
+           \end{pmatrix}
+\end{equation*}} 
+and the vectors $\vct{b}$ and $\vct{c}$:
+{\small
+\begin{equation*}
+ \vct{b} = \begin{pmatrix}
+            1\\1
+           \end{pmatrix}, \
+\vct{c} = \begin{pmatrix}
+           1 & 1.01 & 1.04 & 1.09 & 1.16 & 1.25 & 1.36 & 1.49 & 1.64 & 1.81 & 2
+          \end{pmatrix}^{\trans}
+\end{equation*}}
+ The primal version of this problem is
+ {\small
+ \begin{align*}
+ \minimize  &  x_1+1.01x_2+1.04x_3+1.09x_4+1.16x_5+1.25x_6+1.36x_7\\
+ &+1.49x_8+1.64x_9+1.81x_{10}+2x_{11}\\
+ \subjto  &0.2x_2+0.4x_3+0.6x_4+0.8x_5+x_6+1.2x_7+1.4x_8+1.6x_9\\
+          &+1.8x_{10}+2x_{11}=1\\
+          &x_1+x_2+x_3+x_4+x_5+x_6+x_7+x_8+x_9+x_{10}+x_{11}=1\\
+          & x_i\geq 0.
+ \end{align*}}
+ \item[(b)] The problem has $m=2$ dual variables $y_1$ and $y_2$, so the projection of the trajectory on the $\vct{y}$ plane can be easily visualized. The MATLAB code can be found in the files {\tt pr51.m} and {\tt pr51b.m}. It is a very naive implementation. The trajectories are shown in the figures.
+ \begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{longstep_cropped.pdf}
+ \end{figure}
+
+ \begin{figure}[h!]
+  \centering
+  \includegraphics[width=0.9\textwidth]{longstep1_cropped.pdf}
+ \end{figure}
+ 
+ \item[(c)] In the figure, the central path is shown as the vertical line in the $\vct{y}$ plane. 
+\end{itemize}
+
+\solution{} The last block of rows reads as
+\begin{equation*}
+ \mtx{S}\Delta\vct{x}+\mtx{X}\Delta\vct{s}=-\mtx{XS}\vct{e}+\sigma \mu \vct{e},
+\end{equation*}
+so that multiplying by $\mtx{X}^{-1}$ (the diagonal matrix $\mtx{X}$ is non-singular, since we are in $\mathcal{F}^{\circ}$) and solving for $\Delta\vct{s}$, we get
+\begin{equation*}
+ \Delta \vct{s} = -\mtx{S}\vct{e}-\mtx{X}^{-1}\mtx{S}\Delta\vct{x}+\sigma \mu \mtx{X}^{-1}\vct{e}.
+\end{equation*}
+Substituting $\Delta \vct{s}$ into the first block of rows, we get
+\begin{equation*}
+ \mtx{A}^\trans \Delta \vct{y}+\mtx{X}^{-1}\mtx{S}\Delta\vct{x}=\mtx{S}\vct{e}-\sigma \mu \mtx{X}^{-1}\vct{e}.
+\end{equation*}
+Using $\mtx{D}=\mtx{S}^{-1/2}\mtx{X}^{1/2}$, we get the new system
+\begin{align}\label{eq:1}\tag{1}
+\begin{pmatrix}
+  \zerovct & \mtx{A}\\
+  \mtx{A}^{\trans} & -\mtx{D}^{-2}
+ \end{pmatrix} 
+ \begin{pmatrix}
+  \Delta \vct{y}\\ \Delta \vct{x}
+ \end{pmatrix} &= \begin{pmatrix} \zerovct \\ 
+\mtx{s}-\sigma \mu \mtx{X}^{-1}\vct{e}
+\end{pmatrix}\\
+\label{eq:2}\tag{2}
+\Delta \vct{s} &= -\mtx{S}\vct{e}-\mtx{X}^{-1}\mtx{S}\Delta\vct{x}+\sigma \mu \mtx{X}^{-1}\vct{e}.
+\end{align}
+Multiplying $\mtx{A}\mtx{D}^2$ to the second block of rows, we get
+\begin{equation*}
+ \mtx{AD}^2\mtx{A}^\trans\Delta \vct{y}-\mtx{A}\Delta\vct{x} = \mtx{A}\mtx{D}^2\vct{s}-\sigma\mu\mtx{A}\mtx{D}^2\mtx{X}^{-1}\vct{e},
+\end{equation*}
+which in view of $\mtx{A}\Delta\vct{x}=\zerovct$, $\mtx{D}^{2}\mtx{X}^{-1}=\mtx{S}^{-1}$ and $\mtx{D}^2\vct{s} = \vct{x}$ simplifies to
+\begin{equation*}
+ (\mtx{AD}^2\mtx{A}^\trans) \Delta \vct{y} = \mtx{b}-\sigma\mu\mtx{A}\mtx{S}^{-1}\vct{e}.
+\end{equation*}
+This gives a system of equations for recovering $\Delta\vct{y}$, with a symmetric coefficient matrix $\mtx{A}\mtx{D}^2\mtx{A}^{\trans}$. From the second block of~\eqref{eq:1} we also get
+\begin{equation*}
+ \mtx{X}^{-1}\mtx{S}\Delta \vct{x}-\sigma \mu \mtx{X}^{-1}\vct{e}=\mtx{A}^{\trans}\Delta \vct{y}-\vct{s},
+\end{equation*}
+and substituting this into the expression for $\Delta \vct{s}$ in~\eqref{eq:2} above gives
+\begin{equation*}
+ \Delta \vct{s} = -\mtx{A}^{\trans} \Delta \vct{y}.
+\end{equation*}
+Finally, we can obtain $\Delta\vct{x}$ from $\Delta\vct{s}$ via~\eqref{eq:2},
+\begin{equation*}
+ \Delta\vct{x} = -\vct{x}-\mtx{S}^{-1}\mtx{X}\Delta \vct{s}+\sigma \mu \mtx{S}^{-1}\vct{e}.
+\end{equation*}
+This is the last of the three equations. The benefit is that one only has to solve one system of equations with symmetric coefficient matrix $\mtx{A}\mtx{D}^2\mtx{A}^{\trans}$, which can be done efficiently using, for example, Cholesky factorization or other methods. Once $\Delta\vct{y}$ is found, one can compute the other parts $\Delta\vct{x}$ and $\Delta\vct{s}$ easily.
+\end{document}

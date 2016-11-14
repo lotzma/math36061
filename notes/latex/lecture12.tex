@@ -55,7 +55,7 @@ If we define the function $\R^{2n+m}\to \R^{2n+m}$
 then what we are looking for is a {\em root} $(\vct{x}^*,\vct{y}^*,\vct{s}^*)$ of this function, i.e., a point with $F(\vct{x}^*,\vct{y}^*,\vct{s}^*)=\zerovct$, with the additional property that $\vct{x}^*$ and $\vct{s}^*$ be non-negative. For later reference, we record the form of the {\em Jacobian} matrix of $F$,
 
 \begin{equation*}
- DF(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+ \mtx{J}F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
 \zerovct & \mtx{A}^{\trans} & \mtx{I} \\
   \mtx{A} & \zerovct & \zerovct \\
   \mtx{S} & \zerovct & \mtx{X}
@@ -94,9 +94,9 @@ The data for this problem is given by
 \begin{equation*}
  \mtx{A} = \begin{pmatrix} 1 & 0 & -2\\ 0 & 1 & -1\end{pmatrix}, \ 
  \vct{b} = \begin{pmatrix} 1 \\ -1 \end{pmatrix}, \ 
- \vct{c} = \begin{pmatrix} 1 \\ 2 \\ -2 \end{pmatrix},
+ \vct{c} = \begin{pmatrix} 1 \\ 2 \\ -2 \end{pmatrix}.
 \end{equation*}
-with the function $F$ given by
+Based on this data, the function $F$ given by
 \begin{equation*}
  F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
                                y_1+s_1-1\\
@@ -111,7 +111,7 @@ with the function $F$ given by
 \end{equation*}
 and the Jacobian matrix
 \begin{equation*}
- DF(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
+ \mtx{J}F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix}
                                 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0\\
                                 0 & 0 & 0 & 0 & 1 & 0 & 1 & 0\\
                                 0 & 0 & 0 & -2 & -1 & 0 & 0 & 1\\
@@ -122,7 +122,7 @@ and the Jacobian matrix
                                 0 & 0 & s_3 & 0 & 0 & 0 & 0 & x_3
                                \end{pmatrix}.
 \end{equation*}
-With this data at hand, we can easily program MATLAB to solve the problem for us, making sure that the steplength is small enough. Starting with $\vct{x}^{(0)}=\vct{s}^{(0)}=(1,1,1)^\trans$, we get the sequence of step lengths
+With this data at hand, we can easily use a Python program to solve the problem for us, making sure that the steplength is small enough. Starting with $\vct{x}^{(0)}=\vct{s}^{(0)}=(1,1,1)^\trans$, we get the sequence of step lengths
 \begin{equation*}
  \alpha_0 = 0.5455, \ \alpha_1=0.5455, \ \alpha_2 = 1,
 \end{equation*}
@@ -178,7 +178,7 @@ and compute
 for a small enough $\alpha_k>0$ to ensure non-negativity.
 \end{itemize}
 
-\subsection{A third approach}
+\subsection{A third attempt}
 For the purpose of analysis, it is convenient to let an interior point method operate on vectors that satisfy the first two equalities in~\eqref{eq:opt2} exactly. Define the feasible and strictly feasible sets as
 \begin{align*}
  \mathcal{F} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
