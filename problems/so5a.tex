@@ -13,7 +13,7 @@
 %\setcounter{section}{\theproblemSheetNumber}  
 %\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
 \newcounter{problems}
-\setcounter{problems}{2}
+\setcounter{problems}{0}
 %\setlength{\parindent}{0cm}
 \renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
 \renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
@@ -55,7 +55,7 @@ which leads to the function $F$ and the Jacobian $DF$ being
                                x_1s_1\\
                                x_2s_2
                               \end{pmatrix}, \ 
- DF(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix} 
+ \mtx{J}F(\vct{x},\vct{y},\vct{s}) = \begin{pmatrix} 
                                0 & 0 & 1 & 1 & 0\\
                                0 & 0 & 1 & 0 & 1\\
                                1 & 1 & 0 & 0 & 0\\
@@ -89,9 +89,8 @@ Then solve the system of equations
 \end{equation*}
 and update
 \begin{equation*}
- (x_1^{(k+1)},x_2^{(k+1)},y^{(k+1)},s_1^{(k+1)},s_2^{(k+1)}) =  (x_1^{(k)},x_2^{(k)},y^{(k)},s_1^{(k)},s_2^{(k)})+\alpha_k (\Delta x_1,\Delta x_2,\Delta y, \Delta s_1,\Delta s_2),
+ (x_1^{(k+1)},x_2^{(k+1)},y^{(k+1)},s_1^{(k+1)},s_2^{(k+1)}) =  (x_1^{(k)},x_2^{(k)},y^{(k)},s_1^{(k)},s_2^{(k)})+\alpha_k (\Delta x_1,\Delta x_2,\Delta y, \Delta s_1,\Delta s_2).
 \end{equation*}
-making sure $\alpha_k$ is such that we remain in $\mathcal{N}_{-\infty}(\gamma)$. 
 \item[(b)] The solution here is obvious: the feasible set is the line segment connecting $(0,1)^{\trans}$ and $(1,0)^{\trans}$, and the optimal value is $\vct{x}^*=(0,1)^{\trans}$.
 \item[(c)] Solving
 \begin{equation*}
@@ -112,10 +111,19 @@ can give the solution (there is more than one)
 \end{equation*}
 This solution is clearly not a minimizer of the optimization problem.
 \end{itemize}
-\solution{pr:3} The claim is that the neighbourhood
+
+\solution{pr:3} If $\mtx{B}$ is the matrix with the $-y_i\vct{x}_i$ as rows, and $\vct{y}$ denotes the vector with the $y_i$ as entries, define $\mtx{A}=[\vct{B},-\vct{y}]$. 
+Let $\vct{z}=(\vct{w},b)\in \R^{n+1}$. 
+Then any solution of the feasibility problem
 \begin{equation*}
- \mathcal{N}_{-\infty}(1) = \{(\vct{x},\vct{y},\vct{s})\in \mathcal{F}^{\circ} \mid x_is_i\geq \mu\}
+\mtx{A}\vct{z}<0
 \end{equation*}
-coincides with the central path $\mathcal{C}$. Clearly, since $\mu$ is the {\em average} of the $x_is_i$,
-$x_is_i\geq \mu$ for all $i$ must imply $x_is_i=\mu$ for all $i$ (we can't all be better or equal than average, unless we are all equal). But then, such a vector is clearly on the central path. Conversely, if $(\vct{x},\vct{y},\vct{s})\in \mathcal{C}$, then there exists a $\tau>0$ such that $x_is_i=\tau$ for all $i$. But then, $\mu = \frac{1}{d}\sum_{i=1}^d x_is_i = \frac{1}{d}\sum_{i=1}^d \tau = \tau = x_is_i$ for all $i$, so that $(\vct{x},\vct{y},\vct{s})\in \mathcal{N}_{-\infty}(1)$. 
+has the property that $\ip{\vct{w}}{\vct{x}_i}+b<0$ if $y_i=-1$ and $\ip{\vct{w}}{\vct{x}_j}+b>0$ if $y_i=1$, so we get the separating hyperplane from $\vct{w},b$. If the convex hulls of the $\vct{x}_i$ with $y_i=1$ and of the $\vct{x}_j$ with $y_j=-1$ are disjoint, we have two disjoint, bounded, closed convex sets, and these can be separated by a hyperplane. The existence of a separating hyperplane is equivalent to the linear programming feasibility problem having a solution. 
+
+%\solution{pr:3} The claim is that the neighbourhood
+%\begin{equation*}
+% \mathcal{N}_{-\infty}(1) = \{(\vct{x},\vct{y},\vct{s})\in \mathcal{F}^{\circ} \mid x_is_i\geq \mu\}
+%\end{equation*}
+%coincides with the central path $\mathcal{C}$. Clearly, since $\mu$ is the {\em average} of the $x_is_i$,
+%$x_is_i\geq \mu$ for all $i$ must imply $x_is_i=\mu$ for all $i$ (we can't all be better or equal than average, unless we are all equal). But then, such a vector is clearly on the central path. Conversely, if $(\vct{x},\vct{y},\vct{s})\in \mathcal{C}$, then there exists a $\tau>0$ such that $x_is_i=\tau$ for all $i$. But then, $\mu = \frac{1}{d}\sum_{i=1}^d x_is_i = \frac{1}{d}\sum_{i=1}^d \tau = \tau = x_is_i$ for all $i$, so that $(\vct{x},\vct{y},\vct{s})\in \mathcal{N}_{-\infty}(1)$. 
 \end{document}

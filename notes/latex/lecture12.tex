@@ -150,7 +150,7 @@ In general, the method of choosing small step lengths can be slow. A variation w
 \end{equation}
 for a parameter $\tau>0$. Given some fixed initial values $\vct{x}\geq 0$ and $\vct{s}\geq 0$, compute the {\em duality measure}
 \begin{equation*}
- \mu = \frac{1}{d} \sum_{i=1}^d x_is_i
+ \mu = \frac{1}{n} \sum_{i=1}^n x_is_i
 \end{equation*}
 as the average of the products and using the {\em centering parameter} $\sigma\in (0,1)$, set $\tau = \sigma \mu$. When aiming to solve~\eqref{eq:ap2} using Newton's method, we are aiming towards a solution $(\vct{x}^*,\vct{y}^*,\vct{s}^*)$ where instead of 
 asking that $x_i^*s_i^*=0$, we want that $x_i^*s_i^*=\sigma \mu$, a value that is strictly positive, but smaller than average of the initial value.
@@ -160,7 +160,7 @@ In an additional twist to this approach, after starting with an initial guess $(
  \item Start with $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})$;
  \item For each $k\geq 0$, compute 
  \begin{equation*}
-  \mu^{(k)} = \frac{1}{d} \sum_{i=1}^d x_is_i
+  \mu^{(k)} = \frac{1}{n} \sum_{i=1}^n x_is_i
  \end{equation*}
 and $\sigma_k$. Solve
 \begin{equation*}
@@ -169,7 +169,7 @@ and $\sigma_k$. Solve
   \mtx{A} & \zerovct & \zerovct \\
   \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
  \end{pmatrix}
-\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \vct{c}-\vct{s}^{(k)}-\mtx{A}^{\trans}\vct{y}^{(k)}\\ \vct{b}-\mtx{A}\vct{x}^{(k)}\\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \vct{c}-\vct{s}^{(k)}-\mtx{A}^{\trans}\vct{y}^{(k)}\\ \vct{b}-\mtx{A}\vct{x}^{(k)}\\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\vct{e}\end{pmatrix}
 \end{equation*}
 and compute
 \begin{equation*}
@@ -181,8 +181,8 @@ for a small enough $\alpha_k>0$ to ensure non-negativity.
 \subsection{A third attempt}
 For the purpose of analysis, it is convenient to let an interior point method operate on vectors that satisfy the first two equalities in~\eqref{eq:opt2} exactly. Define the feasible and strictly feasible sets as
 \begin{align*}
- \mathcal{F} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
- \mathcal{F}^{\circ} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}> \zerovct, \ \vct{s}> \zerovct\}\\
+ \mathcal{F} &= \{(\vct{x},\vct{y},\vct{s}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
+ \mathcal{F}^{\circ} &= \{(\vct{x},\vct{y},\vct{s}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}> \zerovct, \ \vct{s}> \zerovct\}\\
 \end{align*}
 Restricting to points in $\mathcal{F}^{\circ}$, the computation of the Newton update in the second approach would change to
 \begin{equation*}
@@ -191,7 +191,7 @@ Restricting to points in $\mathcal{F}^{\circ}$, the computation of the Newton up
   \mtx{A} & \zerovct & \zerovct \\
   \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
  \end{pmatrix}
-\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\vct{e}\end{pmatrix}
 \end{equation*}
 
 In each iteration, a Newton step is taken in the direction of the {\em central path}. This is a curve in $\mathcal{F}^{\circ}$ defined as the set of solutions of

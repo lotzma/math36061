@@ -43,7 +43,7 @@ of the system of equations
   \mtx{A} & \zerovct & \zerovct \\
   \mtx{S} & \zerovct & \mtx{X}
  \end{pmatrix}
-\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}\mtx{S}\vct{e}+\sigma \mu\end{pmatrix},
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}\mtx{S}\vct{e}+\sigma \mu\vct{e}\end{pmatrix},
 \end{equation*}
 with $\mtx{A}\in \R^{m\times n}$, $\vct{x}\in \R^n$, $\vct{s}\in \R^n$, $\vct{X}=\mathrm{diag}(x_1,\dots,x_n)$, $\vct{S}=\mathrm{diag}(s_1,\dots,s_n)$, $\sigma\in (0,1)$, and $\mu=1/n \sum_{i=1}^n x_is_i$.
 Show that $\ip{\Delta\vct{x}}{\Delta\vct{s}}=0$.

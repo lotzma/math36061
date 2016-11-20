@@ -26,17 +26,17 @@ Primal-dual interior point methods aim to solve the problem
 \begin{equation}\label{eq:standard}\tag{P}
  \minimize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct
 \end{equation}
-for a matrix $\mtx{A}\in \R^{m\times d}, \vct{b}\in \R^m$ and $\vct{c}\in \R^d$, by applying Newton-type iterations to the optimality conditions of linear programming. More precisely, we have seen the following algorithm. Recall the feasible sets
+for a matrix $\mtx{A}\in \R^{m\times n}, \vct{b}\in \R^m$ and $\vct{c}\in \R^n$, by applying Newton-type iterations to the optimality conditions of linear programming. More precisely, we have seen the following algorithm. Recall the feasible sets
 \begin{align*}
- \mathcal{F} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
- \mathcal{F}^{\circ} &= \{(\vct{y},\vct{s},\vct{x}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}> \zerovct, \ \vct{s}> \zerovct\}\\
+ \mathcal{F} &= \{(\vct{x},\vct{y},\vct{s}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
+ \mathcal{F}^{\circ} &= \{(\vct{x},\vct{y},\vct{s}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}> \zerovct, \ \vct{s}> \zerovct\}\\
 \end{align*}
 The a simple primal-dual interior point method can be described as follows.
 \begin{itemize}
  \item Start with $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})\in \mathcal{F}^{\circ}$;
  \item For each $k\geq 0$, compute the duality parameter
  \begin{equation*}
-  \mu^{(k)} = \frac{1}{d} \sum_{i=1}^d x_is_i
+  \mu^{(k)} = \frac{1}{n} \sum_{i=1}^n x_is_i
  \end{equation*}
 and choose $\sigma_k\in [\sigma_{\mathrm{min}},\sigma_{\mathrm{max}}]$. Solve
 \begin{equation*}
@@ -45,7 +45,7 @@ and choose $\sigma_k\in [\sigma_{\mathrm{min}},\sigma_{\mathrm{max}}]$. Solve
   \mtx{A} & \zerovct & \zerovct \\
   \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
  \end{pmatrix}
-\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\vct{e}\end{pmatrix}
 \end{equation*}
 and compute
 \begin{equation*}
@@ -54,7 +54,7 @@ and compute
 for a small enough $\alpha_k>0$ to ensure non-negativity.
 \end{itemize}
 
-In each iteration, a Newton step is taken in the direction of the {\em central path}. This is a curve in $\mathcal{F}^{\circ}$ defined as the set of solutions of
+In each iteration, a Newton step is taken in the direction of the \textbf{path}. This is a curve in $\mathcal{F}^{\circ}$ defined as the set of solutions of
 \begin{align}\label{eq:cpopt}
  \begin{split}
   \mtx{A}^{\trans}\vct{y}+\vct{s}-\vct{c} &= \zerovct\\
@@ -69,11 +69,11 @@ where $\tau>0$.
 \section{Path-following methods}
 A path-following method tries to ensure that each iterate is {\em close} to the central path. What it means to be close to the central path depends on the neighbourhood we choose. Here, we will look at the (one-sided) $\infty$-norm neighbourhood
 \begin{equation*}
-\mathcal{N}_{-\infty}(\gamma) = \{(\vct{x},\vct{y},\vct{s})\in \mathcal{F}^{\circ} \mid x_is_i\geq \gamma \mu, \ 1\leq i\leq d\}
+\mathcal{N}_{-\infty}(\gamma) = \{(\vct{x},\vct{y},\vct{s})\in \mathcal{F}^{\circ} \mid x_is_i\geq \gamma \mu, \ 1\leq i\leq n\}
 \end{equation*}
 for some $\gamma\in (0,1]$ (say, $\gamma=10^{-3}$). In words, each $x_is_i$ has to be at least some small multiple of their average value. To see what this has to do with the $\infty$-norm neighbourhood, consider the set of $\vct{x}$ such that
 \begin{equation*}
- \norm{\mtx{X}\mtx{S}\vct{e}-\mu \vct{e}}_\infty \leq (1-\gamma) \mu \ \Longleftrightarrow \ \forall 1\leq i\leq d, \ \gamma \mu \leq x_is_i \leq 2-\gamma,
+ \norm{\mtx{X}\mtx{S}\vct{e}-\mu \vct{e}}_\infty \leq (1-\gamma) \mu \ \Longleftrightarrow \ \forall 1\leq i\leq n, \ \gamma \mu \leq x_is_i \leq 2-\gamma,
 \end{equation*}
 and we are only interested in the lower inequality.
 
@@ -82,7 +82,7 @@ The so-called {\em long-step path-following} interior point method can then be d
  \item Start with $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})\in \mathcal{N}_{-\infty}(\gamma)$;
  \item For each $k\geq 0$, compute the duality parameter
  \begin{equation*}
-  \mu^{(k)} = \frac{1}{d} \sum_{i=1}^d x_is_i
+  \mu^{(k)} = \frac{1}{n} \sum_{i=1}^n x_is_i
  \end{equation*}
 and choose $\sigma_k\in [\sigma_{\mathrm{min}},\sigma_{\mathrm{max}}]$. Solve
 \begin{equation*}
@@ -91,7 +91,7 @@ and choose $\sigma_k\in [\sigma_{\mathrm{min}},\sigma_{\mathrm{max}}]$. Solve
   \mtx{A} & \zerovct & \zerovct \\
   \mtx{S}^{(k)} & \zerovct & \mtx{X}^{(k)}
  \end{pmatrix}
-\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\end{pmatrix}
+\begin{pmatrix} \Delta\vct{x}\\ \Delta \vct{y}\\ \Delta\vct{s} \end{pmatrix} = \begin{pmatrix} \zerovct \\ \zerovct \\ -\vct{X}^{(k)}\mtx{S}^{(k)}\vct{e}+\sigma \mu^{(k)}\vct{e}\end{pmatrix}
 \end{equation*}
 and compute
 \begin{equation*}
@@ -101,7 +101,7 @@ for a small enough $\alpha_k\in [0,1]$ is the largest value such that $(\vct{x}^
 \end{itemize}
 
 \begin{remark}
- As noted at the end of Lecture 11, to find an initial point in $\mathcal{F}^{\circ}$ might not be trivial. In practice one can therefore also use the algorithm described above using {\em infeasible} points, though in this case we have to make sure that the residual norms $\norm{\vct{b}-\mtx{A}\vct{x}}$ and $\norm{\vct{c}-\vct{s}-\mtx{A}^{\trans}\vct{y}}$ remain bounded.
+ As noted at the end of Lecture 12, to find an initial point in $\mathcal{F}^{\circ}$ might not be trivial. In practice one can therefore also use the algorithm described above using {\em infeasible} points, though in this case we have to make sure that the residual norms $\norm{\vct{b}-\mtx{A}\vct{x}}$ and $\norm{\vct{c}-\vct{s}-\mtx{A}^{\trans}\vct{y}}$ remain bounded.
 \end{remark}
 
 \subsection{Visualising the algorithm}
@@ -135,16 +135,16 @@ Figure~\ref{fig:fig2} shows the trajectory of the above example in the $x_2s_2-x
 In the analysis of the long-step path-following algorithm, it is enough to establish that the duality measure $\mu^{(k)}$ converges to $0$ as $k\to \infty$. The reason is that $\mu=0$ forces all the products $x_is_i=0$, and since by design the other constraints are satisfied, this means that the sequence of points converges to a solution. The first theorem tells us that the $\mu_k$ decrease as $k$ increases. An elementary proof is given in Theorem 14.3 in Nocedal and Wright. It depends crucially on the assumption that the iterates remain inside the neighbourhood $\mathcal{N}_{-\infty}(\gamma)$ of the central path.
 
 \begin{theorem}
- Given parameters $\gamma$, $\sigma_{\mathrm{min}}$ and $\sigma_{\mathrm{max}}$, there is a constant $\delta>0$, independent of $d$, such that
+ Given parameters $\gamma$, $\sigma_{\mathrm{min}}$ and $\sigma_{\mathrm{max}}$, there is a constant $\delta>0$, independent of $n$, such that
  \begin{equation}\label{thm:1}
-  \mu_{k+1}\leq \left(1-\frac{\delta}{d}\right) \mu_k.
+  \mu_{k+1}\leq \left(1-\frac{\delta}{n}\right) \mu_k.
  \end{equation}
 \end{theorem}
 
 The next theorem gives a bound on the number of iterations needed to reduce the duality measure beyond any given $\e$.
 
 \begin{theorem}
- Let $\e>0$ and $\gamma\in (0,1)$. Let $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})\in \mathcal{N}_{-\infty}(\gamma)$ be a starting point such that the duality measure satisfies $\mu^{(0)}\leq \e^{-\kappa}$ for some constant $\kappa$. Then there is an index $K=O(d\log (1/\e))$ such that for all $k>K$,
+ Let $\e>0$ and $\gamma\in (0,1)$. Let $(\vct{x}^{(0)},\vct{y}^{(0)},\vct{s}^{(0)})\in \mathcal{N}_{-\infty}(\gamma)$ be a starting point such that the duality measure satisfies $\mu^{(0)}\leq \e^{-\kappa}$ for some constant $\kappa$. Then there is an index $K=O(n\log (1/\e))$ such that for all $k>K$,
  \begin{equation*}
   \mu_k \leq \e.
  \end{equation*}
@@ -154,21 +154,21 @@ In particular, the long-step path-following algorithm converges.
 \begin{proof}
 Repeatedly applying~\eqref{thm:1}, we get
 \begin{equation*}
- \mu_{k} \leq \left(1-\frac{\delta}{d}\right)^k \mu_0.
+ \mu_{k} \leq \left(1-\frac{\delta}{n}\right)^k \mu_0.
 \end{equation*}
 Taking logarithms on both sides,
  \begin{align*}
-  \log \mu_{k}\leq k \log\left(1-\frac{\delta}{d}\right)+\log \mu_0 
-  &\leq k \log\left(1-\frac{\delta}{d}\right)+\kappa \log\left(\frac{1}{\e}\right)\\
-  &\leq k\frac{-\delta}{d}+\kappa\log\left(\frac{1}{\e}\right).
+  \log \mu_{k}\leq k \log\left(1-\frac{\delta}{n}\right)+\log \mu_0 
+  &\leq k \log\left(1-\frac{\delta}{n}\right)+\kappa \log\left(\frac{1}{\e}\right)\\
+  &\leq k\frac{-\delta}{n}+\kappa\log\left(\frac{1}{\e}\right).
  \end{align*}
 We have $\mu_k<\e$ if 
 \begin{equation*}
- -k\frac{\delta}{d}+\kappa \left(\frac{1}{\e}\right) \leq \log \e,
+ -k\frac{\delta}{n}+\kappa \left(\frac{1}{\e}\right) \leq \log \e,
 \end{equation*}
 of equivalently, if 
 \begin{equation*}
- k\geq (1+\kappa)\frac{d}{\delta}\log\left(\frac{1}{\e}\right)=K.
+ k\geq (1+\kappa)\frac{n}{\delta}\log\left(\frac{1}{\e}\right)=K.
 \end{equation*}
 This was to be shown.
 
