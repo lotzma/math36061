@@ -1,0 +1,147 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{6}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}}
+
+%\theoremstyle{remark}
+%\newtheorem{problem}[problemSheetNumber]{}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Analysis}
+\rhead{November 20, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+Problems in Part A will be discussed in class. Problems in Part B come with solutions and should be tried at home. 
+
+\section*{Part A}
+
+\problem Given a linear programming problem,
+\begin{equation}\label{eq:standard}\tag{P}
+ \minimize \ip{\vct{c}}{\vct{x}} \quad \subjto \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct
+\end{equation}
+recall the feasible sets
+\begin{align*}
+ \mathcal{F} &= \{(\vct{x},\vct{y},\vct{s}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}\geq \zerovct, \ \vct{s}\geq \zerovct\}\\
+ \mathcal{F}^{\circ} &= \{(\vct{x},\vct{y},\vct{s}) \mid \mtx{A}^{\trans}\vct{y}+\vct{s}=\vct{c}, \ \mtx{A}\vct{x}=\vct{b}, \ \vct{x}> \zerovct, \ \vct{s}> \zerovct\}\\
+\end{align*}
+The long-step primal dual interior point method restricts to steps in the neighbourhood
+\begin{equation*}
+\mathcal{N}_{-\infty}(\gamma) = \{(\vct{x},\vct{y},\vct{s})\in \mathcal{F}^{\circ} \mid x_is_i\geq \gamma \mu, \ 1\leq i\leq n\}.
+\end{equation*}
+Show that $\mathcal{N}_{-\infty}(1)$ coincides with the central path. In particular, in the extreme case $\gamma=1$ we would force the trajectory to be exactly on the central path.
+
+\problem Show that if $f(\vct{x})$ is a convex function, then the set $\{\vct{x}\mid f(\vct{x})\leq 0\}$ is a convex set. Conclude that the feasible set 
+\begin{equation*}
+ \mathcal{C} = \{\vct{x}\in \R^n \mid g_1(\vct{x})\leq 0,\dots,g_m(\vct{x})\leq 0, h_1(\vct{x})=0,\dots,h_\ell(\vct{x})=0\},
+\end{equation*}
+with $g_i$ convex and $h_j$ linear, is a convex set.
+
+\problem Given a constrained optimization problem with equality constraints
+\begin{align*}
+  \minimize & f(\vct{x})\\
+  \subjto & g_1(\vct{x}) = \cdots = g_m(\vct{x}) = 0,
+\end{align*}
+the \textbf{Lagrangian} function is defined as the function in $\vct{x}\in \R^n$ and $\vct{\lambda}\in \R^m$,
+\begin{equation*}
+  \mathcal{L}(\vct{x},\vct{\lambda}) = f(\vct{x})-\sum_{i=1}^m \lambda_i g_i(\vct{x}) = f(\vct{x})-\ip{\vct{\lambda}}{\vct{g}(\vct{x})}.
+\end{equation*}
+A point $\vct{x}$ is a local minimimum of the equality constrained optimization problem, if there exist \textbf{Lagrange multipliers} $\vct{\lambda}\in \R^m$ such that the Lagrangian satisfies $\nabla \mathcal{L}(\vct{x},\vct{\lambda})=\zerovct$, where the gradient is with respect to both sets of variables $(\vct{x},\vct{\lambda})$. If $f$ is convex and the $g_i$ linear, this is a necessary and sufficient condition for a global minimum.
+
+Use the method of Lagrange multipliers to find a closed-form solution for the minimum of an equality constrained quadratic optimization problem
+\begin{equation*}
+\minimize \vct{x}^{\trans}\mtx{Q}\vct{x} \ \subjto \mtx{A}\vct{x}=\vct{b}.
+\end{equation*}
+%\problem Given a matrix $\mtx{A}\in \R^{m\times n}$ and $\vct{b}\in \R^m$, formulate the first-order optimality conditions for the problem 
+%\begin{equation*}
+% f(\vct{x}) = -\sum_{i=1}^m \log(b_i-\mtx{a}_i^{\trans}\vct{x}),
+%\end{equation*}
+%with the constraints $\mtx{A}\vct{x}+\vct{s}=\vct{b}$ and $\vct{s}> \zerovct$. Compute the Lagrange dual.
+%
+%\problem Consider the {\em Boolean} optimization problem
+%\begin{align*}
+%\minimize & \ip{\vct{c}}{\vct{x}} \\
+%\subjto & \mtx{A}\vct{x}\leq \vct{b}\\
+%& x_i \in \{0,1\}, \ 1\leq i\leq d.
+%\end{align*}
+%This problem requires the $x_i$ to have integer values, and falls outside the scope of continuous optimization. Show that the problem is equivalent to
+%\begin{align*}
+%\minimize & \ip{\vct{c}}{\vct{x}} \\
+%\subjto & \mtx{A}\vct{x}\leq \vct{b}\\
+%& x_i(1-x_i)=0, \ 1\leq i\leq d.
+%\end{align*}
+%While this problem is not convex (the equality constraints are quadratic), we can still formulate the Lagrange dual to this problem, whose optimal value gives a lower bound. Show that the Lagrange dual is a convex optimization problem, thus giving a way to {\em approximate} the solution of the discrete problem by solving a convex optimization problem.
+
+\section*{Part B}
+
+\problem Consider the following linear programming problem
+\begin{align*}
+ \maximize & y_1+y_2\\
+ \subjto & 0.2p\cdot y_1+y_2+s_p=1+0.01p^2,\\
+ & s_p\geq 0, 0\leq p\leq 10.
+\end{align*}
+\begin{itemize}
+ \item[(a)] Formulate the primal version of this problem, and determine the matrix $\mtx{A}$ and the vectors $\vct{b}$, $\vct{c}$.
+ \item[(b)] Using a computing system such as Python or MATLAB, solve this problem using the long-step primal-dual method with parameters $\sigma=0.1, 0.5, 0.9$. Plot the corresponding trajectories in the $x_2s_2-x_5s_5$ plane and in the $y_1-y_2$ plane. 
+ \item[(c)] Describe the central path in the $y_1-y_2$ plane for this problem.
+\end{itemize}
+
+\problem Consider the following portfolio optimization problem.
+\begin{align}\label{eq:opt1}\tag{1}
+\begin{split}
+ \minimize & \vct{x}^{\trans}\Sigma\vct{x}\\
+ \subjto & \vct{r}^{\trans}\vct{x}=\mu\\
+ & \vct{e}^{\trans}\vct{x}=1.
+ \end{split}
+\end{align}
+where
+\begin{itemize}
+ \item $\mtx{\Sigma}\in \R^{n\times n}$ is a positive semidefinite symmetric matrix;
+ \item $\vct{e} = (1,\dots,1)^{\trans}$;
+ \item $\vct{r}\in \R^n$ is a vectors of estimated returns.
+\end{itemize}
+
+The interpretation is that $\mtx{\Sigma}$ is an estimated covariance matrix, and the goal is to find an investment strategy that minimizes the risk for a given return level.
+Using the method of \textbf{Lagrange multipliers}, show that the solution is characterized by:
+\begin{equation*}
+ x = \frac{1}{ac-b^2} \left(c\mtx{\Sigma}^{-1}r-b\mtx{\Sigma}^{-1}e\right)+\mu\cdot \left(a\mtx{\Sigma}^{-1}e-b\mtx{\Sigma}^{-1}r\right),
+\end{equation*}
+where $a=e^{\top}\mtx{\Sigma}^{-1}e$, $b=e^{\top}\mtx{\Sigma}^{-1}r$ and $c=r^{-1}\mtx{\Sigma}^{-1}r$.
+
+Given the covariance matrix and expected returns as follows,
+\begin{equation*}
+ \vct{r} = \begin{pmatrix}
+            14\\12\\15\\7
+           \end{pmatrix}, \ 
+\mtx{\Sigma} = \begin{pmatrix}
+                185 & 86.5 & 80 & 20\\
+                86.5 & 196 & 76 & 13.5\\
+                80 & 76 & 411 & -19\\
+                20 & 13.5 & -19 & 25
+               \end{pmatrix},
+\end{equation*}
+Compute the {\em efficient frontier}, i.e., the plot that relates the solution of~\eqref{eq:opt1} to target returns $\mu$ for $\mu$ varying between $5$ and $35$.
+
+Repeat the same exercise, but this time with the additional constraint $\vct{x}\geq 0$. You can use CVXPY for that. Give an interpretation of this additional constraint.
+
+
+
+\end{document}

@@ -1,0 +1,69 @@
+\documentclass{article}
+% Include macros here
+\input{../../../Work/macros/macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{6}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{3}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\setcounter{MaxMatrixCols}{20}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 23, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} 
+first compute the gradient of all terms,
+\begin{equation*}
+ \nabla (\vct{x}^{\trans}\mtx{\Sigma} \vct{x}) = 2\mtx{\Sigma} \vct{x}, \quad \nabla (\vct{x}^{\trans}\vct{e}) = \vct{e}, \quad \nabla (\vct{x}^{\trans}\vct{r})=\vct{r}.
+\end{equation*}
+Then the Lagrange equation is given by (we absorbed the factor $2$):
+\begin{equation}\label{eq:1}\tag{1}
+ \mtx{\Sigma} \vct{x}-\lambda \vct{e}-\eta \vct{r} = \zerovct \Leftrightarrow \vct{x} = \lambda \mtx{\Sigma}^{-1}\vct{e}+\eta\mtx{\Sigma}^{-1}\vct{r}.
+\end{equation}
+Multiplying with $\vct{e}^{\trans}$ and $\vct{r}^{\trans}$ we get $\lambda$ and $\eta$ as the solution of a system of equations
+\begin{align*}
+ 1 = \vct{e}^{\trans}\vct{x} &= \lambda \vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{e}+ \eta \vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{r}\\
+ \mu = \vct{r}^{\trans}\vct{x} &= \lambda \vct{r}^{\trans}\mtx{\Sigma}^{-1}\vct{e}+ \eta \vct{r}^{\trans}\mtx{\Sigma}^{-1}\vct{r}.
+\end{align*}
+Setting $a=\vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{e}$, $b=\vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{r}$ and $c=\vct{r}^{-1}\mtx{\Sigma}^{-1}\vct{r}$, this corresponds to the system of equations
+\begin{equation*}
+ \begin{pmatrix} a & b\\ b& c\end{pmatrix} \begin{pmatrix} \lambda \\ \eta\end{pmatrix} = \begin{pmatrix} 1\\ \mu\end{pmatrix}.
+\end{equation*}
+Using Cramer's rule for the solution of a $2\times 2$ system of equations (or solving this by Gaussian elimination directly), we get
+\begin{equation*}
+ \begin{pmatrix} \lambda\\ \eta\end{pmatrix} = \frac{1}{ac-b^2} \begin{pmatrix} a\mu-b\\c-b\mu \end{pmatrix}.
+\end{equation*}
+Plugging these into Equation~\eqref{eq:1}, the closed-form solution is
+\begin{equation*}
+ \vct{x} = \frac{1}{ac-b^2} \left(c\mtx{\Sigma}^{-1}\vct{r}-b\mtx{\Sigma}^{-1}\vct{e}\right)+\mu\cdot \left(a\mtx{\Sigma}^{-1}\vct{e}-b\mtx{\Sigma}^{-1}\vct{r}\right).
+\end{equation*}
+Note that this is an affine function in $\mu$, the target return. The variance itself is then
+\begin{equation*}
+ \vct{x}^{\trans}\mtx{\Sigma}\vct{x}.
+\end{equation*}
+Plotting the variance against the target return gives the following graph ({\tt pr6.m})
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.6\textwidth]{portfolio_cropped.pdf}
+\end{figure}
+As we see, the smallest risk occurs when targeting around 6-8\% return.
+\end{document}

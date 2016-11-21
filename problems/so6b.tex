@@ -1,0 +1,93 @@
+\documentclass{article}
+% Include macros here
+\input{../../../Work/macros/macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{6}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{1}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 23, 2015}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} If $f(\vct{x})$ is convex and $\vct{x}$ and $\vct{y}$ are such that $f(\vct{x})\leq 0$ and $f(\vct{y})\leq 0$, then
+\begin{equation*}
+ f(\lambda \vct{x}+(1-\lambda)\vct{y})\leq (1-\lambda)f(\vct{x})+\lambda f(\vct{y}) \leq 0,
+\end{equation*}
+so that the set is convex. If we denote by $\mathcal{C}_i=\{\vct{x}\mid g_i(\vct{x})\leq 0\}$ and $\mathcal{D}_j=\{\vct{x}\mid h_j(\vct{x})=0\}$, then 
+\begin{equation*}
+ \mathcal{C}=\mathcal{C}_1\cap\cdots \cap \mathcal{C}_m\cap \mathcal{D}_1\cap\cdots \cap \mathcal{D}_\ell
+\end{equation*}
+is an intersection of convex sets, and therefore convex.
+
+\solution{pr:2} First of all, note that the function is only defined for $\vct{x}$ such that $\mtx{A}\vct{x}\leq \vct{b}$. We introduce new variables $\vct{y}$ and derive the dual to the problem
+\begin{align*}
+ \minimize & -\sum_{i=1}^m \log(y_i)\\
+ \subjto & \vct{y}=\vct{b}-\mtx{A}\vct{x}.
+\end{align*}
+The Lagrangian to this problem is
+\begin{equation*}
+ \mathcal{L}(\vct{x},\vct{y},\vct{\mu}) = -\sum_{i=1}^m \log(y_i)+\vct{\mu}^{\trans}(\vct{y}-\vct{b}+\mtx{A}\vct{x}).
+\end{equation*}
+The dual function is
+\begin{equation*}
+ g(\vct{\mu}) = \inf_{\vct{x},\vct{y}} \mathcal{L}(\vct{x},\vct{y},\vct{\mu}).
+\end{equation*}
+The infimum is $-\infty$ if $\vct{\mu}^{\trans}\mtx{A}\neq \zerovct$. If $\vct{\mu}$ has negative terms, then the infimum is also $-\infty$ (we could then choose an arbitrary large value for the corresponding $y$ variable). If $\vct{\mu}>0$, then we get a minimum by setting $y_i=\frac{1}{\mu_i}$. It follows that the dual function is
+\begin{equation*}
+ g(\vct{\mu}) = \begin{cases}
+                   -\sum_{i=1}^m \log(\mu_i)+m-\vct{b}^{\trans}\vct{\mu} & \mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\mu}>0,\\
+                   -\infty & \text{ else.}
+                \end{cases}
+\end{equation*}
+
+\solution{pr:3} The Lagrangian of this problem is
+\begin{align*}
+ \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) &= \ip{\vct{c}}{\vct{x}}+\vct{\lambda}^{\trans}(\mtx{A}\vct{x}-\vct{b}) + \sum_{i=1}^d \mu_i x_i(1-x_i)\\
+ &= \vct{x}^{\trans}\mathrm{diag}(\vct{\mu})\vct{x}+(\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu})^{\trans}\vct{x}-\vct{b}^{\trans}\vct{\lambda}.
+\end{align*}
+We want to minimize this over $\vct{x}$. If $\vct{\mu}<0$, then this function is unbounded below. Otherwise, we compute the minimum by setting the gradient to zero,
+\begin{equation*}
+ 2\mathrm{diag}(\vct{\mu})\vct{x}+\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu} = \zerovct,
+\end{equation*}
+and get the expression (after resolving the above for $\vct{x}$ and plugging into the Lagrangian)
+\begin{equation*}
+ g(\vct{\lambda},\vct{\mu}) = \begin{cases}
+                               -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i, & \vct{\mu}\geq \zerovct\\
+                               -\infty & \text{ else.}
+                              \end{cases}
+\end{equation*}
+The dual problem is
+\begin{align*}
+ \maximize & -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i\\
+ \subjto & \vct{\mu}\geq \zerovct, \ \vct{\lambda}\geq \zerovct.
+\end{align*}
+The problem can be simplified a bit further by noting that for each summand
+\begin{equation*}
+ -\frac{1}{4}(c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i,
+\end{equation*}
+if $c_i+\vct{a}_i^{\trans}\vct{\lambda}\geq 0$ we can set $\mu_i=c_i+\vct{a}_i^{\trans}\vct{\lambda}$ and the summand disappears, and if $c_i+\vct{a}_i^{\trans}\vct{\lambda}<0$, then we can maximize the summand by computing the derivative, and get the value $c_i+\vct{a}_i^{\trans}\vct{\lambda}$. Summarising, we have
+\begin{align*}
+ \maximize & -\vct{b}^{\trans}\vct{\lambda}+\sum_{i=1}^d \min\{0,c_i+\mtx{a}_i^{\trans}\vct{\lambda}\}\\
+ \subjto & \vct{\lambda}\geq \zerovct.
+\end{align*}
+Note that the objective function is nonsmooth, but is still concave. One can reverse the signs (and replace the min with a max in the process) to obtain a convex problem. The optimal value of this new problem will be a lower bound, and approximation, to the optimal value of the problem we started out with.
+\end{document}
