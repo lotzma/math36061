@@ -27,14 +27,14 @@ So far we have only dealt with constrained optimization problems where the objec
 \begin{align*}\label{eq:constr}\tag{1}
 \begin{split}
  \minimize & f(\vct{x})\\
- \subjto & \vct{g}(\vct{x})\leq \zerovct\\
+ \subjto & \vct{f}(\vct{x})\leq \zerovct\\
          & \vct{h}(\vct{x})= \zerovct,
 \end{split}
 \end{align*}
-where $\vct{x}\in \R^n$, $\vct{g}=(g_1,\dots,g_m)^{\trans}$, $\vct{g}=(g_1,\dots,g_{\ell})$, and the inequalities are componentwise. 
+where $\vct{x}\in \R^n$, $\vct{f}=(f_1,\dots,f_m)^{\trans}$, $\vct{h}=(h_1,\dots,h_{p})$, and the inequalities are componentwise. 
 The problem~\eqref{eq:constr} is {\em convex}, if $f$ and the $g_i$ are convex, and the $h_j$ are linear. We also denote by $\mathrm{dom}(f)$ the {\em domain} of $f$, which is the set of points $\vct{x}$ where $f$ takes a finite value. The feasible set
 \begin{equation*}
- \mathcal{F} = \{\vct{x} \mid g_i(\vct{x})\leq 0, \ h_j(\vct{x})=0, \ 1\leq i\leq m, \ 1\leq j\leq \ell\}
+ \mathcal{F} = \{\vct{x} \mid f_i(\vct{x})\leq 0, \ h_j(\vct{x})=0, \ 1\leq i\leq m, \ 1\leq j\leq \ell\}
 \end{equation*}
 for a convex constrained problem is a convex set.
 
