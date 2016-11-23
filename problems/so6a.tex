@@ -1,6 +1,6 @@
 \documentclass{article}
 % Include macros here
-\input{../../../Work/macros/macros}
+\input{macros}
 \usepackage{fancyhdr}
 %\include{macros}
 \usepackage{pifont}
@@ -13,57 +13,114 @@
 %\setcounter{section}{\theproblemSheetNumber}  
 %\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
 \newcounter{problems}
-\setcounter{problems}{3}
+\setcounter{problems}{0}
 %\setlength{\parindent}{0cm}
 \renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
 \renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
 
-\setcounter{MaxMatrixCols}{20}
-
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{November 23, 2015}
+\rhead{November 23, 2016}
 
 \begin{document} 
 \begin{center}
 {\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-\solution{pr:1} 
-first compute the gradient of all terms,
+\solution{pr:1} The claim is that the neighbourhood
 \begin{equation*}
- \nabla (\vct{x}^{\trans}\mtx{\Sigma} \vct{x}) = 2\mtx{\Sigma} \vct{x}, \quad \nabla (\vct{x}^{\trans}\vct{e}) = \vct{e}, \quad \nabla (\vct{x}^{\trans}\vct{r})=\vct{r}.
+ \mathcal{N}_{-\infty}(1) = \{(\vct{x},\vct{y},\vct{s})\in \mathcal{F}^{\circ} \mid x_is_i\geq \mu\}
 \end{equation*}
-Then the Lagrange equation is given by (we absorbed the factor $2$):
-\begin{equation}\label{eq:1}\tag{1}
- \mtx{\Sigma} \vct{x}-\lambda \vct{e}-\eta \vct{r} = \zerovct \Leftrightarrow \vct{x} = \lambda \mtx{\Sigma}^{-1}\vct{e}+\eta\mtx{\Sigma}^{-1}\vct{r}.
-\end{equation}
-Multiplying with $\vct{e}^{\trans}$ and $\vct{r}^{\trans}$ we get $\lambda$ and $\eta$ as the solution of a system of equations
-\begin{align*}
- 1 = \vct{e}^{\trans}\vct{x} &= \lambda \vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{e}+ \eta \vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{r}\\
- \mu = \vct{r}^{\trans}\vct{x} &= \lambda \vct{r}^{\trans}\mtx{\Sigma}^{-1}\vct{e}+ \eta \vct{r}^{\trans}\mtx{\Sigma}^{-1}\vct{r}.
-\end{align*}
-Setting $a=\vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{e}$, $b=\vct{e}^{\trans}\mtx{\Sigma}^{-1}\vct{r}$ and $c=\vct{r}^{-1}\mtx{\Sigma}^{-1}\vct{r}$, this corresponds to the system of equations
+coincides with the central path $\mathcal{C}$. Clearly, since $\mu$ is the {\em average} of the $x_is_i$,
+$x_is_i\geq \mu$ for all $i$ must imply $x_is_i=\mu$ for all $i$ (we can't all be better or equal than average, unless we are all equal). But then, such a vector is clearly on the central path. Conversely, if $(\vct{x},\vct{y},\vct{s})\in \mathcal{C}$, then there exists a $\tau>0$ such that $x_is_i=\tau$ for all $i$. But then, $\mu = \frac{1}{n}\sum_{i=1}^n x_is_i = \frac{1}{n}\sum_{i=1}^n \tau = \tau = x_is_i$ for all $i$, so that $(\vct{x},\vct{y},\vct{s})\in \mathcal{N}_{-\infty}(1)$. 
+
+\solution{pr:2} If $f(\vct{x})$ is convex and $\vct{x}$ and $\vct{y}$ are such that $f(\vct{x})\leq 0$ and $f(\vct{y})\leq 0$, then
 \begin{equation*}
- \begin{pmatrix} a & b\\ b& c\end{pmatrix} \begin{pmatrix} \lambda \\ \eta\end{pmatrix} = \begin{pmatrix} 1\\ \mu\end{pmatrix}.
+ f(\lambda \vct{x}+(1-\lambda)\vct{y})\leq (1-\lambda)f(\vct{x})+\lambda f(\vct{y}) \leq 0,
 \end{equation*}
-Using Cramer's rule for the solution of a $2\times 2$ system of equations (or solving this by Gaussian elimination directly), we get
+so that the set is convex. If we denote by $\mathcal{C}_i=\{\vct{x}\mid g_i(\vct{x})\leq 0\}$ and $\mathcal{D}_j=\{\vct{x}\mid h_j(\vct{x})=0\}$, then 
 \begin{equation*}
- \begin{pmatrix} \lambda\\ \eta\end{pmatrix} = \frac{1}{ac-b^2} \begin{pmatrix} a\mu-b\\c-b\mu \end{pmatrix}.
+ \mathcal{C}=\mathcal{C}_1\cap\cdots \cap \mathcal{C}_m\cap \mathcal{D}_1\cap\cdots \cap \mathcal{D}_\ell
 \end{equation*}
-Plugging these into Equation~\eqref{eq:1}, the closed-form solution is
+is an intersection of convex sets, and therefore convex.
+
+\solution{pr:3} The Lagrangian of the quadratic problem is given by
 \begin{equation*}
- \vct{x} = \frac{1}{ac-b^2} \left(c\mtx{\Sigma}^{-1}\vct{r}-b\mtx{\Sigma}^{-1}\vct{e}\right)+\mu\cdot \left(a\mtx{\Sigma}^{-1}\vct{e}-b\mtx{\Sigma}^{-1}\vct{r}\right).
+  \mathcal{L}(\vct{x},\vct{\lambda}) = \frac{1}{2}\vct{x}^{\trans}\mtx{Q}\vct{x}-\sum_{i=1}^m \lambda_i (\ip{\vct{a}_i}{\vct{x}}-b_i).
 \end{equation*}
-Note that this is an affine function in $\mu$, the target return. The variance itself is then
+The gradient of the Lagrangian is
 \begin{equation*}
- \vct{x}^{\trans}\mtx{\Sigma}\vct{x}.
+  \mtx{Q}\vct{x}-\sum_{i=1}^m \lambda_i \mtx{a}_i = \mtx{Q}\vct{x}-\mtx{A}^{\trans}\vct{\lambda} = \zerovct,
 \end{equation*}
-Plotting the variance against the target return gives the following graph ({\tt pr6.m})
-\begin{figure}[h!]
- \centering
- \includegraphics[width=0.6\textwidth]{portfolio_cropped.pdf}
-\end{figure}
-As we see, the smallest risk occurs when targeting around 6-8\% return.
+where we denoted by $\vct{a}_i$ the columns of the matrix $\mtx{A}^{\trans}$ (so that $\vct{a}_i^{\trans}$ are the rows of $\mtx{A})$. Assuming that $\mtx{Q}$ is invertible, we get the equation for $\vct{x}$
+\begin{equation}\label{eq:lagrange}\tag{1}
+  \vct{x} = \mtx{Q}^{-1}\mtx{A}^{\trans}\vct{\lambda}.
+\end{equation} 
+This would be a closed form solution for $\vct{x}$, were it not for the yet unknown Lagrange multipliers $\vct{\lambda}$. We can, however, get an expression for the Lagrange multipliers in terms of the known data. For this, we multiply~\eqref{eq:lagrange} with $\mtx{A}$ to get
+\begin{equation*}
+  \vct{b} = \mtx{A}\vct{x} = \mtx{A}\mtx{Q}^{-1}\mtx{A}^{\trans}\vct{\lambda},
+\end{equation*}
+which holds at an optimal point (since the constraints $\mtx{A}\vct{x}=\vct{b}$ are expected to hold). Note that the only unknown parameter in this equation is the vector of Lagrange multipliers $\vct{\lambda}$, all the rest depends on the known quantities $\vct{b}$, $\mtx{Q}$, and $\mtx{A}$. Solving this $m\times m$ system of linear equations for $\lambda$ we get
+\begin{equation*}
+  \vct{\lambda} = (\mtx{A}\mtx{Q}^{-1}\mtx{A}^{\trans})^{-1} \vct{b},
+\end{equation*}
+and plugging this into~\eqref{eq:lagrange}, we get the closed form solution for $\vct{x}$ as
+\begin{equation*}
+  \vct{x} = \mtx{Q}^{-1}\mtx{A}^{\trans}(\mtx{A}\mtx{Q}^{-1}\mtx{A}^{\trans})^{-1} \vct{b}.
+\end{equation*}
+In practice, computing $\vct{x}$ this way may not be very efficient due to conditioning and computational complexity issues, and one would solve the resulting system of equations that gives $\vct{\lambda}$ using some matrix factorizations.
+
+%\solution{pr:2} First of all, note that the function is only defined for $\vct{x}$ such that $\mtx{A}\vct{x}\leq \vct{b}$. We introduce new variables $\vct{y}$ and derive the dual to the problem
+%\begin{align*}
+% \minimize & -\sum_{i=1}^m \log(y_i)\\
+% \subjto & \vct{y}=\vct{b}-\mtx{A}\vct{x}.
+%\end{align*}
+%The Lagrangian to this problem is
+%\begin{equation*}
+% \mathcal{L}(\vct{x},\vct{y},\vct{\mu}) = -\sum_{i=1}^m \log(y_i)+\vct{\mu}^{\trans}(\vct{y}-\vct{b}+\mtx{A}\vct{x}).
+%\end{equation*}
+%The dual function is
+%\begin{equation*}
+% g(\vct{\mu}) = \inf_{\vct{x},\vct{y}} \mathcal{L}(\vct{x},\vct{y},\vct{\mu}).
+%\end{equation*}
+%The infimum is $-\infty$ if $\vct{\mu}^{\trans}\mtx{A}\neq \zerovct$. If $\vct{\mu}$ has negative terms, then the infimum is also $-\infty$ (we could then choose an arbitrary large value for the corresponding $y$ variable). If $\vct{\mu}>0$, then we get a minimum by setting $y_i=\frac{1}{\mu_i}$. It follows that the dual function is
+%\begin{equation*}
+% g(\vct{\mu}) = \begin{cases}
+%                   -\sum_{i=1}^m \log(\mu_i)+m-\vct{b}^{\trans}\vct{\mu} & \mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\mu}>0,\\
+%                   -\infty & \text{ else.}
+%                \end{cases}
+%\end{equation*}
+%
+%\solution{pr:3} The Lagrangian of this problem is
+%\begin{align*}
+% \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) &= \ip{\vct{c}}{\vct{x}}+\vct{\lambda}^{\trans}(\mtx{A}\vct{x}-\vct{b}) + \sum_{i=1}^d \mu_i x_i(1-x_i)\\
+% &= \vct{x}^{\trans}\mathrm{diag}(\vct{\mu})\vct{x}+(\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu})^{\trans}\vct{x}-\vct{b}^{\trans}\vct{\lambda}.
+%\end{align*}
+%We want to minimize this over $\vct{x}$. If $\vct{\mu}<0$, then this function is unbounded below. Otherwise, we compute the minimum by setting the gradient to zero,
+%\begin{equation*}
+% 2\mathrm{diag}(\vct{\mu})\vct{x}+\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu} = \zerovct,
+%\end{equation*}
+%and get the expression (after resolving the above for $\vct{x}$ and plugging into the Lagrangian)
+%\begin{equation*}
+% g(\vct{\lambda},\vct{\mu}) = \begin{cases}
+%                               -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i, & \vct{\mu}\geq \zerovct\\
+%                               -\infty & \text{ else.}
+%                              \end{cases}
+%\end{equation*}
+%The dual problem is
+%\begin{align*}
+% \maximize & -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i\\
+% \subjto & \vct{\mu}\geq \zerovct, \ \vct{\lambda}\geq \zerovct.
+%\end{align*}
+%The problem can be simplified a bit further by noting that for each summand
+%\begin{equation*}
+% -\frac{1}{4}(c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i,
+%\end{equation*}
+%if $c_i+\vct{a}_i^{\trans}\vct{\lambda}\geq 0$ we can set $\mu_i=c_i+\vct{a}_i^{\trans}\vct{\lambda}$ and the summand disappears, and if $c_i+\vct{a}_i^{\trans}\vct{\lambda}<0$, then we can maximize the summand by computing the derivative, and get the value $c_i+\vct{a}_i^{\trans}\vct{\lambda}$. Summarising, we have
+%\begin{align*}
+% \maximize & -\vct{b}^{\trans}\vct{\lambda}+\sum_{i=1}^d \min\{0,c_i+\mtx{a}_i^{\trans}\vct{\lambda}\}\\
+% \subjto & \vct{\lambda}\geq \zerovct.
+%\end{align*}
+%Note that the objective function is nonsmooth, but is still concave. One can reverse the signs (and replace the min with a max in the process) to obtain a convex problem. The optimal value of this new problem will be a lower bound, and approximation, to the optimal value of the problem we started out with.
 \end{document}

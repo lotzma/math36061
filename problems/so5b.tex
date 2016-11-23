@@ -30,49 +30,7 @@
 {\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-%\solution{pr:1} 
-%\begin{itemize}
-% \item[(a)] We first write down the matrix $\mtx{A}$:
-%{\small 
-% \begin{equation*}
-% \mtx{A} = \begin{pmatrix}
-%            0 & 0.2 & 0.4 & 0.6 & 0.8 & 1 & 1.2 & 1.4&1.6&1.8&2 \\
-%            1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1 & 1
-%           \end{pmatrix}
-%\end{equation*}} 
-%and the vectors $\vct{b}$ and $\vct{c}$:
-%{\small
-%\begin{equation*}
-% \vct{b} = \begin{pmatrix}
-%            1\\1
-%           \end{pmatrix}, \
-%\vct{c} = \begin{pmatrix}
-%           1 & 1.01 & 1.04 & 1.09 & 1.16 & 1.25 & 1.36 & 1.49 & 1.64 & 1.81 & 2
-%          \end{pmatrix}^{\trans}
-%\end{equation*}}
-% The primal version of this problem is
-% {\small
-% \begin{align*}
-% \minimize  &  x_1+1.01x_2+1.04x_3+1.09x_4+1.16x_5+1.25x_6+1.36x_7\\
-% &+1.49x_8+1.64x_9+1.81x_{10}+2x_{11}\\
-% \subjto  &0.2x_2+0.4x_3+0.6x_4+0.8x_5+x_6+1.2x_7+1.4x_8+1.6x_9\\
-%          &+1.8x_{10}+2x_{11}=1\\
-%          &x_1+x_2+x_3+x_4+x_5+x_6+x_7+x_8+x_9+x_{10}+x_{11}=1\\
-%          & x_i\geq 0.
-% \end{align*}}
-% \item[(b)] The problem has $m=2$ dual variables $y_1$ and $y_2$, so the projection of the trajectory on the $\vct{y}$ plane can be easily visualized. The MATLAB code can be found in the files {\tt pr51.m} and {\tt pr51b.m}. It is a very naive implementation. The trajectories are shown in the figures.
-% \begin{figure}[h!]
-%  \centering
-%  \includegraphics[width=0.9\textwidth]{images/longstep_cropped.pdf}
-% \end{figure}
-%
-% \begin{figure}[h!]
-%  \centering
-%  \includegraphics[width=0.9\textwidth]{images/longstep1_cropped.pdf}
-% \end{figure}
-% 
-% \item[(c)] In the figure, the central path is shown as the vertical line in the $\vct{y}$ plane. 
-%\end{itemize}
+
 
 \solution{} The last block of rows reads as
 \begin{equation*}
