@@ -1,0 +1,133 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{7}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{0}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 28, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} First of all, note that the function is only defined for $\vct{x}$ such that $\mtx{A}\vct{x}\leq \vct{b}$. We introduce new variables $\vct{y}$ and derive the dual to the problem
+\begin{align*}
+ \minimize & -\sum_{i=1}^m \log(y_i)\\
+ \subjto & \vct{y}=\vct{b}-\mtx{A}\vct{x}.
+\end{align*}
+The Lagrangian to this problem is
+\begin{equation*}
+ \mathcal{L}(\vct{x},\vct{y},\vct{\mu}) = -\sum_{i=1}^m \log(y_i)+\vct{\mu}^{\trans}(\vct{y}-\vct{b}+\mtx{A}\vct{x}).
+\end{equation*}
+The dual function is
+\begin{equation*}
+ g(\vct{\mu}) = \inf_{\vct{x},\vct{y}} \mathcal{L}(\vct{x},\vct{y},\vct{\mu}).
+\end{equation*}
+The infimum is $-\infty$ if $\vct{\mu}^{\trans}\mtx{A}\neq \zerovct$. If $\vct{\mu}$ has negative terms, then the infimum is also $-\infty$ (we could then choose an arbitrary large value for the corresponding $y$ variable). If $\vct{\mu}>0$, then we get a minimum by setting $y_i=\frac{1}{\mu_i}$. It follows that the dual function is
+\begin{equation*}
+ g(\vct{\mu}) = \begin{cases}
+                   -\sum_{i=1}^m \log(\mu_i)+m-\vct{b}^{\trans}\vct{\mu} & \mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\mu}>0,\\
+                   -\infty & \text{ else.}
+                \end{cases}
+\end{equation*}
+
+\solution{pr:2} The problem is not convex since the equality constraint is not linear. We can formulate an equivalent convex optimization problem as
+\begin{equation*}
+  \minimize x_1^2+x_2^2 \quad \subjto x_1\leq 0, \ x_1+x_2=0.
+\end{equation*}
+
+\solution{pr:1} Write
+\begin{equation*}
+ \mtx{P}(\lambda) = \mtx{P}+\sum_{i=1}^m\lambda_i \mtx{P}_i, \ \vct{q}(\lambda) = \vct{q}+\sum_{i=1}^m \lambda_i \vct{q}_i, \ \vct{r}(\lambda)=\vct{r}+\sum_{i=1}^m \lambda_i\vct{r}_i.
+\end{equation*}
+With this notation, we can express the Lagrangian as
+\begin{equation*}
+ \mathcal{L}(\vct{x},\vct{\lambda}) = \frac{1}{2}\vct{x}^{\trans}\vct{P}(\lambda)\vct{x}+\vct{q}(\lambda)^{\trans}\vct{x}+\vct{r}(\lambda).
+\end{equation*}
+For $\vct{\lambda}\geq \zerovct$ we have $\mtx{P}(\lambda)>\zerovct$, and 
+\begin{equation*}
+ g(\vct{\lambda}) = \inf_{\vct{x}} \mathcal{L}(\vct{x},\vct{\lambda}) = -\frac{1}{2}\vct{q}(\vct{\lambda})^{\trans}\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})+\vct{r}(\vct{\lambda}).
+\end{equation*}
+The Lagrange dual is then given by
+\begin{align*}
+\maximize &  -\frac{1}{2}\vct{q}(\vct{\lambda})^{\trans}\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})+\vct{r}(\vct{\lambda})\\
+\subjto & \vct{\lambda}\geq \zerovct.
+\end{align*}
+
+%\solution{pr:2} First of all, we can make the objective function linear by writing the problem as
+%\begin{align*}
+% \minimize & t\\
+% \subjto & \frac{1}{2} \mtx{x}^{\trans}\mtx{P}\mtx{x}+\vct{q}^{\trans}\vct{x}+r-t\leq 0\\
+% & \frac{1}{2}\vct{x}^{\trans}\mtx{P}_i\vct{x}+\vct{q}_i^{\trans}\vct{x}+r_i\leq 0, \ 1\leq i\leq m.
+%\end{align*}
+%Now we can factor each $\vct{P}_i$ as $\vct{P}_i=\vct{M}_i^{\trans}\vct{M}_i$.
+%The matrix
+%\begin{equation*}
+% \begin{pmatrix}
+%  \mtx{I} & \vct{M}_i\vct{x}\\
+%  \vct{x}^{\trans}\mtx{M}_i & -r_i-\vct{q}_i^{\trans}\vct{x}
+% \end{pmatrix}
+%\end{equation*}
+%is positive semidefinite if and only if $\frac{1}{2}\vct{x}^{\trans}\mtx{P}_i\vct{x}+\vct{q}_i^{\trans}\vct{x}+r_i\leq 0$, by the hint. We can therefore write the QCQP as
+%\begin{align*}
+%\minimize & t\\
+%\subjto & \begin{pmatrix}
+%  \mtx{I} & \vct{M}\vct{x}\\
+%  \vct{x}^{\trans}\mtx{M} & -r-\vct{q}^{\trans}\vct{x}+t
+% \end{pmatrix}\succeq \zerovct\\
+% & \begin{pmatrix}
+%  \mtx{I} & \vct{M}_i\vct{x}\\
+%  \vct{x}^{\trans}\mtx{M}_i & -r_i-\vct{q}_i^{\trans}\vct{x}
+% \end{pmatrix}\succeq \zerovct, \ 1\leq i\leq m.
+%\end{align*}
+%We can formulate several semidefinite constraints as one by assembling the above matrices as diagonal blocks of a big matrix.
+%
+%\solution{pr:3} We write the optimization problem slightly different as
+%\begin{align*}
+% \minimize & f(\vct{x})+\frac{1}{t}\varphi(\vct{x})\\
+% \subjto & f_i(\vct{x})\leq \zerovct\\
+% & \mtx{A}\vct{x}=\vct{b}.
+%\end{align*}
+%The KKT conditions for this problem are
+%\begin{align*}
+%\begin{split}
+%  \vct{f}(\vct{x}) & \leq \zerovct\\
+%  \mtx{A}\vct{x} & = \vct{b}\\
+%  \tilde{\vct{\lambda}}&\geq \zerovct\\
+%  \tilde{\lambda}_if_i(\vct{x}) & = 0, \ 1\leq i\leq m\\
+%  \nabla_{\vct{x}} f(\vct{x}^*)-\frac{1}{t}\sum_{i=1}^m \frac{1}{f_i(\vct{x})}\nabla f_i(\vct{x})+\sum_{i=1}^m \tilde{\lambda}_i \nabla_{\vct{x}}f_i(\vct{x})+\mtx{A}^{\trans}\vct{\mu} &= \zerovct,
+% \end{split}
+% \end{align*}
+% We now join the coefficients of $\nabla f_i(\vct{x})$ in the last line and set
+% \begin{equation*}
+%  \lambda_i := \tilde{\lambda}_i-\frac{1}{tf_i(\vct{x})}.
+% \end{equation*}
+% The last equation then becomes
+% \begin{equation*}
+%  \nabla_{\vct{x}} f(\vct{x}^*)+\sum_{i=1}^m \lambda_i\nabla f_i(\vct{x})+\sum_{i=1}^m \tilde{\lambda}_i \nabla_{\vct{x}}f_i(\vct{x})+\mtx{A}^{\trans}\vct{\mu} = \zerovct.
+% \end{equation*}
+%These new multipliers also satisfy
+%\begin{equation*}
+% \lambda_i f_i(\vct{x}) = -\frac{1}{t}.
+%\end{equation*}
+%Rewriting the KKT conditions for the barrier problem in terms of the $\lambda_i$ gives the modified KKT conditions.
+
+\end{document}

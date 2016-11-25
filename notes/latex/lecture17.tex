@@ -31,7 +31,7 @@ In this lecture we introduce interior point methods for solving nonlinear convex
          & \mtx{A}\vct{x} = \vct{b}.
 \end{split}
 \end{align}
-with $\vct{x}\in \R^n$, $\mtx{A}\in \R^{p\times d}$ and $\vct{f}=(f_1,\dots,f_m)^{\trans}\colon \R^n\to \R^m$. The particular form of interior point methods we discuss is the {\em barrier method}, which differs slightly from the primal-dual method discussed for linear programming.
+with $\vct{x}\in \R^n$, $\mtx{A}\in \R^{p\times n}$ and $\vct{f}=(f_1,\dots,f_m)^{\trans}\colon \R^n\to \R^m$. The particular form of interior point methods we discuss is the {\em barrier method}, which differs slightly from the primal-dual method discussed for linear programming.
 
 Recall the Karush-Kuhn-Tucker (KKT) conditions
 \begin{align}\label{eq:kkt}\tag{2}
@@ -44,7 +44,7 @@ Recall the Karush-Kuhn-Tucker (KKT) conditions
  \end{split}
  \end{align}
 where $\nabla_{\vct{x}}$ denotes the gradient of a function with respect to $\vct{x}$.
- As discussed in the previous lecture, for convex problems these are necessary and sufficient conditions for $(\vct{x}^*,\vct{\lambda}^*,\vct{\mu}^*)\in \R^{d}\times \R^m\times \R^p$ being a set of optimal primal and dual solutions. By this we mean that $\vct{x}^*$ is a minimizer of~\eqref{eq:constr} and $(\vct{\lambda}^*,\vct{\mu}^*)$ is a maximizer of the Lagrange dual function $g(\vct{\lambda},\vct{\mu})$ subject to $\vct{\lambda}\geq 0$, which in turn was defined as the infimum
+ As discussed in the previous lecture, for convex problems these are necessary and sufficient conditions for $(\vct{x}^*,\vct{\lambda}^*,\vct{\mu}^*)\in \R^{n}\times \R^m\times \R^p$ being a set of optimal primal and dual solutions. By this we mean that $\vct{x}^*$ is a minimizer of~\eqref{eq:constr} and $(\vct{\lambda}^*,\vct{\mu}^*)$ is a maximizer of the Lagrange dual function $g(\vct{\lambda},\vct{\mu})$ subject to $\vct{\lambda}\geq 0$, which in turn was defined as the infimum
  \begin{equation*}
   g(\vct{\lambda},\vct{\mu}) = \inf_{\vct{x}} \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}),
  \end{equation*}
@@ -98,7 +98,7 @@ Clearly, the objective is $f(\vct{x})$ whenever the inequality constraints $f_i(
 \begin{equation*}
  \hat{I}(u) := -\frac{1}{t}\ln(-u)
 \end{equation*}
-for suitable values $t$. Figure~\ref{fig:1} shows the approximating functions for $t=0.5,1,2$. 
+for suitable values $t$. The figure below shows the approximating functions for $t=0.5,1,2$. 
 \begin{figure}[h!]
  \centering
  \includegraphics[width=0.8\textwidth]{images/logbarrier_cropped.pdf}

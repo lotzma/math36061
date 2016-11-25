@@ -1,0 +1,85 @@
+\documentclass{article}
+% Include macros here
+\input{macros}
+\usepackage{fancyhdr}
+%\include{macros}
+\usepackage{pifont}
+
+% Number of problem sheet
+\newcounter{problemSheetNumber}
+\setcounter{problemSheetNumber}{7}
+\newcommand{\matlabprob}{\ding{100} \ }
+\newcommand{\examprob}{\ding{80} \ }
+%\setcounter{section}{\theproblemSheetNumber}  
+%\renewcommand{\theparagraph}{(\thesection.\arabic{paragraph})}
+\newcounter{problems}
+\setcounter{problems}{3}
+%\setlength{\parindent}{0cm}
+\renewcommand{\problem}[1]{\paragraph{(\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+\renewcommand{\solution}[1]{\paragraph{Solution (\theproblemSheetNumber.\theproblems)}\addtocounter{problems}{1}\label{#1}}
+
+\setcounter{MaxMatrixCols}{20}
+
+\pagestyle{fancy}
+\lhead{MATH36061}
+\chead{Convex Optimization}
+\rhead{November 25, 2016}
+
+\begin{document} 
+\begin{center}
+{\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
+\end{center}
+
+\solution{pr:1} The Lagrangian of this problem is
+\begin{align*}
+ \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) &= \ip{\vct{c}}{\vct{x}}+\vct{\lambda}^{\trans}(\mtx{A}\vct{x}-\vct{b}) + \sum_{i=1}^d \mu_i x_i(1-x_i)\\
+ &= \vct{x}^{\trans}\mathrm{diag}(\vct{\mu})\vct{x}+(\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu})^{\trans}\vct{x}-\vct{b}^{\trans}\vct{\lambda}.
+\end{align*}
+We want to minimize this over $\vct{x}$. If $\vct{\mu}<0$, then this function is unbounded below. Otherwise, we compute the minimum by setting the gradient to zero,
+\begin{equation*}
+ 2\mathrm{diag}(\vct{\mu})\vct{x}+\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu} = \zerovct,
+\end{equation*}
+and get the expression (after resolving the above for $\vct{x}$ and plugging into the Lagrangian)
+\begin{equation*}
+ g(\vct{\lambda},\vct{\mu}) = \begin{cases}
+                               -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i, & \vct{\mu}\geq \zerovct\\
+                               -\infty & \text{ else.}
+                              \end{cases}
+\end{equation*}
+The dual problem is
+\begin{align*}
+ \maximize & -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i\\
+ \subjto & \vct{\mu}\geq \zerovct, \ \vct{\lambda}\geq \zerovct.
+\end{align*}
+The problem can be simplified a bit further by noting that for each summand
+\begin{equation*}
+ -\frac{1}{4}(c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i,
+\end{equation*}
+if $c_i+\vct{a}_i^{\trans}\vct{\lambda}\geq 0$ we can set $\mu_i=c_i+\vct{a}_i^{\trans}\vct{\lambda}$ and the summand disappears, and if $c_i+\vct{a}_i^{\trans}\vct{\lambda}<0$, then we can maximize the summand by computing the derivative, and get the value $c_i+\vct{a}_i^{\trans}\vct{\lambda}$. Summarising, we have
+\begin{align*}
+ \maximize & -\vct{b}^{\trans}\vct{\lambda}+\sum_{i=1}^d \min\{0,c_i+\mtx{a}_i^{\trans}\vct{\lambda}\}\\
+ \subjto & \vct{\lambda}\geq \zerovct.
+\end{align*}
+Note that the objective function is nonsmooth, but is still concave. One can reverse the signs (and replace the min with a max in the process) to obtain a convex problem. The optimal value of this new problem will be a lower bound, and approximation, to the optimal value of the problem we started out with.
+
+\solution{pr:1} The largest eigenvalue of $\mtx{A}$ can be written as
+\begin{equation*}
+ \lambda_{\mathrm{max}}(\mtx{A}) = \max_{\vct{v}\in \R^d} \frac{\vct{v}^{\trans}\mtx{A}\vct{v}}{\vct{v}^{\trans}\vct{v}}.
+\end{equation*}
+Therefore, $t\geq \lambda_{\mathrm{max}}(\mtx{A})$ is equivalent to the statement that for all $\vct{v}$,
+\begin{equation*}
+ t\geq \frac{\vct{v}^{\trans}\mtx{A}\vct{v}}{\vct{v}^{\trans}\vct{v}} \ \Leftrightarrow \ t\vct{v}^{\trans}\vct{v}-\vct{v}^{\trans}\mtx{A}\vct{v}\geq 0.
+\end{equation*}
+We can write $\vct{v}^{\trans}\vct{v}=\vct{v}^{\trans}\mtx{I}\vct{v}$, with the itendity matrix $\mtx{I}$, so that the above is equivalent to
+\begin{equation*}
+ t\mtx{I}-\mtx{A}\succeq \zerovct.
+\end{equation*}
+The following semidefinite programming problem gives the largest eigenvalue:
+\begin{align*}
+ \minimize & t\\
+ \subjto & t\mtx{I}-\mtx{A}\succeq \zerovct.
+\end{align*}
+
+\solution{pr:2} 
+
+\end{document}
