@@ -31,7 +31,7 @@ In this lecture we study optimality conditions for convex problems of the form
          & \vct{h}(\vct{x})= \zerovct,
 \end{split}
 \end{align*}
-where $\vct{x}\in \R^n$, $\vct{f}=(f_1,\dots,f_m)^{\trans}$, $\vct{h}=(h_1,\dots,h_p)$, and the inequalities are componentwise. We assume that $f$ and the $g_i$ are convex, and the $h_j$ are linear. It is also customary to write the conditions $h(\vct{x})=\zerovct$ as $\mtx{A}\vct{x}=\vct{b}$, with $h_j(\vct{x}) = \vct{a}_j^{\trans}\vct{x}-b_j$, $\vct{a}_j$ being the $j$-th row of $\mtx{A}$.
+where $\vct{x}\in \R^n$, $\vct{f}=(f_1,\dots,f_m)^{\trans}$, $\vct{h}=(h_1,\dots,h_p)^{\trans}$, and the inequalities are componentwise. We assume that $f$ and the $f_i$ are convex, and the $h_j$ are linear. It is also customary to write the conditions $\vct{h}(\vct{x})=\zerovct$ as $\mtx{A}\vct{x}=\vct{b}$, with $h_j(\vct{x}) = \vct{a}_j^{\trans}\vct{x}-b_j$, $\vct{a}_j$ being the $j$-th row of $\mtx{A}$.
 
 \section{A first-order optimality condition}
 So far we have seen two examples of first order optimality conditions: for unconstraint optimization ($\nabla f(\vct{x})=0$) and for linear programming. We now generalize these to the setting of constrained convex optimization.
@@ -57,7 +57,7 @@ if and only if for all $\vct{y}\in \mathcal{F}$,
  \begin{equation*}
   f(\vct{y})\geq f(\vct{x}^*)+\ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*} \geq f(\vct{x}^*),
  \end{equation*}
-which shows that $\vct{x}^*$ is a minimizer in $\mathcal{F}$. To show the opposite direction, assume that $\vct{x}^*$ is a minimizer but that~\eqref{eq:constr} does not hold. This means that there exists a $\vct{y}\in \mathcal{F}$ such that $\ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*}<0$. Since both $\vct{x}^*$ and $\vct{y}$ are in $\mathcal{F}$ and $\mathcal{F}$ is convex, any point $\vct{z}(\lambda)=(1-\lambda)\vct{x}^*+t\vct{y}$ with $\lambda\in [0,1]$ is also in $\mathcal{F}$. At $\lambda=0$ we have
+which shows that $\vct{x}^*$ is a minimizer in $\mathcal{F}$. To show the opposite direction, assume that $\vct{x}^*$ is a minimizer but that~\eqref{eq:constr} does not hold. This means that there exists a $\vct{y}\in \mathcal{F}$ such that $\ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*}<0$. Since both $\vct{x}^*$ and $\vct{y}$ are in $\mathcal{F}$ and $\mathcal{F}$ is convex, any point $\vct{z}(\lambda)=(1-\lambda)\vct{x}^*+\lambda\vct{y}$ with $\lambda\in [0,1]$ is also in $\mathcal{F}$. At $\lambda=0$ we have
 \begin{equation*}
  \frac{df}{d\lambda}f(\vct{z}(\lambda))|_{\lambda=0} = \ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*}<0.
 \end{equation*}
@@ -69,7 +69,7 @@ Since the derivative at $\lambda=0$ is negative, the function $f(\vct{z}(\lambda
  \begin{equation*}
   \forall \vct{y}\in \R^n\colon \ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*}\geq 0.
  \end{equation*}
-If there was a $\vct{y}$ such that $\ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*}>0$, then replacing $\vct{y}$ by $2\vct{x}-\vct{y}$ we also have the converse inequality, and therefore the optimality condition is equivalent to saying that $\nabla f(\vct{x}^*)=\zerovct$. We therefore recover the well-known first order optimality condition from Lecture 2. 
+Given $\vct{y}$ such that $\ip{\nabla f(\vct{x}^*)}{\vct{y}-\vct{x}^*}\geq 0$, then replacing $\vct{y}$ by $2\vct{x}-\vct{y}$ we also have the converse inequality, and therefore the optimality condition is equivalent to saying that $\nabla f(\vct{x}^*)=\zerovct$. We therefore recover the well-known first order optimality condition from Lecture 2. 
 \end{example}
 
 Geometrically, the first order optimality condition means that the set
@@ -154,7 +154,7 @@ Assume that $\mathcal{D}$ is not empty and let $p^*$ be the optimal value of~\eq
 
 The {\em Lagrangian} of the system is defined as
 \begin{equation*}
- \mathcal{L}(x,y,\lambda) = f(\vct{x})+\vct{\lambda}^{\trans}\vct{f}(\vct{x})+\vct{\mu}^{\trans}h(\vct{x}) = f(\vct{x}) +\sum_{i=1}^m \lambda_i f_i(\vct{x})+\sum_{i=1}^p \mu_i h_i(\vct{x}).
+ \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) = f(\vct{x})+\vct{\lambda}^{\trans}\vct{f}(\vct{x})+\vct{\mu}^{\trans}h(\vct{x}) = f(\vct{x}) +\sum_{i=1}^m \lambda_i f_i(\vct{x})+\sum_{i=1}^p \mu_i h_i(\vct{x}).
 \end{equation*}
 The vectors $\vct{\lambda}$ and $\vct{\mu}$ are called the {\em dual variables} or {\em Lagrange multipliers} of the system. The domain of $\mathcal{L}$ is $\mathcal{D}\times \R^m\times \R^{p}$. 
 
@@ -180,7 +180,7 @@ The Lagrangian $\mathcal{L}$ is linear in the $\lambda_i$ and $\mu_j$ variables.
  \begin{equation*}
   f_i(\vct{x}^*)\leq 0, \quad h_j(\vct{x}^*)=0,\ 1\leq i\leq m, \ 1\leq j\leq p.
  \end{equation*}
-Then for $\vct{\lambda}\geq \zerovct$ and $\mu$, since each $h_j(\vct{x}^*)=0$ and $\lambda_jf_j(\vct{x}^*)\leq 0$, 
+Then for $\vct{\lambda}\geq \zerovct$ and any $\vct{\mu}$, since each $h_j(\vct{x}^*)=0$ and $\lambda_jf_j(\vct{x}^*)\leq 0$, 
 \begin{equation*}
  \mathcal{L}(\vct{x}^*,\vct{\lambda},\vct{\mu}) = f(\vct{x}^*)+\sum_{i=1}^m \lambda_if_i(\vct{x}^*)+\sum_{j=1}^p \mu_j h_j(\vct{x}^*)\leq f(\vct{x}^*).
 \end{equation*}
@@ -192,35 +192,6 @@ Since this holds for {\em all} feasible $\vct{x}^*$, it holds in particular for 
 \end{proof}
 
 A point $(\vct{\lambda},\vct{\mu})$ with $\vct{\lambda}\geq \zerovct$ and $(\vct{\lambda},\vct{\mu})\in \mathrm{dom}(g)$ is called a {\em feasible point} of the dual problem.
-
-\begin{example}
- Consider a linear programming problem of the form
- \begin{align*}
-  \minimize & \ip{\vct{c}}{\vct{x}}\\
-  \subjto & \mtx{A}\vct{x}=\vct{b}\\
-  & \vct{x}\geq \zerovct.
- \end{align*}
-The inequality constraints are $-x_i\leq 0$, while the equality constraints are $\vct{a}_i^{\trans}\vct{x}-b_i$. The Lagrangian has the form
-\begin{align*}
- \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) &= \ip{\vct{c}}{\vct{x}}-\sum_{i=1}^n \lambda_i x_i + \sum_{j=1}^m \mu_j(\vct{a}_j^{\trans}\vct{x}-b_j)\\
- &= (\vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu})^{\trans}\vct{x}-\vct{b}^{\trans}\vct{\mu}.
-\end{align*}
-The infimum over $\vct{x}$ of this function is $-\infty$ unless $\vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu}= \zerovct$. The Lagrange dual is therefore
-\begin{equation*}
- g(\vct{\lambda},\vct{\mu}) = \begin{cases} 
-                               -\vct{\mu}^{\trans}\vct{b} & \text{ if } \vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu}=\zerovct\\
-                               -\infty & \text{ else.}
-                              \end{cases}
-\end{equation*}
-From Lemma~\ref{le:lag1} we conclude that
-\begin{equation*}
- \max \{-\vct{b}^{\trans}\vct{\mu} \mid \vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\lambda}\geq \zerovct\} \leq \min \{\vct{c}^{\trans}\vct{x} \mid \mtx{A}\vct{x}=\zerovct, \ \vct{x}\geq \zerovct\}.
-\end{equation*}
-Note that if we write $\vct{y}=-\vct{\mu}$ and $\vct{s}=\vct{\lambda}$, then we get the dual version of the linear programming problem we started out with, and in this case we know that 
-\begin{equation*}
- \max_{\vct{\lambda}\geq \zerovct,\vct{\mu}} g(\vct{\lambda},\vct{\mu}) = p^*.
-\end{equation*}
-\end{example}
 
 The {\em Lagrange dual} of the optimization problem~\eqref{eq:sys1} is the problem
 \begin{equation}\label{eq:lagdual}

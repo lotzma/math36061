@@ -1,0 +1,235 @@
+%-----------------------------------------------------------------------
+% Beginning of chap2.tex
+%-----------------------------------------------------------------------
+%
+%  AMS-LaTeX sample file for a chapter of a monograph, to be used with
+%  an AMS monograph document class.  This is a data file input by
+%  chapter.tex.
+%
+%  Use this file as a model for a chapter; DO NOT START BY removing its
+%  contents and filling in your own text.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter*{Lecture 16}
+\addcontentsline{toc}{chapter}{Lecture 16}
+\addtocounter{chapter}{16}
+\addtocounter{section}{0}
+%\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+%\epigraph{}{--- \textup{}}
+
+For convex problems of the form
+
+\begin{align*}\label{eq:constr}\tag{1}
+\begin{split}
+ \minimize & f(\vct{x})\\
+ \subjto & \vct{f}(\vct{x})\leq \zerovct\\
+         & \mtx{A}\vct{x} = \vct{b},
+\end{split}
+\end{align*}
+we introduced the Lagrangian $\mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu})$ and defined the Lagrange dual as
+\begin{equation*}
+ g(\vct{\lambda},\vct{\mu})=\inf_{\vct{x}\in \mathcal{D}} \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}).
+\end{equation*}
+We saw that $g(\vct{\lambda},\vct{\mu})$ is a lower bound on the optimal value of~\eqref{eq:constr}. Note that here we wrote the conditions $h_j(\vct{x})=0$ as system of linear equations $\mtx{A}\vct{x}=\vct{b}$, since for the problem to be convex, we require that the $h_j$ be linear functions.
+
+\begin{example}
+ Consider a linear programming problem of the form
+ \begin{align*}
+  \minimize & \ip{\vct{c}}{\vct{x}}\\
+  \subjto & \mtx{A}\vct{x}=\vct{b}\\
+  & \vct{x}\geq \zerovct.
+ \end{align*}
+The inequality constraints are $-x_i\leq 0$, while the equality constraints are $\vct{a}_i^{\trans}\vct{x}-b_i$. The Lagrangian has the form
+\begin{align*}
+ \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) &= \ip{\vct{c}}{\vct{x}}-\sum_{i=1}^n \lambda_i x_i + \sum_{j=1}^m \mu_j(\vct{a}_j^{\trans}\vct{x}-b_j)\\
+ &= (\vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu})^{\trans}\vct{x}-\vct{b}^{\trans}\vct{\mu}.
+\end{align*}
+The infimum over $\vct{x}$ of this function is $-\infty$ unless $\vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu}= \zerovct$. The Lagrange dual is therefore
+\begin{equation*}
+ g(\vct{\lambda},\vct{\mu}) = \begin{cases} 
+                               -\vct{\mu}^{\trans}\vct{b} & \text{ if } \vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu}=\zerovct\\
+                               -\infty & \text{ else.}
+                              \end{cases}
+\end{equation*}
+From Lemma 15.5 we conclude that
+\begin{equation*}
+ \max \{-\vct{b}^{\trans}\vct{\mu} \mid \vct{c}-\vct{\lambda}+\mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\lambda}\geq \zerovct\} \leq \min \{\vct{c}^{\trans}\vct{x} \mid \mtx{A}\vct{x}=\zerovct, \ \vct{x}\geq \zerovct\}.
+\end{equation*}
+Note that if we write $\vct{y}=-\vct{\mu}$ and $\vct{s}=\vct{\lambda}$, then we get the dual version of the linear programming problem we started out with, and in this case we know that 
+\begin{equation*}
+ \max_{\vct{\lambda}\geq \zerovct,\vct{\mu}} g(\vct{\lambda},\vct{\mu}) = p^*.
+\end{equation*}
+\end{example}
+
+
+\section{Constraint qualification}
+In the example of linear programming, we have seen that the optimal value of the dual problem is equal to the optimal value of the primal problem. In general, we have
+\begin{equation*}
+ d^* = \sup_{\vct{\lambda}>0,\vct{\mu}} g(\vct{\lambda},\vct{\mu}) \leq \inf_{\vct{x}\in \mathcal{D}} \{f(\vct{x}) \mid f_i(\vct{x})\leq 0, \ \mtx{A}\vct{x}=\vct{b}\}=p^*.
+\end{equation*}
+Once certain conditions, called {\em constraint qualifications}, hold, we can ensure that {\em strong duality} holds, which means $d^*=p^*$. One particular such constraint qualification is Slater's Theorem.
+
+\begin{theorem}(Slater conditions)
+ Assume that the interior of the domain $\mathcal{D}$ of~\eqref{eq:constr} is non-empty, that the problem~\eqref{eq:constr} is convex, and that there exists a point $\vct{x}\in \mathcal{D}$ such that 
+ \begin{equation*}
+  f_i(\vct{x})<0, \ 1\leq i\leq m, \quad \mtx{A}\vct{x}=\vct{b}, \ 1\leq j\leq p.
+ \end{equation*}
+Then $d^*=p^*$, the primal optimal value coincides with the dual optimal value.
+\end{theorem}
+
+\begin{proof}(Optional)
+ Assume $\mtx{A}$ has rank $p$ (the number of rows). Assume moreover that $p^*$ is finite, since if $p^*=-\infty$, then by weak duality we already have $d^*=p^*$. 
+ 
+ Define the convex set
+ \begin{equation*}
+  \mathcal{A} = \{(\vct{u},\vct{v},t)\in \R^m\times \R^{p}\times \R \mid \forall \vct{x}\in \mathcal{D}, f_i(\vct{x})\leq u_i, \mtx{A}\vct{x}-\vct{b}=\vct{v}, f(\vct{x})\leq t\}.
+ \end{equation*}
+Then the optimal value of~\eqref{eq:constr} is
+\begin{equation*}
+ p^* = \inf \{t \mid (\zerovct,\zerovct,t)\in \mathcal{A}\}.
+\end{equation*}
+Define the convex set $\mathcal{B}$ as
+\begin{equation*}
+ \mathcal{B} = \{(0,0,s)\in \R^m\times \R^p\times \R \mid s<p^*\}.
+\end{equation*}
+The sets $\mathcal{A}$ and $\mathcal{B}$ are disjoint. To see this, assume to the contrary that there is a point $\vct{w}\in \mathcal{A}\cap \mathcal{B}$. Then since $\vct{w}\in \mathcal{B}$, $\vct{w}=(0,0,s)$ with $s<p^*$, but also since $\vct{w}\in \mathcal{A}$, ther exists an $\vct{x}\in \mathcal{D}$ with $f_i(\vct{x})\leq 0$, $\mtx{A}\vct{x}-\vct{b}=\zerovct$, and $f(\vct{x})\leq s<p^*$, in contradiction to the optimality of $p^*$ as a value.
+
+By the separating hyperplane theorem, there exist a hyperplane separating $\mathcal{A}$ and $\mathcal{B}$ (but not necessarilty strictly!), defined by a vector $(\tilde{\vct{\lambda}},\tilde{\vct{\mu}},\nu)\neq \zerovct$ and $\alpha\neq 0$ with the property that
+\begin{equation}\label{eq:cond1}
+ (u,v,t)\in \mathcal{A} \Longrightarrow \vct{\lambda}^{\trans}\vct{u}+\vct{\mu}^{\trans}\vct{v}+\nu t\geq \alpha
+ \end{equation}
+ and
+ \begin{equation}\label{eq:cond2}
+ (u,v,t)\in \mathcal{B} \Longrightarrow \vct{\lambda}^{\trans}\vct{u}+\vct{\mu}^{\trans}\vct{v}+\nu t\leq \alpha.
+\end{equation}
+If $\tilde{\vct{\lambda}}<\zerovct$ or $\nu<0$, we could make the right-hand side of ~\eqref{eq:cond1} arbitrary small, contradicting the bound by $\alpha$. It follows that $\tilde{\vct{\lambda}}\geq \zerovct$ and $\nu\geq 0$. Condition~\eqref{eq:cond2} simply means that $\nu t\leq \alpha$ for all $t<p^*$, so that $\nu p^*\leq \alpha$. Combining this bound with~\eqref{eq:cond1}, we get the two inequalities, valid for any $\vct{x}\in \mathcal{D}$,
+\begin{equation}\label{eq:cond3}
+ \sum_{i=1}^m \tilde{\lambda}_i f_i(\vct{x}) + \tilde{\vct{\mu}}^{\trans}(\mtx{A}\vct{x}-\vct{b})+\nu f(\vct{x}) \geq \alpha \geq \nu p^*.
+\end{equation}
+Note that the left-hand side has the form of a Lagrangian function scaled by $\nu$.
+If $\nu>0$ we can divide by $\mu$ and set $\lambda_i=\tilde{\lambda}_i/\nu$, $\mu_i=\tilde{\mu}_i/\nu$, to obtain
+\begin{equation*}
+ \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) \geq p^*.
+\end{equation*}
+By weak duality we have $p^*\geq g(\vct{\lambda},\vct{\mu})$, so that we get strong duality if $\nu>0$. If $\nu=0$, then~\eqref{eq:cond3} implies
+\begin{equation}\label{eq:cond4}
+ \sum_{i=1}^m \tilde{\lambda}_i f_i(\vct{x}) + \tilde{\vct{\mu}}^{\trans}(\mtx{A}\vct{x}-\vct{b})\geq 0,
+\end{equation}
+and for a point $\tilde{\vct{x}}$ satisfying the conditions $\mtx{A}\vct{x}=\vct{b}$ and $f_i(\vct{x})<0$ for $1\leq i\leq m$, this means that $\tilde{\vct{\lambda}}=\zerovct$. As $(\tilde{\vct{\lambda}},\tilde{\vct{\mu}},\nu)\neq \zerovct$, we have $\vct{\mu}\neq \zerovct$. Since $\tilde{\vct{\mu}}^{\trans}(\mtx{A}\vct{x}-\vct{b})\geq 0$ and $=0$ for some $\tilde{\vct{x}}$ in the interior of $\mathcal{D}$, there must be a $\vct{x}$ in the interior such that $\tilde{\vct{\mu}}^{\trans}(\mtx{A}\vct{x}-\vct{b})<0$, in contradiction to~\eqref{eq:cond4} (unless $\tilde{\vct{\mu}}^{\trans}\mtx{A}=\zerovct$, which would contradict the condition that $\mtx{A}$ has maximal rank $p$).
+\end{proof}
+
+\begin{example}
+ The problem $\minimize e^{-x} \ \subjto x^2/y\leq 0$ is an example of a convex problem that does not satisfy strong duality.
+\end{example}
+
+\begin{example}
+ Consider the problem
+ \begin{equation*}
+  \minimize \vct{x}^{\trans}\vct{x} \subjto \mtx{A}\vct{x}=\vct{b}.
+ \end{equation*}
+The Lagrangian is $\mathcal{L}(\vct{x},\vct{\mu})=\vct{x}^{\trans}\vct{x}+\vct{\mu}^{\trans}(\mtx{A}\vct{x}-\vct{b})$. For any $\vct{\mu}$, we can find the infimum
+\begin{equation*}
+ g(\vct{\mu}) = \inf_{\vct{x}}\mathcal{L}(\vct{x},\vct{\mu})
+\end{equation*}
+by setting the derivative of the Lagrangian to $\vct{x}$ to zero:
+\begin{equation*}
+ \nabla_{\vct{x}}\mathcal{L}(\vct{x},\vct{\mu}) = 2\vct{x}+\mtx{A}^{\trans}\vct{\mu}=\zerovct,
+\end{equation*}
+which gives the solution
+\begin{equation*}
+ \vct{x} = -\frac{1}{2}\mtx{A}^{\trans}\vct{\mu}.
+\end{equation*}
+The dual function is therefore
+\begin{equation*}
+ g(\vct{\mu}) = -\frac{1}{4}\vct{\mu}^{\trans}\mtx{A}^{\trans}\mtx{A}\vct{\mu}-\vct{b}^{\trans}\vct{\mu}.
+\end{equation*}
+As the negative of a positive semidefinite quadratic function, it is concave. Moreover, we get the lower bound
+\begin{equation*}
+ -\frac{1}{4}\vct{\mu}^{\trans}\mtx{A}^{\trans}\mtx{A}\vct{\mu}-\vct{b}^{\trans}\vct{\mu}\leq \inf \{\vct{x}^{\trans}\vct{x} \mid \mtx{A}\vct{x}=\vct{b}\}.
+\end{equation*}
+The problem we started out with is convex, and if we assume that there exists a feasible primal point, then the above inequality is in fact an equality by Slater's conditions.
+\end{example}
+
+
+\section{Karush-Kuhn-Tucker optimality conditions}
+Consider now a not necessarily convex problem of the form
+\begin{align}\label{eq:constr1}
+\begin{split}
+ \minimize & f(\vct{x})\\
+ \subjto & \vct{f}(\vct{x})\leq \zerovct\\
+         & \mtx{h}(\vct{x}) = \vct{0},
+\end{split}
+\end{align}
+If $p^*$ is the optimal solution of~\eqref{eq:constr1} and $(\vct{\lambda},\vct{\mu})$ dual variables, then we have seen that (this holds even in the non-convex case)
+\begin{equation*}
+ p^*\geq g(\vct{\lambda},\vct{\mu}).
+\end{equation*}
+From this is follows that for any primal feasible point $\vct{x}$,
+\begin{equation*}
+ f(\vct{x})-p^*\leq f(\vct{x})-g(\vct{\lambda},\vct{\mu}).
+\end{equation*}
+The difference $f(\vct{x})-g(\vct{\lambda},\vct{\mu})$ between the primal objective function at a primal feasible point and the dual objective function at a dual feasible point is called the {\em duality gap} at $\vct{x}$ and $(\vct{\lambda},\vct{\mu})$. For any such points we know that
+\begin{equation*}
+ p^*, q^* \in [g(\vct{\lambda},\vct{\mu}),f(\vct{x})],
+\end{equation*}
+and if the gap is small we have a good approximation of the primal and dual optimal values. The duality gap can be used in iterative algorithms to define stopping criteria: if the algorithm generates a sequence of primal-dual variables $(\vct{x}^k,\vct{\lambda}^k,\vct{\mu}^k)$, then we can stop if the duality gap is less than, say, a predefined tolerance $\varepsilon$.
+
+Now suppose that we have points $(\vct{x}^*,\vct{\lambda}^*,\vct{\mu}^*)$ such that the duality gap is zero. Then
+\begin{align*}
+ f(\vct{x}^*) &= g(\vct{\lambda}^*,\vct{\mu}^*)\\
+ &= \inf_{\vct{x}}\left(f(\vct{x})+\sum_{i=1}^m \lambda_i^*f_i(\vct{x})+\sum_{j=1}^p \mu_j^*h_j(\vct{x})\right)\\
+ &\leq f(\vct{x}^*)+\sum_{i=1}^m \lambda_i^* f_i(\vct{x}^*)+\sum_{j=1}^p \mu_j^*h_j(\vct{x}^*)\\
+ &\leq f(\vct{x}^*),
+\end{align*}
+where the last inequality follows from the fact that $h_j(\vct{x}^*)=0$ and $\lambda_i^* f_i(\vct{x}^*)\leq 0$ for $1\leq j\leq p$ and $1\leq i\leq m$. It follows that the inequalities are in fact equalities. From the identity
+\begin{equation*}
+ f(\vct{x}^*) = f(\vct{x}^*)+\sum_{i=1}^m \lambda_i^* f_i(\vct{x}^*)
+\end{equation*}
+and $\lambda_i^*\geq 0$ and $f_i(\vct{x}^*)\leq 0$ we also conclude that at such optimal points,
+\begin{equation*}
+ \lambda_i^* f_i(\vct{x}^*) = 0, \quad 1\leq i\leq m.
+\end{equation*}
+This condition is known as {\em complementary slackness}. From the above we also see that $\vct{x}^*$ minimizes the Lagrangian $\mathcal{L}(\vct{x},\vct{\lambda}^*,\vct{\mu}^*)$, so that the gradient of that function is zero:
+\begin{equation*}
+ \nabla_{\vct{x}}\mathcal{L}(\vct{x}^*,\vct{\lambda}^*,\vct{\mu}^*) = \zerovct.
+\end{equation*}
+Collecting these conditions (primal and dual feasibility, complementary slackness, vanishing gradient), we arrive at a set of optimality conditions known as the Karush-Kuhn-Tucker (KKT) conditions.
+
+\begin{theorem}(KKT conditions)
+ Let $\vct{x}^*$ and $(\vct{\lambda}^*,\vct{\mu}^*)$ be primal and dual optimal solutions of~\eqref{eq:constr1} with zero duality gap. The the following conditions are satisfied:
+ \begin{align*}
+  \vct{f}(\vct{x}^*) & \leq \zerovct\\
+  \vct{h}(\vct{x}^*) & = \zerovct\\
+  \vct{\lambda}^*&\geq \zerovct\\
+  \lambda_i^*f_i(\vct{x}^*) & =0, \ 1\leq i\leq m\\
+  \nabla_{\vct{x}} f(\vct{x}^*)+\sum_{i=1}^m \lambda_i^* \nabla_{\vct{x}}f_i(\vct{x}^*)+\sum_{j=1}^{p}\mu_j^*\nabla_{\vct{x}}h_j(\vct{x}^*) &= \zerovct.
+ \end{align*}
+ Moreover, if the problem is convex, then any points satisfying the KKT conditions have zero duality gap.
+\end{theorem}
+
+%\begin{example}
+% Let's look again at the classic linear programming problem
+% \begin{align*}
+%  \minimize & \ip{\vct{c}}{\vct{x}}\\
+%  \subjto & \mtx{A}\vct{x}=\vct{b}\\
+%  & \vct{x}\geq \zerovct.
+% \end{align*}
+%The KKT conditions are
+%\begin{align*}
+% \mtx{A}\vct{x}& = \vct{b}\\
+% -\vct{x}&\leq \zerovct\\
+% \vct{\lambda}&\geq \zerovct\\
+% \lambda_i \vct{x}_i &= 0\\
+% \vct{c}+\mtx{A}^{\trans}\vct{\mu}-\vct{\lambda} &= \zerovct.
+%\end{align*}
+%Replacing $\vct{\lambda}=\vct{s}$ and $-\vct{\mu}=\vct{y}$ we get the familiar linear programming optimality conditions.
+%\end{example}
+
+
+% %-----------------------------------------------------------------------
+% % End of chap1.tex
+% %-----------------------------------------------------------------------

@@ -1,0 +1,173 @@
+%-----------------------------------------------------------------------
+% Beginning of chap2.tex
+%-----------------------------------------------------------------------
+%
+%  AMS-LaTeX sample file for a chapter of a monograph, to be used with
+%  an AMS monograph document class.  This is a data file input by
+%  chapter.tex.
+%
+%  Use this file as a model for a chapter; DO NOT START BY removing its
+%  contents and filling in your own text.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter*{Lecture 17}
+\addcontentsline{toc}{chapter}{Lecture 17}
+\addtocounter{chapter}{17}
+\addtocounter{section}{0}
+%\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+
+%\epigraph{}{--- \textup{}}
+
+In this lecture we introduce interior point methods for solving nonlinear convex optimization problems of the form
+
+\begin{align}\label{eq:constr}\tag{1}
+\begin{split}
+ \minimize & f(\vct{x})\\
+ \subjto & \vct{f}(\vct{x})\leq \zerovct\\
+         & \mtx{A}\vct{x} = \vct{b}.
+\end{split}
+\end{align}
+with $\vct{x}\in \R^n$, $\mtx{A}\in \R^{p\times d}$ and $\vct{f}=(f_1,\dots,f_m)^{\trans}\colon \R^n\to \R^m$. The particular form of interior point methods we discuss is the {\em barrier method}, which differs slightly from the primal-dual method discussed for linear programming.
+
+Recall the Karush-Kuhn-Tucker (KKT) conditions
+\begin{align}\label{eq:kkt}\tag{2}
+\begin{split}
+  \vct{f}(\vct{x}^*) & \leq \zerovct\\
+  \mtx{A}\vct{x}^* & = \vct{b}\\
+  \vct{\lambda}^*&\geq \zerovct\\
+  \lambda_i^*f_i(\vct{x}^*) & =0, \ 1\leq i\leq m\\
+  \nabla_{\vct{x}} f(\vct{x}^*)+\sum_{i=1}^m \lambda_i^* \nabla_{\vct{x}}f_i(\vct{x}^*)+\mtx{A}^{\trans}\vct{\mu}^* &= \zerovct,
+ \end{split}
+ \end{align}
+where $\nabla_{\vct{x}}$ denotes the gradient of a function with respect to $\vct{x}$.
+ As discussed in the previous lecture, for convex problems these are necessary and sufficient conditions for $(\vct{x}^*,\vct{\lambda}^*,\vct{\mu}^*)\in \R^{d}\times \R^m\times \R^p$ being a set of optimal primal and dual solutions. By this we mean that $\vct{x}^*$ is a minimizer of~\eqref{eq:constr} and $(\vct{\lambda}^*,\vct{\mu}^*)$ is a maximizer of the Lagrange dual function $g(\vct{\lambda},\vct{\mu})$ subject to $\vct{\lambda}\geq 0$, which in turn was defined as the infimum
+ \begin{equation*}
+  g(\vct{\lambda},\vct{\mu}) = \inf_{\vct{x}} \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}),
+ \end{equation*}
+where $\mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu})=f(\vct{x})+\vct{\lambda}^{\trans}\vct{f}(\vct{x})+\vct{\mu}^{\trans}(\mtx{A}\vct{x}-\vct{b})$ is the Lagrangian. In this section we make the additional assumption that the functions $f$ and $f_i$, $1\leq i\leq m$, are two time continuously differentiable. The reason is that we want to apply variants of Newton's method to the KKT conditions.
+For later reference we list some of the more popular forms of convex optimization problems that fall into our scope, with the associated KKT conditions.
+
+\begin{example}(LP) For a linear programming problem of the form
+\begin{align*}
+\minimize & \ip{\vct{c}}{\vct{x}}\\
+\subjto & \mtx{A}\vct{x}=\vct{b}\\
+& \vct{x}\geq \zerovct,
+\end{align*}
+the KKT conditions have the form
+\begin{align*}
+ \mtx{A}\vct{x}&=\vct{b}\\
+ \mtx{A}^{\trans}\vct{y}+\vct{s}&=\vct{c}\\
+ \vct{s} & \geq \zerovct\\
+ \vct{x} & \geq \zerovct\\
+ x_is_i&=0, \ 1\leq i.
+\end{align*}
+\end{example}
+
+\begin{example}(QP) A {\em quadratic programming problem} is a problem with quadratic objective and linear constraints of the form
+\begin{align*}
+ \minimize & \vct{x}^{\trans}\mtx{P}\vct{x}+\vct{q}^{\trans}\vct{x}+\vct{r}\\
+ \subjto & \mtx{A}\vct{x}=\vct{b}\\
+ & \mtx{B}\vct{x}\leq \vct{c}.
+\end{align*}
+One typical example is portfolio optimization.
+\end{example}
+
+Many other problems can be cast in the required form, and we will see later that the framework also encompasses semidefinite programming.
+
+\section{The logarithmic barrier}
+The idea of barrier methods is to replace the constraints of the optimization problem~\eqref{eq:constr} with a parametrized system of equality constraints, such that the solutions of the equality constraint system can be found, and converge to the solution of the original system. The first observation is that we can replace the inequality contstrained system
+\begin{equation*}
+ \minimize f(\vct{x}) \quad \subjto \mtx{A}\vct{x}=\vct{b}, \ f_i(\vct{x})\leq 0, \ 1\leq i\leq m,
+\end{equation*}
+with the equality constrained, but nonsmooth, problem
+\begin{equation*}
+ \minimize f(\vct{x}) + \sum_{i=1}^m I_-(f_i(\vct{x})), \ \subjto \mtx{A}\vct{x}=\vct{b},
+\end{equation*}
+where
+\begin{equation*}
+ I_-(t) = \begin{cases}
+           0 & t\leq 0,\\
+           \infty & t>0.
+          \end{cases}
+\end{equation*}
+Clearly, the objective is $f(\vct{x})$ whenever the inequality constraints $f_i(\vct{x})\leq 0$ are satisfied, and $\infty$ if not, so that points that do not satisfy the constraints are forbidden. Since this function is not easy to deal with analytically, we {\em approximate} it with the function
+\begin{equation*}
+ \hat{I}(u) := -\frac{1}{t}\ln(-u)
+\end{equation*}
+for suitable values $t$. Figure~\ref{fig:1} shows the approximating functions for $t=0.5,1,2$. 
+\begin{figure}[h!]
+ \centering
+ \includegraphics[width=0.8\textwidth]{images/logbarrier_cropped.pdf}
+ \label{fig:1}
+\end{figure}
+As is easily seen, as $t$ increases the approximation becomes better.
+An approximation to the nonsmooth problem is given by the following equality constrained problem,
+\begin{align*}
+\begin{split}
+\minimize & f(\vct{x})-\sum_{i=1}^{m} \frac{1}{t}\log(f_i(\vct{x}))\\
+\subjto & \mtx{A}\vct{x}=\vct{b}.
+\end{split}
+\end{align*}
+The domain $\mathcal{D}$ of this problem is the set of points such that the inequalities $f_i(\vct{x})<0$ are strictly satisfied. One can also verify that the objective function is convex, giving rise to a convex optimization problem.
+The function
+\begin{equation*}
+ \varphi(\vct{x}) = -\sum_{i=1}^m \log(f_i(\vct{x}))
+\end{equation*}
+is called the {\em logarithmic barrier function} of the system of inequalities $f_i(\vct{x})<0$: the reason is that it prevents candidates $\vct{x}$ from becoming too close to the boundary of the feasible set by becomming very large near it. With this notation, we can write the approximate problem as
+\begin{align}\label{eq:logbarrier}
+\begin{split}
+\minimize & tf(\vct{x})+\phi(\vct{x})\\
+\subjto & \mtx{A}\vct{x}=\vct{b}.
+\end{split}
+\end{align}
+Note that here we multiplied the objective with $t$, which does not change the optimal points (but the values).
+For reference, we record the gradient and Hessian of $\varphi$,
+\begin{align*}
+ \nabla \phi &= \sum_{i=1}^m \frac{1}{-f_i(\vct{x})}\nabla f_i(\vct{x})\\
+ \nabla^2\phi &= \sum_{i=1}^m \frac{1}{f_i^2(\vct{x})}\nabla f_i(\vct{x})\nabla f_i(\vct{x})^{\trans}+\sum_{i=1}^m \frac{1}{-\nabla f_i(\vct{x})}\nabla^2 f_i(\vct{x}).
+\end{align*}
+
+ Two questions are of importance:
+\begin{enumerate}
+ \item How well does a solution of~\eqref{eq:logbarrier} approximate one of~\eqref{eq:constr}, and
+ \item How do we solve~\eqref{eq:logbarrier}?
+\end{enumerate}
+
+\section{The central path}
+The set of solutions $\vct{x}^*(t)$ of~\eqref{eq:logbarrier} for $t>0$ is called the {\em central path}. Points on the central path are strictly feasible: they satisfy $\mtx{A}\vct{x}^*(t)=\vct{b}$ and $f_i(\vct{x}^*(t))<0$. Moreover, by the Lagrange multiplier theorem, they satisfy the optimality condition
+\begin{equation*}
+ t\nabla f(\vct{x})+\nabla \phi(\vct{x})+\mtx{A}^{\trans}\mtx{\mu}^*=\zerovct
+\end{equation*}
+for some suitable Lagrange multipliers $\vct{\mu}\in \R^p$. An important property of the central path is that we can derive dual points $(\vct{\lambda}^*,\vct{\mu}^*)$, and therefore (by Lagrange duality) lower bounds on the optimal value $p^*$ of~\eqref{eq:constr}, from any point $\vct{x}^*$ on the central path. In fact, the central path can be derived from the solutions of a variant of the KKT conditions.
+
+\begin{lemma}
+ A point $\vct{x}$ is equal to a point $\vct{x}^*(t)$ on the central path if and only if there exist dual multipliers $\lambda$ and $\mu$ such that the following conditions are satisfied.
+ \begin{align*}
+\begin{split}
+  \vct{f}(\vct{x}^*) & \leq \zerovct\\
+  \mtx{A}\vct{x}^* & = \vct{b}\\
+  \vct{\lambda}^*&\geq \zerovct\\
+  -\lambda_i^*f_i(\vct{x}^*) & =\frac{1}{t}, \ 1\leq i\leq m\\
+  \nabla_{\vct{x}} f(\vct{x}^*)+\sum_{i=1}^m \lambda_i^* \nabla_{\vct{x}}f_i(\vct{x}^*)+\mtx{A}^{\trans}\vct{\mu}^* &= \zerovct,
+ \end{split}
+ \end{align*}
+\end{lemma}
+
+The proof is left as an exercise. Note the analogy with the definition of the central path in the case of linear programming! Accordingly, the solution methods discussed in the context of linear programming carry over to the nonlinear case. We conclude by sketching the {\em barrier method}.
+
+\begin{enumerate}
+ \item Start with a strictly feasible $\vct{x}$ and $t:=t^{(0)}>0$, $\mu>1$ and tolerance $\e>0$;
+ \item Compute $\vct{x}^*(t)$ by minimizing $tf+\phi$ subject to $\mtx{A}\vct{x}=\vct{b}$, starting with $\vct{x}$;
+ \item Update $\vct{x} = \vct{x}^*(t)$;
+ \item Stop if $m/t<\e$, otherwise set $t:=\mu t$ (increase $t$).
+\end{enumerate}
+
+The only unexplained part is how to solve the equality constrained minimization problem. One way is to use Newton's method on the optimality conditions of this problem.
+
+% %-----------------------------------------------------------------------
+% % End of chap1.tex
+% %-----------------------------------------------------------------------
