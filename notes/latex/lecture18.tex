@@ -33,29 +33,35 @@ Note that we can replace the $+1$ and $-1$ with any other positve or negative qu
   y_i(\vct{w}^{\trans}\vct{x}_i+b)-1 \geq 0.
 \end{equation}
 
-
-Pic
-
 A hyperplane separating the two point sets will in general not be unique.
 As we want to use the linear classifier on new, yet unknown data, we want to find a separating hyperplane with best possible \textbf{margin}. Let $d_+$ and $d_-$ denote the distance of a separating hyperplane to the closest positive and closest negative point, respectively. The quantity $d=d_++d_-$ is then called the margin or the classifier, and we want to find a hyperplane with largest possible margin.
 
-Pic
+\begin{figure}
+\centering
+\includegraphics[width=0.8\textwidth]{images/svm-linsep.png}
+\caption{A hyperplane separating two sets of points with margin and support vectors.}
+\end{figure}
 
 Given a hyperplane $H$ described in ~\eqref{eq:sephyp} and a point $\vct{x}$ such that we have the equality $\vct{w}^{\trans}\vct{x}_i+b=1$ (the point is as close as possible to the hyperplane, also called a \textbf{support vector}), the distance of that point to the hyperplane can be computed by first taking the difference of $\vct{x}$ with a point $\vct{p}$ on $H$ (an {\em anchor}), and then computing the dot product of $\vct{x}-\vct{p}$ with the unit vector $\vct{w}/\norm{\vct{w}}$ orthogonal to $H$.
 
+\begin{figure}
+\centering
 \begin{tikzpicture}[scale=1]
 \draw[color=black, thick, ->] (0,-0.1)--(0,2.5);
 \draw[color=black, thick, ->] (-0.1,0)--(2.5,0);
-\draw[color=black, fill=blue!5, thick] (0,0)--(0,1)--(0.67,0.67)--(1,0)--(0,0);
-\draw[color=black] (0,2)--(1,0);
-\draw[color=black] (0,1)--(2,0);
-\draw[color=black] (1,-1)--(1,2.5);
-\draw[color=black,very thick,->] (0,0)--(0.33,-1);
-\draw[color=blue,dashed] (-1,-0.67)--(2,0.33);
-\filldraw[red] (1,0) circle (2pt);
-\node (A1) at (1,0)  [label=-30:{$\vct{x}^*=\begin{pmatrix}1\\0\end{pmatrix}$}] {};
-\node (A2) at (0.33,-1)  [label=180:{$c$}] {};
+\draw[color=black] (-1,1.5)--(3,-0.5);
+\draw[color=black, very thick, ->] (0,0)--(1,2);
+\draw[color=black, thick, ->] (0,0)--(2,1);
+\draw[color=black, thick] (0.4,0.8)--(2,1);
+\draw[color=blue,dashed] (2,1)--(0.8,1.6);
+\draw[color=blue, very thick] (0.4,0.8)--(0.8,1.6);
+\filldraw[red] (0.4,0.8) circle (2pt);
+\node (A1) at (2,1)  [label=30:{$\vct{x}$}] {};
+\node (A2) at (1,2)  [label=30:{$\frac{\vct{w}}{\norm{\vct{w}}}$}] {};
+\node (A3) at (-1,1.5)  [label=90:{$H$}] {};
 \end{tikzpicture}
+\caption{Computing the distance to the hyperplane}
+\end{figure}
 
 As anchor point $\vct{p}$ we can just choose a multiple $c\vct{w}$ that is on the plane, i.e., that satisfies $\ip{\vct{w}}{c\vct{w}}+b=0$. This implies that $c=-b/\norm{\vct{w}}^2$, and consequently $\vct{p} = -(b/\norm{\vct{w}}^2 \vct{w}$. The distance is then
 \begin{equation*}
