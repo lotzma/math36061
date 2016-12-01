@@ -1,0 +1,210 @@
+%-----------------------------------------------------------------------
+% Beginning of chap2.tex
+%-----------------------------------------------------------------------
+%
+%  AMS-LaTeX sample file for a chapter of a monograph, to be used with
+%  an AMS monograph document class.  This is a data file input by
+%  chapter.tex.
+%
+%  Use this file as a model for a chapter; DO NOT START BY removing its
+%  contents and filling in your own text.
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\chapter*{Lecture 17}
+\addcontentsline{toc}{chapter}{Lecture 17}
+\addtocounter{chapter}{1}
+\addtocounter{section}{-2}
+\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{theorem}{chapter}
+
+%\epigraph{}{--- \textup{}}
+
+\section{Semidefinite programming}
+Recall the linear programming formulation
+\begin{align}\label{eq:lp}\tag{LP}
+\begin{split}
+ \minimize & \ip{\vct{c}}{\vct{x}}\\
+ \subjto & \mtx{A}\vct{x}=\vct{b}\\
+ & \vct{x}\geq \zerovct,
+ \end{split}
+\end{align}
+with $\vct{c},\vct{x}\in \R^d$, $\mtx{A}\in \R^{m\times d}$, and $\vct{b}\in \R^m$. 
+Semidefinite programming is a far-reaching generalization of linear programming, in which the vector space $\R^d$ is replaced by the vector space of real symmetric matrices,
+\begin{equation*}
+ \mathrm{SYM}_n = \{\vct{X}\in \R^{n\times n} \mid x_{ij}=x_{ji}, 1\leq i<j\leq n\},
+\end{equation*}
+with the trace inner product,
+\begin{equation*}
+ \ip{\vct{X}}{\vct{Y}} = \vct{X}\bullet\vct{Y} = \mathrm{tr}(\vct{X}\vct{Y}) = \sum_{i=1}^n \sum_{j=1}^n x_{ij}y_{ij},
+\end{equation*}
+where $\mathrm{tr}(\vct{X})=\sum_{i=1}^n x_{ii}$ is the {\em trace} of a matrix $\vct{X}$. 
+The matrix $\mtx{A}$ in~\eqref{eq:lp} is replaced by a linear map $\mathcal{\mtx{A}}\colon \mathrm{SYM}_n\to \R^m$. So far, this new setting does not fall out of the general framework of linear programming (note that~\eqref{eq:lp} does not make any reference on the nature of the inner product and the linear map $\mtx{A}$). The point of departure of semidefinite programming is that the inequality constraints $\vct{x}\geq \zerovct$ are replaced with the constraint $\mtx{X} \succeq\zerovct$, meaning that $\vct{X}$ is positive semidefinite. A {\em semidefinite programming} (SDP) problem thus has the form
+\begin{align}\label{eq:sdp-p}\tag{SDP-P}
+\begin{split}
+ \minimize & \mtx{C}\bullet \mtx{X}\\
+ \subjto & \mathcal{\mtx{A}}(\mtx{X})=\vct{b}\\
+ & \mtx{X} \succeq \zerovct.
+ \end{split}
+\end{align}
+
+\begin{remark}\label{re:1}
+ Recall that $\mtx{X}\succeq \zerovct$ means that for all $\vct{v}\in \R^n$, $\vct{v}^{\trans}\mtx{X}\vct{v}\geq 0$. Therefore, SDP can be viewed as linear programming with an uncountable number of inequality constraints. Recall also that a symmetric matrix is positive semidefinite if and only if the (necessarily real) eigenvalues are non-negative. While the feasible sets of linear programming are polyhedra, the feasible sets of SDP are called {\em spectrahedra}, since they are ``polyhedra in the spectrum (set of eigenvalues)''.
+\end{remark}
+
+The vector space $\mathrm{SYM}_n$ has dimension $d:=n(n+1)/2$, the number of entries on or above the main diagonal. Therefore, if we identify $\mathrm{SYM}_n\cong \R^{d}$, the linear map $\mathcal{\mtx{A}}$ can be identified with a ``big'' $d\times m$ matrix. Alternatively, the condition $\mathcal{\mtx{A}}(\vct{X})=\vct{b}$ can be seen as collection of $m$ linear constraints, each of the form $\mtx{A}_i\bullet \mtx{X}=b_i$ with a symmetric matrix $\mtx{A}_i$, so that we can express ~\eqref{eq:sdp-p} as
+\begin{align*}
+ \minimize & \mtx{C}\bullet \mtx{X}\\
+ \subjto & \mtx{A}_i\bullet \mtx{X} = b_i, \quad 1\leq i\leq m,\\
+ & \mtx{X}\succeq \zerovct.
+\end{align*}
+
+\begin{example}\label{ex:17-1}
+Consider an SDP with $n=3$ and $m=2$ ($3\times 3$ symmetric matrices and $2$ constraints), with the following data
+\begin{equation*}
+ \mtx{A}_1 = \begin{pmatrix}
+              1 & 0 & 1\\
+              0 & 3 & 7\\
+              1 & 7 & 5
+             \end{pmatrix}, \quad
+\mtx{A}_2 = \begin{pmatrix}
+             0 & 2 & 8\\
+             2 & 6 & 0\\
+             8 & 0 & 4
+            \end{pmatrix}, \quad
+\mtx{C} = \begin{pmatrix}
+           1 & 2 & 3\\
+           2 & 9 & 0\\
+           3 & 0 & 7 
+          \end{pmatrix}, \quad
+\vct{b} = \begin{pmatrix} 
+           11 \\ 19
+          \end{pmatrix}.
+\end{equation*}
+The decision variable is the symmetric matrix
+\begin{equation*}
+ \vct{X} = \begin{pmatrix}
+            x_{11} & x_{12} & x_{13}\\
+            x_{12} & x_{22} & x_{23}\\
+            x_{13} & x_{23} & x_{33}
+           \end{pmatrix}.
+\end{equation*}
+The objective function is
+\begin{equation*}
+ \mtx{C}\bullet \mtx{X} = x_{11}+4x_{12}+6x_{13}+9x_{22}+7x_{33},
+\end{equation*}
+where we used the symmetry $x_{ij}=x_{ji}$ to simplify the expression. Working out the constraints $\mtx{A}_i\bullet \mtx{X}=b_i$ in the same way, we arrive at the following form of the SDP:
+\begin{align*}
+ \minimize & x_{11}+4x_{12}+6x_{13}+9x_{22}+7x_{33}\\
+ \subjto & x_{11}+2x_{13}+3x_{22}+14x_{23}+5x_{33} = 11\\
+ & 4x_{12}+16x_{13}+6x_{22}+4x_{33} = 19\\
+ & \mtx{X}\succeq \zerovct.
+\end{align*}
+As mentioned in Remark~\ref{re:1}, were it not for the positive semidefinite constraint, the above would be an old-fashioned LP in the variables $\vct{x}=(x_{11},x_{12},x_{13},x_{22},x_{23},x_{33})^{\trans}$.
+\end{example}
+
+Linear programming is a special case of semidefinite programming. To see this, start with the problem~\eqref{eq:lp} and create the new matrices
+\begin{equation*}
+ \mtx{A}_i = \mathrm{diag}(a_{i1},\dots,a_{id}), \quad \mtx{C} = \mathrm{diag}(c_1,\dots,c_d).
+\end{equation*}
+Then the problem~\eqref{eq:lp} is equivalent to the SDP
+\begin{align*}
+ \minimize & \mtx{C}\bullet \mtx{X}\\
+ \subjto & \mtx{A}_i\bullet \mtx{X} = b_i, \ 1\leq i\leq m,\\
+ & x_{ij}=0, \ i<j,\\
+ & \mtx{X}\succeq \zerovct.
+\end{align*}
+In fact, any solution of the above has the form $\vct{X}=\mathrm{diag}(x_{11},\dots,x_{dd})$, which we identify with a vector $\vct{x}\in \R^d$, with the semidefinite constraint, applied to the diagonal matrix, translating into $x_i\geq 0$ for $1\leq i\leq d$.
+
+\section{Semidefinite programming duality}
+Just as with linear programming, we can formulate a dual problem
+\begin{align}\label{eq:sdp-d}\tag{SDP-D}
+ \begin{split}
+  \maximize & \ip{\vct{y}}{\vct{b}}\\
+  \subjto & \sum_{i=1}^m y_i \mtx{A}_i + \mtx{S}=\mtx{C}\\
+  & \mtx{S}\succeq \zerovct.
+ \end{split}
+\end{align}
+
+\begin{example}
+ The dual to the problem in Example~\ref{ex:17-1} is the problem
+ \begin{align*}
+  \maximize & 11y_1+19y_2\\
+  \subjto & y_1\begin{pmatrix}
+                1 & 0 & 1\\
+                0 & 3 & 7\\
+                1 & 7 & 5
+               \end{pmatrix}
+	+ y_2 \begin{pmatrix}
+	       0 & 2 & 8\\
+	       2 & 6 & 0\\
+	       8 & 0 & 4
+	      \end{pmatrix}
+ + \mtx{S} = 
+\begin{pmatrix}
+ 1 & 2 & 3\\
+ 2 & 9 & 0\\
+ 3 & 0 & 7
+\end{pmatrix},\\
+& \mtx{S}\succeq \zerovct.
+ \end{align*}
+ One can also write the constraints more compactly by eliminating $\mtx{S}$, in terms of a matrix whose entries are linear functions of $y_1$ and $y_2$ and which is required to be positive semidefinite.
+\end{example}
+
+We call $\mtx{X}$ a feasible matrix for~\eqref{eq:sdp-p} if it satisfies the constraints, and $(\vct{y},\mtx{S})$ a feasible pair for~\eqref{eq:sdp-d} if $\vct{y}$ and $\mtx{S}$ satisfy the constraints. As with the nonlinear optimization setting from Lecture 16, we call the {\em duality gap} the difference $\mtx{C}\bullet \mtx{X}-\ip{\vct{b}}{\vct{y}}$ between the primal and dual objective functions at feasible points.
+
+\begin{theorem}\label{thm:1}
+ Let $\mtx{X}$ be a feasible matrix for~\eqref{eq:sdp-p} and let $(\vct{y},\mtx{S})$ be a feasible pair for~\eqref{eq:sdp-d}. Then the {\em duality gap} satisfies
+ \begin{equation*}
+  \mtx{C}\bullet \mtx{X}-\ip{\vct{b}}{\vct{y}} = \mtx{S}\bullet \mtx{X}\geq 0.
+ \end{equation*}
+Moreover, if the duality gap is zero, then $\mtx{X}$ and $(\vct{y},\mtx{S})$ are optimal points for~\eqref{eq:sdp-p} and~\eqref{eq:sdp-d}, respectively.
+\end{theorem}
+
+Recall that $\mtx{X}\in \mathrm{SYM}_n$ if and only if $\mtx{X}=\mtx{Q}\mtx{D}\mtx{Q}^{\trans}$, with $\mtx{D}$ diagonal (containing the eigenvalues) and $\mtx{Q}$ orthogonal (that is, $\mtx{Q}^{\trans}\mtx{Q}=\mtx{I}$). If in addition $\mtx{X}\succeq \zerovct$, then the diagonal entries 
+are nonnegative. We need some more facts about positive semidefinite matrices.
+
+\begin{lemma}\label{le:1}
+Let $\mtx{X}\in \mathcal{S}^n_{+}$. Then:
+\begin{enumerate}
+ \item The diagonal entries satisfy $x_{ii}\geq 0$ for $1\leq i\leq n$;
+ \item If $x_{ii}=0$ for some $i$, then $x_{ij}=x_{ji}=0$ for all $1\leq j\leq n$ (if a diagonal is zero, then the whole corresponding row and column is zero).
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}[Proof of Theorem~\ref{thm:1}]
+Note that
+\begin{equation*}
+ \mtx{C}\bullet\mtx{X}-\ip{\vct{b}}{\vct{y}}=\sum_{i=1}^m y_i \mtx{A}_i\bullet \mtx{X}+\mtx{S}\bullet \mtx{X}-\ip{\vct{b}}{\vct{y}} = \mtx{S}\bullet \mtx{X},
+\end{equation*}
+since $\sum_{i=1}^m y_i \mtx{A}_i\bullet \mtx{X}=\sum_{i=1}^m y_ib_i=\ip{\vct{y}}{\vct{b}}$.
+ We next show that if $\mtx{X}\succeq \zerovct$ and $\mtx{S}\succeq \zerovct$, then $\mtx{X}\bullet \mtx{S}\geq 0$. Assume $\mtx{X}=\mtx{Q}\mtx{D}\mtx{Q}^{\trans}$ and $\mtx{S}=\mtx{P}\mtx{E}\mtx{P}^{\trans}$, with $\mtx{Q},\mtx{P}$ orthogonal and $\mtx{D},\mtx{E}$ diagonal. Then
+ \begin{equation*}
+  \mtx{X}\bullet \mtx{S} = \mathrm{tr}(\mtx{S}\mtx{X}) = \mathrm{tr}(\mtx{Q}\mtx{D}\mtx{Q}^{\trans}\mtx{P}\mtx{E}\mtx{P}^{\trans}) = \mathrm{tr}(\mtx{D}\mtx{Q}^{\trans}\mtx{PE}\mtx{P}^{\trans}\mtx{Q}),
+ \end{equation*}
+where we used that $\mathrm{tr}(\mtx{A}\mtx{B})=\mathrm{tr}(\mtx{B}\mtx{A})$. The last expression equals 
+\begin{equation}\label{eq:2}
+ \sum_{i=1}^n \mtx{D}_{ii} (\mtx{Q}^{\trans}\mtx{PE}\mtx{P}^{\trans}\mtx{Q})_{ii}\geq 0,
+\end{equation}
+since $\mtx{D}_{ii}\geq 0$ and $\mtx{Q}^{\trans}\mtx{PE}\mtx{P}^{\trans}\mtx{Q}\succeq \zerovct$, which implies that the diagonal entries are also nonnegative by Lemma~\ref{le:1}.
+
+Now if $\mtx{X}\bullet \mtx{S}=0$, then by~\eqref{eq:2}, $\sum_{i=1}^n \mtx{D}_{ii} (\mtx{Q}^{\trans}\mtx{PE}\mtx{P}^{\trans}\mtx{Q})_{ii}=0$. This means that for each $i$, either $D_{ii}=0$, or $(\mtx{Q}^{\trans}\mtx{PE}\mtx{P}^{\trans}\mtx{Q})_{ii}=0$. In the latter case, by Lemma~\ref{le:1}, the whole $j$-th row of this matrix is zero. If follows that
+\begin{equation*}
+ \mtx{D}(\mtx{Q}^{\trans}\mtx{PE}\mtx{P}^{\trans}\mtx{Q})=(\mtx{D}\mtx{Q}^{\trans})(\mtx{PE}\mtx{P}^{\trans}\mtx{Q})=\zerovct.
+\end{equation*}
+Since $\mtx{A}\mtx{B}=\zerovct$ implies $\mtx{B}\mtx{A}=\zerovct$, we get that $\mtx{X}\mtx{S}=(\mtx{PE}\mtx{P}^{\trans}\mtx{Q})(\mtx{D}\mtx{Q}^{\trans})=\zerovct$.
+\end{proof}
+
+As with nonlinear convex optimization, some mild conditions (also known as Slater's condition) ensure that the primal and dual optimal values coincide. 
+
+\begin{theorem}
+ Let $p^*$ be the optimal value of~\eqref{eq:sdp-p} and $d^*$ the optimal value of~\eqref{eq:sdp-d}. If there exists a feasible matrix $\mtx{X}\succ \zerovct$ for~\eqref{eq:sdp-p}, and a feasible pair $(\vct{y},\mtx{S})$ for~\eqref{eq:sdp-d} with $\mtx{S}\succ \zerovct$, then $p^*=d^*$.
+\end{theorem}
+
+The theory of interior point methods carries over to semidefinite programming, giving us efficient (in theory and practice) algorithms for solving such problem. In the next lecture we will address some concrete problems that can be solved efficiently using semidefinite programming, and for which linear or quadratic programming are not enough.
+
+% %-----------------------------------------------------------------------
+% % End of chap1.tex
+% %-----------------------------------------------------------------------
