@@ -12,15 +12,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\chapter*{Lecture 17}
-\addcontentsline{toc}{chapter}{Lecture 17}
-\addtocounter{chapter}{1}
-\addtocounter{section}{-2}
-\numberwithin{section}{chapter}
+\chapter*{Lecture 19}
+\addcontentsline{toc}{chapter}{Lecture 19}
+\addtocounter{chapter}{19}
+\addtocounter{section}{0}
+%\numberwithin{section}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{theorem}{chapter}
 
 %\epigraph{}{--- \textup{}}
+
+Semidefinite programming (SDP) is a far-reaching generalization of linear programming (LP), in which vectors are replaced by matrices and the non-negativity condition is replaced with the condition that the matrices be positive semidefinite. 
 
 \section{Semidefinite programming}
 Recall the linear programming formulation
@@ -31,8 +33,8 @@ Recall the linear programming formulation
  & \vct{x}\geq \zerovct,
  \end{split}
 \end{align}
-with $\vct{c},\vct{x}\in \R^d$, $\mtx{A}\in \R^{m\times d}$, and $\vct{b}\in \R^m$. 
-Semidefinite programming is a far-reaching generalization of linear programming, in which the vector space $\R^d$ is replaced by the vector space of real symmetric matrices,
+with $\vct{c},\vct{x}\in \R^n$, $\mtx{A}\in \R^{m\times n}$, and $\vct{b}\in \R^m$. 
+Semidefinite programming is a far-reaching generalization of linear programming, in which the vector space $\R^n$ is replaced by the vector space of real symmetric matrices,
 \begin{equation*}
  \mathrm{SYM}_n = \{\vct{X}\in \R^{n\times n} \mid x_{ij}=x_{ji}, 1\leq i<j\leq n\},
 \end{equation*}
@@ -54,7 +56,7 @@ The matrix $\mtx{A}$ in~\eqref{eq:lp} is replaced by a linear map $\mathcal{\mtx
  Recall that $\mtx{X}\succeq \zerovct$ means that for all $\vct{v}\in \R^n$, $\vct{v}^{\trans}\mtx{X}\vct{v}\geq 0$. Therefore, SDP can be viewed as linear programming with an uncountable number of inequality constraints. Recall also that a symmetric matrix is positive semidefinite if and only if the (necessarily real) eigenvalues are non-negative. While the feasible sets of linear programming are polyhedra, the feasible sets of SDP are called {\em spectrahedra}, since they are ``polyhedra in the spectrum (set of eigenvalues)''.
 \end{remark}
 
-The vector space $\mathrm{SYM}_n$ has dimension $d:=n(n+1)/2$, the number of entries on or above the main diagonal. Therefore, if we identify $\mathrm{SYM}_n\cong \R^{d}$, the linear map $\mathcal{\mtx{A}}$ can be identified with a ``big'' $d\times m$ matrix. Alternatively, the condition $\mathcal{\mtx{A}}(\vct{X})=\vct{b}$ can be seen as collection of $m$ linear constraints, each of the form $\mtx{A}_i\bullet \mtx{X}=b_i$ with a symmetric matrix $\mtx{A}_i$, so that we can express ~\eqref{eq:sdp-p} as
+The vector space $\mathrm{SYM}_n$ has dimension $d:=n(n+1)/2$, the number of entries on or above the main diagonal. Therefore, if we identify $\mathrm{SYM}_n\cong \R^{d}$, the linear map $\mathcal{\mtx{A}}$ can be identified with a ``big'' $m\times d$ matrix. Alternatively, the condition $\mathcal{\mtx{A}}(\vct{X})=\vct{b}$ can be seen as collection of $m$ linear constraints, each of the form $\mtx{A}_i\bullet \mtx{X}=b_i$ with a symmetric matrix $\mtx{A}_i$, so that we can express ~\eqref{eq:sdp-p} as
 \begin{align*}
  \minimize & \mtx{C}\bullet \mtx{X}\\
  \subjto & \mtx{A}_i\bullet \mtx{X} = b_i, \quad 1\leq i\leq m,\\
@@ -107,7 +109,7 @@ As mentioned in Remark~\ref{re:1}, were it not for the positive semidefinite con
 
 Linear programming is a special case of semidefinite programming. To see this, start with the problem~\eqref{eq:lp} and create the new matrices
 \begin{equation*}
- \mtx{A}_i = \mathrm{diag}(a_{i1},\dots,a_{id}), \quad \mtx{C} = \mathrm{diag}(c_1,\dots,c_d).
+ \mtx{A}_i = \mathrm{diag}(a_{i1},\dots,a_{in}), \quad \mtx{C} = \mathrm{diag}(c_1,\dots,c_n).
 \end{equation*}
 Then the problem~\eqref{eq:lp} is equivalent to the SDP
 \begin{align*}
@@ -116,7 +118,7 @@ Then the problem~\eqref{eq:lp} is equivalent to the SDP
  & x_{ij}=0, \ i<j,\\
  & \mtx{X}\succeq \zerovct.
 \end{align*}
-In fact, any solution of the above has the form $\vct{X}=\mathrm{diag}(x_{11},\dots,x_{dd})$, which we identify with a vector $\vct{x}\in \R^d$, with the semidefinite constraint, applied to the diagonal matrix, translating into $x_i\geq 0$ for $1\leq i\leq d$.
+In fact, any solution of the above has the form $\vct{X}=\mathrm{diag}(x_{11},\dots,x_{nn})$, which we identify with a vector $\vct{x}\in \R^n$, with the semidefinite constraint, applied to the diagonal matrix, translating into $x_i\geq 0$ for $1\leq i\leq n$.
 
 \section{Semidefinite programming duality}
 Just as with linear programming, we can formulate a dual problem
@@ -174,7 +176,7 @@ Let $\mtx{X}\in \mathcal{S}^n_{+}$. Then:
 \end{enumerate}
 \end{lemma}
 
-\begin{proof}[Proof of Theorem~\ref{thm:1}]
+\begin{proof}[Proof of Theorem~\ref{thm:1}](Optional.)
 Note that
 \begin{equation*}
  \mtx{C}\bullet\mtx{X}-\ip{\vct{b}}{\vct{y}}=\sum_{i=1}^m y_i \mtx{A}_i\bullet \mtx{X}+\mtx{S}\bullet \mtx{X}-\ip{\vct{b}}{\vct{y}} = \mtx{S}\bullet \mtx{X},
