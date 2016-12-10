@@ -7,7 +7,7 @@
 
 % Number of problem sheet
 \newcounter{problemSheetNumber}
-\setcounter{problemSheetNumber}{7}
+\setcounter{problemSheetNumber}{8}
 \newcommand{\matlabprob}{\ding{100} \ }
 \newcommand{\examprob}{\ding{80} \ }
 %\setcounter{section}{\theproblemSheetNumber}  
@@ -21,130 +21,172 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{November 28, 2016}
+\rhead{December 7, 2016}
 
 \begin{document} 
 \begin{center}
 {\Large {\bf Solutions to Part A of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-\solution{pr:1} First of all, note that the function is only defined for $\vct{x}$ such that $\mtx{A}\vct{x}\leq \vct{b}$. This is the {\em domain} of the function. 
-
-We introduce new variables $\vct{y}$ and derive the dual to the problem
+\solution{pr:1} We write the optimization problem slightly different as
 \begin{align*}
- \minimize & -\sum_{i=1}^m \log(y_i)\\
- \subjto & \vct{y}=\vct{b}-\mtx{A}\vct{x}.
+ \minimize & f(\vct{x})+\frac{1}{t}\varphi(\vct{x})\\
+ \subjto & f_i(\vct{x})\leq \zerovct\\
+ & \mtx{A}\vct{x}=\vct{b}.
 \end{align*}
-Note that by restricting to the domain of the problem, we don't have to explicitly ask for $\vct{y}$ to be non-negative: the objective function wouldn't make sense for negative values.
-
-The Lagrangian to this problem is
+Using the fact that the gradient of $\varphi(\vct{x})$ is given by
+\begin{equation*}
+  \nabla_{\vct{x}}\varphi(\vct{x}) = -\sum_{i=1}^m \frac{\nabla f_i(\vct{x})}{f_i(\vct{x})},
+\end{equation*}
+we can derive the KKT conditions for this problem as
 \begin{align*}
- \mathcal{L}(\vct{x},\vct{y},\vct{\mu}) &= -\sum_{i=1}^m \log(y_i)+\vct{\mu}^{\trans}(\vct{y}-\vct{b}+\mtx{A}\vct{x})\\
- &= \sum_{i=1}^m -\log(y_i)+\mu_i(y_i-b_i+\mtx{a}_i^{\trans}\vct{x}).
-\end{align*}
-The dual function is
+\begin{split}
+  \vct{f}(\vct{x}) & \leq \zerovct\\
+  \mtx{A}\vct{x} & = \vct{b}\\
+  \tilde{\vct{\lambda}}&\geq \zerovct\\
+  \tilde{\lambda}_if_i(\vct{x}) & = 0, \ 1\leq i\leq m\\
+  \nabla_{\vct{x}} f(\vct{x}^*)-\frac{1}{t}\sum_{i=1}^m \frac{1}{f_i(\vct{x})}\nabla f_i(\vct{x})+\sum_{i=1}^m \tilde{\lambda}_i \nabla f_i(\vct{x})+\mtx{A}^{\trans}\vct{\mu} &= \zerovct,
+ \end{split}
+ \end{align*}
+ We now join the coefficients of $\nabla f_i(\vct{x})$ in the last line and set
+ \begin{equation*}
+  \lambda_i := \tilde{\lambda}_i-\frac{1}{tf_i(\vct{x})}.
+ \end{equation*}
+ The last equation then becomes
+ \begin{equation*}
+  \nabla_{\vct{x}} f(\vct{x}^*)+\sum_{i=1}^m \lambda_i\nabla f_i(\vct{x})+\sum_{i=1}^m +\mtx{A}^{\trans}\vct{\mu} = \zerovct.
+ \end{equation*}
+These new multipliers also satisfy
 \begin{equation*}
- g(\vct{\mu}) = \inf_{\vct{x},\vct{y}} \mathcal{L}(\vct{x},\vct{y},\vct{\mu}),
+ \lambda_i f_i(\vct{x}) = -\frac{1}{t}.
 \end{equation*}
-where the infimum is taken over the domain of $\mathcal{L}$ (in particular, this requires $\vct{y}\geq \zerovct$). 
-The infimum is $-\infty$ if $\vct{\mu}^{\trans}\mtx{A}\neq \zerovct$. If $\vct{\mu}$ has negative terms, then the infimum is also $-\infty$ (we could then choose an arbitrary large value for the corresponding $y$ variable). 
+Rewriting the KKT conditions for the barrier problem in terms of the $\lambda_i$ gives the modified KKT conditions.
 
-If $\vct{\mu}>0$, then we can determine the minimum by computing the gradient. For the partial derivative in $y_i$ we get
-
-\begin{equation*}
-  \frac{\partial \mathcal{L}}{\partial y_i} = -\frac{1}{y_i}+\mu_i = 0,
-\end{equation*}
-
-so at the minimum we have $y_i=\frac{1}{\mu_i}$. For the gradient in the $\vct{x}$ variables we get $\nabla_{\vct{x}}\mathcal{L} = \mtx{A}^{\trans}\vct{\mu}=\zerovct$. 
-It follows that the dual function is
-\begin{equation*}
- g(\vct{\mu}) = \begin{cases}
-                   \sum_{i=1}^m \log(\mu_i)+m-\vct{b}^{\trans}\vct{\mu} & \text{ if } \mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\mu}>0,\\
-                   -\infty & \text{ else,}
-                \end{cases}
-\end{equation*}
-where we used that $\log(y_i) = \log(1/\mu_i) = -\log(\mu_i)$. 
-
-\solution{pr:2} The problem is not convex since the equality constraint is not linear, and the inequality constraint is not convex. We can formulate an equivalent convex optimization problem as
-\begin{equation*}
-  \minimize x_1^2+x_2^2 \quad \subjto x_1\leq 0, \ x_1+x_2=0.
-\end{equation*}
-
-\solution{pr:1} Write
-\begin{equation*}
- \mtx{P}(\lambda) = \mtx{P}+\sum_{i=1}^m\lambda_i \mtx{P}_i, \ \vct{q}(\lambda) = \vct{q}+\sum_{i=1}^m \lambda_i \vct{q}_i, \ \vct{r}(\lambda)=\vct{r}+\sum_{i=1}^m \lambda_i\vct{r}_i.
-\end{equation*}
-With this notation, we can express the Lagrangian as
-\begin{equation*}
- \mathcal{L}(\vct{x},\vct{\lambda}) = \frac{1}{2}\vct{x}^{\trans}\vct{P}(\lambda)\vct{x}+\vct{q}(\lambda)^{\trans}\vct{x}+\vct{r}(\lambda).
-\end{equation*}
-We can now approach this minimization problem just as we would approach any such problem with a positive semidefinite matrix: compute the gradient in $\vct{x}$, $\mtx{P}(\vct{\lambda})+\vct{q}(\vct{\lambda})$, and set this to zero. Plugging in the result, $\vct{x}=-\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})$, into the equation for the Lagrangian, we get
-for $\vct{\lambda}\geq \zerovct$
-\begin{equation*}
- g(\vct{\lambda}) = \inf_{\vct{x}} \mathcal{L}(\vct{x},\vct{\lambda}) = -\frac{1}{2}\vct{q}(\vct{\lambda})^{\trans}\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})+\vct{r}(\vct{\lambda}).
-\end{equation*}
-The Lagrange dual is then given by
+\solution{pr:2} For this problem we just have to figure out how to modify the derivations done in class to the current problem, essentially adding the extra term involving the $s_i$ in the objective, replacing the $-1$ with $-1+s_i$ in the constraints, and adding some non-negativity constraints for the $s_i$. The Lagrangian of the problem is then
 \begin{align*}
-\maximize &  -\frac{1}{2}\vct{q}(\vct{\lambda})^{\trans}\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})+\vct{r}(\vct{\lambda})\\
-\subjto & \vct{\lambda}\geq \zerovct.
+  \mathcal{L}(\vct{w},b,\vct{s},\vct{\lambda},\tilde{\vct{\lambda}}) &= \frac{1}{2}\vct{w}^{\trans}\vct{w}+\mu \vct{s}^{\trans}\vct{e} + \vct{\lambda}^{\trans}\mtx{X}\vct{w}-b\vct{\lambda}^{\trans}\vct{y}+\vct{\lambda}^{\trans}(\vct{e}-\vct{s})-\tilde{\vct{\lambda}}^{\trans}\vct{s}\\
+  &=\frac{1}{2}\vct{w}^{\trans}\vct{w}+ \vct{\lambda}^{\trans}\mtx{X}\vct{w}-b\vct{\lambda}^{\trans}\vct{y}+\vct{s}^{\trans}(\mu\vct{e}-\vct{\lambda}-\tilde{\vct{\lambda}})+\vct{\lambda}^{\trans}\vct{e}.
 \end{align*}
-This function looks simpler at first sight, since it only involves non-negativity constraints, but it requires the inverse of a linear combination of the matrices $\vct{P}_i$, which makes things less straight-forward.
-%\solution{pr:2} First of all, we can make the objective function linear by writing the problem as
-%\begin{align*}
-% \minimize & t\\
-% \subjto & \frac{1}{2} \mtx{x}^{\trans}\mtx{P}\mtx{x}+\vct{q}^{\trans}\vct{x}+r-t\leq 0\\
-% & \frac{1}{2}\vct{x}^{\trans}\mtx{P}_i\vct{x}+\vct{q}_i^{\trans}\vct{x}+r_i\leq 0, \ 1\leq i\leq m.
-%\end{align*}
-%Now we can factor each $\vct{P}_i$ as $\vct{P}_i=\vct{M}_i^{\trans}\vct{M}_i$.
-%The matrix
-%\begin{equation*}
-% \begin{pmatrix}
-%  \mtx{I} & \vct{M}_i\vct{x}\\
-%  \vct{x}^{\trans}\mtx{M}_i & -r_i-\vct{q}_i^{\trans}\vct{x}
-% \end{pmatrix}
-%\end{equation*}
-%is positive semidefinite if and only if $\frac{1}{2}\vct{x}^{\trans}\mtx{P}_i\vct{x}+\vct{q}_i^{\trans}\vct{x}+r_i\leq 0$, by the hint. We can therefore write the QCQP as
-%\begin{align*}
-%\minimize & t\\
-%\subjto & \begin{pmatrix}
-%  \mtx{I} & \vct{M}\vct{x}\\
-%  \vct{x}^{\trans}\mtx{M} & -r-\vct{q}^{\trans}\vct{x}+t
-% \end{pmatrix}\succeq \zerovct\\
-% & \begin{pmatrix}
-%  \mtx{I} & \vct{M}_i\vct{x}\\
-%  \vct{x}^{\trans}\mtx{M}_i & -r_i-\vct{q}_i^{\trans}\vct{x}
-% \end{pmatrix}\succeq \zerovct, \ 1\leq i\leq m.
-%\end{align*}
-%We can formulate several semidefinite constraints as one by assembling the above matrices as diagonal blocks of a big matrix.
+This might look slightly involved, but breaking it down we can recognise all the relevant terms in there as coming from either the objective function or the constraints.
+
+To find the Lagrange dual $g(\vct{\lambda},\tilde{\vct{\lambda}})$, we set the gradient to $0$,
+
+\begin{align*}
+\nabla_{\vct{x}}\mathcal{L} &= \vct{w}-\mtx{X}^{\trans}\vct{\lambda} = \zerovct\\
+\nabla_{\vct{s}}\mathcal{L} &= \mu\vct{e}-\vct{\lambda}-\tilde{\vct{\lambda}} = \zerovct\\
+\frac{\partial \mathcal{L}}{\partial b} &= \vct{y}^{\trans}\vct{\lambda} = 0 
+\end{align*}
+
+As in the lecture, we can replace $\vct{w}$ in the Lagrangian by $\vct{X}^{\trans}\vct{\lambda}$ and $\vct{\lambda}^{\trans}\vct{y}$ by $0$. In addition, we get to replace $\mu\vct{e}-\vct{\lambda}-\tilde{\vct{\lambda}}$ by $\zerovct$, overall giving the following expression for $\vct{g}$:
+\begin{equation*}
+ \vct{g}(\vct{\lambda}) = -\frac{1}{2}\vct{\lambda}^{\trans}\mtx{X}\mtx{X}^{\trans}\vct{\lambda}+\vct{\lambda}^{\trans}\vct{e}.
+\end{equation*}
+It turns out that the Lagrange dual is the same! A difference becomes apparent when considering the Lagrange dual problem, which requires maximizing over $\vct{\lambda}\geq \zerovct$ and $\tilde{\vct{\lambda}}\geq \zerovct$. Since $\mu\vct{e}-\vct{\lambda}=\tilde{\vct{\lambda}}\geq \zerovct$, we conclude that $\vct{\lambda}\leq \mu \vct{e}$, i.e., every $\lambda_i$ is bounded by $\mu$. We can therefore rephrase the Lagrange dual problem as
+\begin{equation*}
+  \minimize \frac{1}{2}\vct{\lambda}^{\trans}\mtx{X}\mtx{X}^{\trans}\vct{\lambda}-\vct{\lambda}^{\trans}\vct{e} \quad \subjto \zerovct\leq \vct{\lambda} \leq \mu\vct{e}.
+\end{equation*}
+The KKT conditions are found by collecting the constraints of the primal problem, of the dual problem, the gradient of the Lagrangian, and complementarity slackness:
+\begin{align*}
+   \mtx{X}\vct{w}+b\vct{y}-\vct{e}+\vct{s} & \geq \zerovct\\
+   \vct{s}&\geq \zerovct   \\
+   \vct{\lambda}&\geq \zerovct\\
+   \tilde{\vct{\lambda}}&\geq \zerovct\\
+   \lambda_i (1-y_i(\vct{w}^{\trans}\vct{x}_i+b)) &= 0 \text{ for } 1\leq i\leq n\\
+   \vct{w}-\mtx{X}^{\trans}\vct{\lambda} &= \zerovct\\
+   \nabla_{\vct{s}}\mathcal{L} &= \mu\vct{e}-\vct{\lambda}-\tilde{\vct{\lambda}} = \zerovct\\
+   \vct{y}^{\trans}\vct{\lambda} &= 0.
+\end{align*}
+A closer look at these conditions reveals that some of the variables (for example, $\tilde{\vct{\lambda}}$) could be eliminated, thus simplifying the system.
+
+%\solution{pr:3} First of all, note that the function is only defined for $\vct{x}$ such that $\mtx{A}\vct{x}\leq \vct{b}$. This is the {\em domain} of the function. 
 %
-%\solution{pr:3} We write the optimization problem slightly different as
+%We introduce new variables $\vct{y}$ and derive the dual to the problem
 %\begin{align*}
-% \minimize & f(\vct{x})+\frac{1}{t}\varphi(\vct{x})\\
-% \subjto & f_i(\vct{x})\leq \zerovct\\
-% & \mtx{A}\vct{x}=\vct{b}.
+% \minimize & -\sum_{i=1}^m \log(y_i)\\
+% \subjto & \vct{y}=\vct{b}-\mtx{A}\vct{x}.
 %\end{align*}
-%The KKT conditions for this problem are
+%Note that by restricting to the domain of the problem, we don't have to explicitly ask for $\vct{y}$ to be non-negative: the objective function wouldn't make sense for negative values.
+%
+%The Lagrangian to this problem is
 %\begin{align*}
-%\begin{split}
-%  \vct{f}(\vct{x}) & \leq \zerovct\\
-%  \mtx{A}\vct{x} & = \vct{b}\\
-%  \tilde{\vct{\lambda}}&\geq \zerovct\\
-%  \tilde{\lambda}_if_i(\vct{x}) & = 0, \ 1\leq i\leq m\\
-%  \nabla_{\vct{x}} f(\vct{x}^*)-\frac{1}{t}\sum_{i=1}^m \frac{1}{f_i(\vct{x})}\nabla f_i(\vct{x})+\sum_{i=1}^m \tilde{\lambda}_i \nabla_{\vct{x}}f_i(\vct{x})+\mtx{A}^{\trans}\vct{\mu} &= \zerovct,
-% \end{split}
-% \end{align*}
-% We now join the coefficients of $\nabla f_i(\vct{x})$ in the last line and set
-% \begin{equation*}
-%  \lambda_i := \tilde{\lambda}_i-\frac{1}{tf_i(\vct{x})}.
-% \end{equation*}
-% The last equation then becomes
-% \begin{equation*}
-%  \nabla_{\vct{x}} f(\vct{x}^*)+\sum_{i=1}^m \lambda_i\nabla f_i(\vct{x})+\sum_{i=1}^m \tilde{\lambda}_i \nabla_{\vct{x}}f_i(\vct{x})+\mtx{A}^{\trans}\vct{\mu} = \zerovct.
-% \end{equation*}
-%These new multipliers also satisfy
+% \mathcal{L}(\vct{x},\vct{y},\vct{\mu}) &= -\sum_{i=1}^m \log(y_i)+\vct{\mu}^{\trans}(\vct{y}-\vct{b}+\mtx{A}\vct{x})\\
+% &= \sum_{i=1}^m -\log(y_i)+\mu_i(y_i-b_i+\mtx{a}_i^{\trans}\vct{x}).
+%\end{align*}
+%The dual function is
 %\begin{equation*}
-% \lambda_i f_i(\vct{x}) = -\frac{1}{t}.
+% g(\vct{\mu}) = \inf_{\vct{x},\vct{y}} \mathcal{L}(\vct{x},\vct{y},\vct{\mu}),
 %\end{equation*}
-%Rewriting the KKT conditions for the barrier problem in terms of the $\lambda_i$ gives the modified KKT conditions.
+%where the infimum is taken over the domain of $\mathcal{L}$ (in particular, this requires $\vct{y}\geq \zerovct$). 
+%The infimum is $-\infty$ if $\vct{\mu}^{\trans}\mtx{A}\neq \zerovct$. If $\vct{\mu}$ has negative terms, then the infimum is also $-\infty$ (we could then choose an arbitrary large value for the corresponding $y$ variable). 
+%
+%If $\vct{\mu}>0$, then we can determine the minimum by computing the gradient. For the partial derivative in $y_i$ we get
+%
+%\begin{equation*}
+%  \frac{\partial \mathcal{L}}{\partial y_i} = -\frac{1}{y_i}+\mu_i = 0,
+%\end{equation*}
+%
+%so at the minimum we have $y_i=\frac{1}{\mu_i}$. For the gradient in the $\vct{x}$ variables we get $\nabla_{\vct{x}}\mathcal{L} = \mtx{A}^{\trans}\vct{\mu}=\zerovct$. 
+%It follows that the dual function is
+%\begin{equation*}
+% g(\vct{\mu}) = \begin{cases}
+%                   \sum_{i=1}^m \log(\mu_i)+m-\vct{b}^{\trans}\vct{\mu} & \text{ if } \mtx{A}^{\trans}\vct{\mu}=\zerovct, \ \vct{\mu}>0,\\
+%                   -\infty & \text{ else,}
+%                \end{cases}
+%\end{equation*}
+%where we used that $\log(y_i) = \log(1/\mu_i) = -\log(\mu_i)$. 
+%
+%\solution{pr:2} The problem is not convex since the equality constraint is not linear, and the inequality constraint is not convex. We can formulate an equivalent convex optimization problem as
+%\begin{equation*}
+%  \minimize x_1^2+x_2^2 \quad \subjto x_1\leq 0, \ x_1+x_2=0.
+%\end{equation*}
+
+%\solution{pr:3} Write
+%\begin{equation*}
+% \mtx{P}(\lambda) = \mtx{P}+\sum_{i=1}^m\lambda_i \mtx{P}_i, \ \vct{q}(\lambda) = \vct{q}+\sum_{i=1}^m \lambda_i \vct{q}_i, \ \vct{r}(\lambda)=\vct{r}+\sum_{i=1}^m \lambda_i\vct{r}_i.
+%\end{equation*}
+%With this notation, we can express the Lagrangian as
+%\begin{equation*}
+% \mathcal{L}(\vct{x},\vct{\lambda}) = \frac{1}{2}\vct{x}^{\trans}\vct{P}(\lambda)\vct{x}+\vct{q}(\lambda)^{\trans}\vct{x}+\vct{r}(\lambda).
+%\end{equation*}
+%We can now approach this minimization problem just as we would approach any such problem with a positive semidefinite matrix: compute the gradient in $\vct{x}$, $\mtx{P}(\vct{\lambda})+\vct{q}(\vct{\lambda})$, and set this to zero. Plugging in the result, $\vct{x}=-\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})$, into the equation for the Lagrangian, we get
+%for $\vct{\lambda}\geq \zerovct$
+%\begin{equation*}
+% g(\vct{\lambda}) = \inf_{\vct{x}} \mathcal{L}(\vct{x},\vct{\lambda}) = -\frac{1}{2}\vct{q}(\vct{\lambda})^{\trans}\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})+\vct{r}(\vct{\lambda}).
+%\end{equation*}
+%The Lagrange dual is then given by
+%\begin{align*}
+%\maximize &  -\frac{1}{2}\vct{q}(\vct{\lambda})^{\trans}\mtx{P}(\vct{\lambda})^{-1}\vct{q}(\vct{\lambda})+\vct{r}(\vct{\lambda})\\
+%\subjto & \vct{\lambda}\geq \zerovct.
+%\end{align*}
+%This function looks simpler at first sight, since it only involves non-negativity constraints, but it requires the inverse of a linear combination of the matrices $\vct{P}_i$, which makes things less straight-forward.
+\solution{pr:2} First of all, we can make the objective function linear by writing the problem as
+\begin{align*}
+ \minimize & t\\
+ \subjto & \frac{1}{2} \mtx{x}^{\trans}\mtx{P}\mtx{x}+\vct{q}^{\trans}\vct{x}+r-t\leq 0\\
+ & \frac{1}{2}\vct{x}^{\trans}\mtx{P}_i\vct{x}+\vct{q}_i^{\trans}\vct{x}+r_i\leq 0, \ 1\leq i\leq m.
+\end{align*}
+Now we can factor each $\vct{P}_i$ as $\vct{P}_i=\vct{M}_i^{\trans}\vct{M}_i$.
+The matrix
+\begin{equation*}
+ \begin{pmatrix}
+  \mtx{I} & \vct{M}_i\vct{x}\\
+  \vct{x}^{\trans}\mtx{M}_i & -r_i-\vct{q}_i^{\trans}\vct{x}
+ \end{pmatrix}
+\end{equation*}
+is positive semidefinite if and only if $\frac{1}{2}\vct{x}^{\trans}\mtx{P}_i\vct{x}+\vct{q}_i^{\trans}\vct{x}+r_i\leq 0$, by the hint. We can therefore write the QCQP as
+\begin{align*}
+\minimize & t\\
+\subjto & \begin{pmatrix}
+  \mtx{I} & \vct{M}\vct{x}\\
+  \vct{x}^{\trans}\mtx{M} & -r-\vct{q}^{\trans}\vct{x}+t
+ \end{pmatrix}\succeq \zerovct\\
+ & \begin{pmatrix}
+  \mtx{I} & \vct{M}_i\vct{x}\\
+  \vct{x}^{\trans}\mtx{M}_i & -r_i-\vct{q}_i^{\trans}\vct{x}
+ \end{pmatrix}\succeq \zerovct, \ 1\leq i\leq m.
+\end{align*}
+We can formulate several semidefinite constraints as one by assembling the above matrices as diagonal blocks of a big matrix.
+%
+
 
 \end{document}

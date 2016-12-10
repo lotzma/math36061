@@ -7,7 +7,7 @@
 
 % Number of problem sheet
 \newcounter{problemSheetNumber}
-\setcounter{problemSheetNumber}{7}
+\setcounter{problemSheetNumber}{8}
 \newcommand{\matlabprob}{\ding{100} \ }
 \newcommand{\examprob}{\ding{80} \ }
 %\setcounter{section}{\theproblemSheetNumber}  
@@ -23,81 +23,44 @@
 \pagestyle{fancy}
 \lhead{MATH36061}
 \chead{Convex Optimization}
-\rhead{November 25, 2016}
+\rhead{December 6, 2016}
 
 \begin{document} 
 \begin{center}
 {\Large {\bf Solutions to Part B of Problem Sheet \theproblemSheetNumber}}
 \end{center}
 
-\solution{pr:1} The Lagrangian of this problem is
-\begin{align*}
- \mathcal{L}(\vct{x},\vct{\lambda},\vct{\mu}) &= \ip{\vct{c}}{\vct{x}}+\vct{\lambda}^{\trans}(\mtx{A}\vct{x}-\vct{b}) + \sum_{i=1}^d \mu_i x_i(1-x_i)\\
- &= \vct{x}^{\trans}\mathrm{diag}(\vct{\mu})\vct{x}+(\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu})^{\trans}\vct{x}-\vct{b}^{\trans}\vct{\lambda}.
-\end{align*}
-We want to minimize this over $\vct{x}$. If $\vct{\mu}<0$, then this function is unbounded below. Otherwise, we compute the minimum by setting the gradient to zero,
-\begin{equation*}
- 2\mathrm{diag}(\vct{\mu})\vct{x}+\vct{c}+\mtx{A}^{\trans}\vct{\lambda}-\vct{\mu} = \zerovct,
-\end{equation*}
-and get the expression (after resolving the above for $\vct{x}$ and plugging into the Lagrangian)
-\begin{equation*}
- g(\vct{\lambda},\vct{\mu}) = \begin{cases}
-                               -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i, & \vct{\mu}\geq \zerovct\\
-                               -\infty & \text{ else.}
-                              \end{cases}
-\end{equation*}
-The dual problem is
-\begin{align*}
- \maximize & -\vct{b}^{\trans}\vct{\lambda}-\frac{1}{4}\sum_{i=1}^d (c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i\\
- \subjto & \vct{\mu}\geq \zerovct, \ \vct{\lambda}\geq \zerovct.
-\end{align*}
-The problem can be simplified a bit further by noting that for each summand
-\begin{equation*}
- -\frac{1}{4}(c_i+\vct{a}_i^{\trans}\vct{\lambda}-\mu_i)^2/\mu_i,
-\end{equation*}
-if $c_i+\vct{a}_i^{\trans}\vct{\lambda}\geq 0$ we can set $\mu_i=c_i+\vct{a}_i^{\trans}\vct{\lambda}$ and the summand disappears, and if $c_i+\vct{a}_i^{\trans}\vct{\lambda}<0$, then we can maximize the summand by computing the derivative, and get the value $c_i+\vct{a}_i^{\trans}\vct{\lambda}$. Summarising, we have
-\begin{align*}
- \maximize & -\vct{b}^{\trans}\vct{\lambda}+\sum_{i=1}^d \min\{0,c_i+\mtx{a}_i^{\trans}\vct{\lambda}\}\\
- \subjto & \vct{\lambda}\geq \zerovct.
-\end{align*}
-Note that the objective function is nonsmooth, but is still concave. One can reverse the signs (and replace the min with a max in the process) to obtain a convex problem. The optimal value of this new problem will be a lower bound, and approximation, to the optimal value of the problem we started out with.
 
-%\solution{pr:1} The largest eigenvalue of $\mtx{A}$ can be written as
-%\begin{equation*}
-% \lambda_{\mathrm{max}}(\mtx{A}) = \max_{\vct{v}\in \R^d} \frac{\vct{v}^{\trans}\mtx{A}\vct{v}}{\vct{v}^{\trans}\vct{v}}.
-%\end{equation*}
-%Therefore, $t\geq \lambda_{\mathrm{max}}(\mtx{A})$ is equivalent to the statement that for all $\vct{v}$,
-%\begin{equation*}
-% t\geq \frac{\vct{v}^{\trans}\mtx{A}\vct{v}}{\vct{v}^{\trans}\vct{v}} \ \Leftrightarrow \ t\vct{v}^{\trans}\vct{v}-\vct{v}^{\trans}\mtx{A}\vct{v}\geq 0.
-%\end{equation*}
-%We can write $\vct{v}^{\trans}\vct{v}=\vct{v}^{\trans}\mtx{I}\vct{v}$, with the itendity matrix $\mtx{I}$, so that the above is equivalent to
-%\begin{equation*}
-% t\mtx{I}-\mtx{A}\succeq \zerovct.
-%\end{equation*}
-%The following semidefinite programming problem gives the largest eigenvalue:
-%\begin{align*}
-% \minimize & t\\
-% \subjto & t\mtx{I}-\mtx{A}\succeq \zerovct.
-%\end{align*}
+\solution{pr:1} The largest eigenvalue of $\mtx{A}$ can be written as
+\begin{equation*}
+ \lambda_{\mathrm{max}}(\mtx{A}) = \max_{\vct{v}\in \R^n} \frac{\vct{v}^{\trans}\mtx{A}\vct{v}}{\vct{v}^{\trans}\vct{v}}.
+\end{equation*}
+Therefore, $t\geq \lambda_{\mathrm{max}}(\mtx{A})$ is equivalent to the statement that for all $\vct{v}$,
+\begin{equation*}
+ t\geq \frac{\vct{v}^{\trans}\mtx{A}\vct{v}}{\vct{v}^{\trans}\vct{v}} \ \Leftrightarrow \ t\vct{v}^{\trans}\vct{v}-\vct{v}^{\trans}\mtx{A}\vct{v}\geq 0.
+\end{equation*}
+We can write $\vct{v}^{\trans}\vct{v}=\vct{v}^{\trans}\mtx{I}\vct{v}$, with the itendity matrix $\mtx{I}$, so that the above is equivalent to
+\begin{equation*}
+ t\mtx{I}-\mtx{A}\succeq \zerovct.
+\end{equation*}
+The following semidefinite programming problem gives the largest eigenvalue:
+\begin{align*}
+ \minimize & t\\
+ \subjto & t\mtx{I}-\mtx{A}\succeq \zerovct.
+\end{align*}
 
-\solution{pr:2} The idea here is to {\em relax} the problem: we replace the individual constraints $x_i^2=1$ with the weaker constraint that the sum of the squares is $m$,
-\begin{equation}\label{eq:1}\tag{1}
-  \minimize \vct{x}^{\trans}\mtx{W}\vct{x} \subjto \sum_{i=1}^n x_i^2 = n.
-\end{equation}
-This constraint includes the previous one, but we have more options. Therofore, the minimizer of~\eqref{eq:1} is smaller or equal to minimizer of the original problem, and any lower bound on this minimizer will be a lower bound on the minimizer of the original problem.
-
-The Lagrangian of~\eqref{eq:1} is 
+\solution{pr:2}
+\begin{itemize}
+\item[(a)] A symmetric matrix can be diagonalized by orthogonal transformations, $\Sigma = \mtx{Q}^{\trans}\mtx{A}\mtx{Q}$, with $\mtx{Q}$ orthogonal, and $\Sigma$ is diagonal with the eigenvalues of $\mtx{A}$ in the diagonal. The trace is invariant under similarity transformations, $\mathrm{tr}(\mtx{A}) = \mathrm{tr}(\mtx{Q}^{\trans}\mtx{A}\mtx{Q})$, from which we get that the trace equals the sum of the eigenvalues.
+\item[(b)] By Part (a), the problem is formally defined as
 \begin{equation*}
-  \mathcal{L}(\vct{x},\mu) = \vct{x}^{\trans}\mtx{W}\vct{x} + \mu (\vct{x}^{\trans}\vct{x}-n),
+  \minimize \mtx{I}\bullet \mtx{X} \subjto x_{ij} = a_{ij} \text{ for } (i,j)\in \Omega, \quad \mtx{X}\succeq \zerovct.
 \end{equation*}
-and computing the gradient, we see that the minimizer satisfies
-\begin{equation*}
-  \mtx{W}\vct{x} = -\mu \vct{x}.
-\end{equation*}
-This is precisely the equation for eigenvalues and eigenvectors of $\mtx{W}$! 
-If we multiply the first equation with $\vct{x}^{\trans}$ and replace the term $\vct{x}^{\trans}\mtx{W}\vct{x}$ in the Lagrangian with $-\mu\vct{x}^{\trans}\vct{x}$, then we get
-\begin{equation*}
-  g(\mu) = -\mu n.
-\end{equation*}
-The largest possible such $\mu$ is arrived at when $\lambda = -\mu$ is the smallest eigenvalue of $\mtx{W}$. Therefore, $g(\mu) \geq n \lambda_{\text{min}}(\mtx{W})$, and in particular the optimal value of~\eqref{eq:1} (and of the original problem) is bounded by this.
+We can formulate each of the constraints in the form $\mtx{A}_{ij} \bullet \mtx{X} = a_{ij}$, with $\mtx{A}_{ij}$ the matrix with a $1$ in entry $(i,j)$ and $0$ elsewhere. The dual problem would be of the form
+\begin{align*}
+  \maximize &\sum_{(i,j)\in \Omega} y_{ij}a_{ij} \\
+  \subjto & \sum_{(i,j)\in \Omega} y_{ij}\mtx{A}_{ij} +\mtx{S} = \mtx{I}\\
+  & \mtx{S}\succeq \zerovct.
+\end{align*}
+\end{itemize}
 \end{document}

@@ -107,7 +107,7 @@ where $\vct{e}$ is the vector of all ones.
 
 Note that there is one dual variable $\lambda_i$ per data point $\vct{x}_i$. We can find the optimal value by solving the dual problem~\eqref{eq:svm-dual}, but that does not give us automatically the weights $\vct{w}$ and the bias $b$. We can find the weights by $\vct{w}=\mtx{X}^{\trans}\vct{\lambda}$. As for $b$, this is best determined from the KKT conditions of the problem. These can be written by combining the constraints of the primal problem with the conditions on the gradient of the Lagrangian~\eqref{eq:lagrange-grad}, the condition $\vct{\lambda}\geq \zerovct$, and complementary slackness as
 \begin{align*}
-   \mtx{X}\vct{w}+b\vct{y}-\vct{e} &= \zerovct\\
+   \mtx{X}\vct{w}+b\vct{y}-\vct{e} &\geq \zerovct\\
    \vct{\lambda}&\geq \zerovct\\
    \lambda_i (1-y_i(\vct{w}^{\trans}\vct{x}_i+b)) &= 0 \text{ for } 1\leq i\leq n\\
    \vct{w}-\mtx{X}^{\trans}\vct{\lambda} &= \zerovct\\
