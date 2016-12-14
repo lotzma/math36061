@@ -25,7 +25,7 @@
 %\numberwithin{equation}{chapter}
 
 % Include macros here
-\input{../../../Work/macros/macros}
+\input{macros}
 
 %\renewcommand{\chaptername}{}
 %\renewcommand{\thechapter}{}
@@ -34,8 +34,6 @@
 \numberwithin{section}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{theorem}{chapter}
-
-\lstset{language=Matlab}
 
 %\frontmatter
 %\title{Convex Optimization}
@@ -62,7 +60,91 @@
 \mainmatter
 
 %\include{notation}
-\include{exam-summary}
+
+\section*{Overview}
+
+\begin{enumerate}
+\item Introduction (Lecture 1 + Introductory slides)
+\begin{itemize}
+ \item What is an optimization problem?
+ \item Examples of optimization problems.
+\end{itemize}
+\item Unconstrained optimization and iterative algorithms (Lectures 2-6)
+\begin{itemize}
+ \item Unconstrained optimization
+ \item Convex functions
+ \item Gradient descent (steepest descent, step length, linear least squares)
+ \item Convergence of iterative methods
+ \item Convergence of gradient descent
+ \item Newton's method
+ \item Machine learning / supervised learning
+\end{itemize}
+\item Linear Programming Theory (Lectures 7-13)
+\begin{itemize}
+ \item Convex sets
+ \item Linear programming duality: a first glance
+ \item Polyhedra
+ \item Farkas' Lemma
+ \item Linear programming duality
+ \item A first algorithm
+ \item Optimality condition for linear programming
+ \item Newton's method and idea of interior point methods
+ \item Path following and the central path
+\end{itemize}
+\item Non-linear convex optimization (Lectures 14-18)
+\begin{itemize}
+\item Quadratic programming and portfolio optimization
+\item Lagrangian duality
+\item KKT conditions
+\item Logarithmic barrier and central path
+\item Linear support vector machines
+\end{itemize}
+\item Semidefinite programming
+\begin{itemize}
+\item Semidefinite programming as generalization of LP
+\item Relaxation of the MaxCut problem
+\end{itemize}
+\end{enumerate}
+
+\newpage
+
+\section*{Questions and Answers}
+
+\noindent {\em Q}: Which lectures are relevant for the test?\\
+
+\noindent {\em A}: Weeks 1-12 (lectures 1-20). \\
+
+\noindent {\em Q}: What do we have to know from the lectures?\\
+
+\noindent {\em A}: The following {\em will not} be asked, though the statements should be known:
+\begin{itemize}
+\item Python code will not be part of the test;
+\item Proofs in Section 4.3 on the convergence of gradient descent. What needs to be remembered from this section is that gradient descent has {\em linear} convergence (implied by the last Theorem in that section).
+\item Proof of Theorem 5.6 (quadratic convergence of Newton's method), though the statement should be known.
+\item Section 5.2 (Quasinewton methods)
+\item Proof of Lemma 7.8.
+\item Proof of Corollary 9.3.
+\item Section 13.2
+\item Proof of Theorem 15.1
+\item Proof of Theorem 16.2
+\item Description of barrier algorithm at end of Lecture 17
+\item Derivation of separation margin in Lecture 18
+\item Proof of Theorem 19.4
+\end{itemize}
+
+As a rule of thumb, it is beneficial for the understanding to know the proof ideas, though precise reconstruction of proofs will not be asked.\\
+
+\noindent {\em Q}: Which problems are relevant?\\
+
+\noindent {\em A}: Problem that use Python or require cutting a shape out of paper will not be relevant to the test. More precisely, the following problems will not feature:
+
+\begin{itemize}
+\item Part B problems.
+\item Problem 2.1(c) (the derivation).
+\item Problem 2.3
+\item Problem 3.2
+\end{itemize}
+
 %\include{lecture2}
 
 %\appendix

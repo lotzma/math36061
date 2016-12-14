@@ -14,8 +14,10 @@
 
 \chapter*{Lecture 16}
 \addcontentsline{toc}{chapter}{Lecture 16}
-\addtocounter{chapter}{16}
-\addtocounter{section}{0}
+\setcounter{chapter}{16}
+\setcounter{section}{0}
+\setcounter{equation}{0}
+\setcounter{theorem}{0}
 %\numberwithin{section}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{theorem}{chapter}
@@ -123,7 +125,7 @@ and for a point $\tilde{\vct{x}}$ satisfying the conditions $\mtx{A}\vct{x}=\vct
 \end{proof}
 
 \begin{example}
- The problem $\minimize e^{-x} \ \subjto x^2/y\leq 0$ is an example of a convex problem that does not satisfy strong duality.
+ The problem $\minimize e^{-x} \ \subjto x^2/y\leq 0, \ y\geq 0$ is an example of a convex problem that does not satisfy strong duality.
 \end{example}
 
 \begin{example}

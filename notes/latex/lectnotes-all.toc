@@ -1,0 +1,86 @@
+\select@language {UKenglish}
+\contentsline {chapter}{Contents}{ii}{section*.1}
+\contentsline {part}{\partnumberline {I}Introduction}{1}{part.1}
+\contentsline {chapter}{Lecture 1}{3}{chapter*.3}
+\contentsline {section}{\numberline {1.1}What is an optimization problem?}{3}{section.1.1}
+\contentsline {section}{\numberline {1.2}Examples of optimization problem}{4}{section.1.2}
+\contentsline {part}{\partnumberline {II}Unconstrained Optimization}{15}{part.2}
+\contentsline {chapter}{Lecture 2}{17}{chapter*.14}
+\contentsline {section}{\numberline {2.1}Unconstrained optimization}{17}{section.2.1}
+\contentsline {section}{\numberline {2.2}Convex functions}{18}{section.2.2}
+\contentsline {chapter}{Lecture 3}{23}{chapter*.17}
+\contentsline {section}{\numberline {3.1}Gradient descent}{23}{section.3.1}
+\contentsline {subsection}{Linear least squares}{24}{section*.19}
+\contentsline {chapter}{Lecture 4}{27}{chapter*.21}
+\contentsline {section}{\numberline {4.1}Step length selection}{27}{section.4.1}
+\contentsline {section}{\numberline {4.2}Convergence of iterative methods}{29}{section.4.2}
+\contentsline {section}{\numberline {4.3}Convergence of gradient descent}{29}{section.4.3}
+\contentsline {chapter}{Lecture 5}{31}{chapter*.23}
+\contentsline {section}{\numberline {5.1}Newton's Method}{31}{section.5.1}
+\contentsline {section}{\numberline {5.2}Quasinewton methods}{35}{section.5.2}
+\contentsline {chapter}{Lecture 6}{37}{chapter*.26}
+\contentsline {section}{\numberline {6.1}Supervised Learning}{37}{section.6.1}
+\contentsline {part}{\partnumberline {III}Linear Programming}{45}{part.3}
+\contentsline {chapter}{Lecture 7}{47}{chapter*.33}
+\contentsline {section}{\numberline {7.1}Convex sets}{47}{section.7.1}
+\contentsline {chapter}{Lecture 8}{53}{chapter*.41}
+\contentsline {section}{\numberline {8.1}Linear Programming Duality: a first glance}{53}{section.8.1}
+\contentsline {section}{\numberline {8.2}Polyhedra}{54}{section.8.2}
+\contentsline {chapter}{Lecture 9}{59}{chapter*.45}
+\contentsline {section}{\numberline {9.1}Farkas' Lemma}{59}{section.9.1}
+\contentsline {section}{\numberline {9.2}Linear programming duality}{61}{section.9.2}
+\contentsline {chapter}{Lecture 10}{63}{chapter*.50}
+\contentsline {section}{\numberline {10.1}A first algorithm for linear programming}{63}{section.10.1}
+\contentsline {chapter}{Lecture 11}{67}{chapter*.56}
+\contentsline {section}{\numberline {1.1}An optimality condition}{67}{section.1.1}
+\contentsline {section}{\numberline {1.2}Newton's method for solving equations}{69}{section.1.2}
+\contentsline {chapter}{Lecture 12}{71}{chapter*.62}
+\contentsline {section}{\numberline {12.1}Towards an efficient interior-point method}{71}{section.12.1}
+\contentsline {subsection}{A first attempt}{72}{section*.67}
+\contentsline {subsection}{A second attempt}{73}{section*.68}
+\contentsline {subsection}{A third attempt}{74}{section*.69}
+\contentsline {chapter}{Lecture 13}{75}{chapter*.70}
+\contentsline {section}{\numberline {13.1}Path-following methods}{76}{section.13.1}
+\contentsline {subsection}{Visualising the algorithm}{77}{section*.72}
+\contentsline {section}{\numberline {13.2}Analysis of Path-following}{78}{section.13.2}
+\contentsline {part}{\partnumberline {IV}Non-linear Convex Optimization}{81}{part.4}
+\contentsline {chapter}{Lecture 14}{83}{chapter*.76}
+\contentsline {section}{\numberline {14.1}Quadratic Programming and Portfolio Optimization}{83}{section.14.1}
+\contentsline {subsection}{Mean-variance portfolio theory}{83}{section*.79}
+\contentsline {chapter}{Lecture 15}{89}{chapter*.82}
+\contentsline {section}{\numberline {15.1}A first-order optimality condition}{89}{section.15.1}
+\contentsline {section}{\numberline {15.2}Lagrangian duality}{90}{section.15.2}
+\contentsline {chapter}{Lecture 16}{93}{chapter*.86}
+\contentsline {section}{\numberline {16.1}Constraint qualification}{94}{section.16.1}
+\contentsline {section}{\numberline {16.2}Karush-Kuhn-Tucker optimality conditions}{96}{section.16.2}
+\contentsline {chapter}{Lecture 17}{99}{chapter*.89}
+\contentsline {section}{\numberline {17.1}The logarithmic barrier}{100}{section.17.1}
+\contentsline {section}{\numberline {17.2}The central path}{102}{section.17.2}
+\contentsline {chapter}{Lecture 18}{105}{chapter*.95}
+\contentsline {section}{\numberline {18.1}Linear Support Vector Machines}{105}{section.18.1}
+\contentsline {section}{\numberline {18.2}Extensions}{108}{section.18.2}
+\contentsline {subsection}{Non-exact separation}{108}{section*.98}
+\contentsline {subsection}{Non-linear separation and kernels}{108}{section*.99}
+\contentsline {subsection}{Multiple classes}{109}{section*.100}
+\contentsline {part}{\partnumberline {V}Semidefinite Programming}{113}{part.5}
+\contentsline {chapter}{Lecture 19}{115}{chapter*.104}
+\contentsline {section}{\numberline {19.1}Semidefinite programming}{115}{section.19.1}
+\contentsline {section}{\numberline {19.2}Semidefinite programming duality}{117}{section.19.2}
+\contentsline {chapter}{Lecture 20}{119}{chapter*.111}
+\contentsline {section}{\numberline {20.1}Semidefinite relaxation}{119}{section.20.1}
+\contentsline {section}{\numberline {20.2}The Goemans-Williamson Algorithm}{121}{section.20.2}
+\contentsline {chapter}{Appendix}{123}{chapter*.116}
+\contentsline {section}{\numberline {1}Asymptotic notation}{123}{section.1.1}
+\contentsline {section}{\numberline {2}Linear Algebra}{124}{section.1.2}
+\contentsline {subsection}{Linear subspaces}{124}{section*.118}
+\contentsline {subsection}{Linear maps}{126}{section*.121}
+\contentsline {subsection}{Eigenvalues}{129}{section*.123}
+\contentsline {subsection}{Norms}{130}{section*.124}
+\contentsline {subsection}{Positive semidefinite matrices}{132}{section*.127}
+\contentsline {subsection}{Matrix decompositions}{133}{section*.128}
+\contentsline {section}{\numberline {3}Calculus}{135}{section.1.3}
+\contentsline {subsection}{Topology}{137}{section*.133}
+\contentsline {subsection}{Differentiable functions}{139}{section*.135}
+\contentsline {section}{\numberline {4}Finite precision arithmetic}{143}{section.1.4}
+\contentsline {subsection}{Measuring errors}{143}{section*.138}
+\contentsline {subsection}{Floating point and significant figures}{144}{section*.139}

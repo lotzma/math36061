@@ -12,11 +12,13 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\chapter*{Lecture 18}
-\addcontentsline{toc}{chapter}{Lecture 18}
-\addtocounter{chapter}{1}
-\addtocounter{section}{-2}
-\numberwithin{section}{chapter}
+\chapter*{Lecture 20}
+\addcontentsline{toc}{chapter}{Lecture 20}
+\setcounter{chapter}{20}
+\setcounter{section}{0}
+\setcounter{equation}{0}
+\setcounter{theorem}{0}
+%\numberwithin{section}{chapter}
 \numberwithin{equation}{chapter}
 \numberwithin{theorem}{chapter}
 
@@ -31,10 +33,10 @@ The standard form of a semidefinite programming problem is
  & \mtx{X} \succeq \zerovct,
  \end{split}
 \end{align}
-where $\mtx{C}$ and $\mtx{A}_i$, $1\leq i\leq m$, are symmetric $n\times n$ matrices (elements of the vector space $\mathrm{SYM}_n$. At first sight, it is not clear why solving such problem should be of interest. In this lecture we discuss a useful application to {\em discrete} optimization problems that are usually difficult in practice.
+where $\mtx{C}$ and $\mtx{A}_i$, $1\leq i\leq m$, are symmetric $n\times n$ matrices (elements of the vector space $\mathrm{SYM}_n$). At first sight, it is not clear why solving such problem should be of interest. In this lecture we discuss a useful application to {\em discrete} optimization problems that are usually difficult in practice.
 
 \section{Semidefinite relaxation}
-A graph is a pair $G=(V,E)$, where $V=\{1,\dots,n\}$ consists of the {\em vertices}, and $E=\subset V\times V$ consists of {\em edges} connecting some of the vertices. We will consider undirected edges, i.e., $(i,j)$ will be the same edge as $(j,i)$. 
+A graph is a pair $G=(V,E)$, where $V=\{1,\dots,n\}$ consists of the {\em vertices}, and $E\subseteq V\times V$ consists of {\em edges} connecting some of the vertices. We will consider undirected edges, i.e., $(i,j)$ will be the same edge as $(j,i)$. 
 \begin{figure}[h!]
 \centering
 \begin{tikzpicture}[scale=0.5]
@@ -89,7 +91,7 @@ A graph is a pair $G=(V,E)$, where $V=\{1,\dots,n\}$ consists of the {\em vertic
 \end{figure}
 
 Note that for graphs, we only care about the incidences (which node is connected to which other node), the images are just visualizations and the distances and placements of nodes are pure convenience.
-Graphs are in important tool in areas such as network analysis, and many discrete computational problems can be formulated as graph problems. One such problem is \textsc{MaxCut}. Given a graph $G=(V,E)$, a {\em cut} is a pair $(S,V\backslash S)$, where $S\subseteq V$ is a subset of vertices. The {\em edge set} of the cut is the set
+Graphs are an important tool in areas such as network analysis, and many discrete computational problems can be formulated as graph problems. One such problem is \textsc{MaxCut}. Given a graph $G=(V,E)$, a {\em cut} is a pair $(S,V\backslash S)$, where $S\subseteq V$ is a subset of vertices. The {\em edge set} of the cut is the set
 \begin{equation*}
  E(S,V\backslash S) = \{e\in E\mid e \text{ connects a vertex in } S \text{ with a vertex in } V\backslash S\}.
 \end{equation*}
@@ -112,13 +114,14 @@ The size of a cut is the number of edges in it, and the \textsc{MaxCut} problem 
   \node (4) at (1,0)   [mynode,label=-45:$4$] {};
   \end{tikzpicture}
  \end{figure}
- There are $10$ nontrivial cuts, with the set $S$ given by
+ There are $7$ nontrivial cuts, namely
  \begin{equation*}
-  \{1\}, \{2\}, \{3\}, \{4\}, \{1,2\}, \{1,3\}, \{1,4\}, \{2,3\}, \{2,4\}, \{3,4\} 
+  \{1\}, \{2\}, \{3\}, \{4\}, \{1,2\}, \{1,3\}, \{1,4\}
  \end{equation*}
+Note that we don't list all the non-empty subsets of $\{1,2,3,4\}$, as that would amount to counting every cut twice (every set would feature as $S$ and as $V\backslash S$).
 The sizes of these cuts (number of edges joining $S$ with $V\backslash S$) is
 \begin{equation*}
- 2, 1, 1, 2, 1, 3, 2, 3, 3, 1.
+ 2, 1, 1, 2, 1, 3, 2.
 \end{equation*}
 The maximum cut size is therefore $3$ (it can't be any bigger, since we only have three edges), and one such cut can be realized by taking the set $S=\{1,3\}$ and $V\backslash S=\{2,4\}$. 
 \end{example}
@@ -152,7 +155,7 @@ The size of a cut is then the sum $\sum_{(i,j)\in E} \frac{1}{2}(1-x_ix_j)$, and
  \subjto & x_i^2=1, \ 1\leq i\leq n.
 \end{split}
  \end{align}
-We now look for a {\em relaxation} of the problem: a new problem with a bigger constraint set that also contains the solutions of~\eqref{eq:maxcut-orig}, but possibly more. As a first step, replace $x_i\in \{-1,1\}$ with vectors $\vct{u}_i\in \{\pm \vct{e}_1\}$, where $\vct{e}_1=(0,\dots,0,1)^{\trans}$ is a unit vector, and $x_ix_j$ with $\vct{u}_i^{\trans}\vct{u}_j$. The optimization is then over sets of vectors $(\vct{u}_1,\dots,\vct{u}_n)$, and can be written as
+We now look for a {\em relaxation} of the problem: a new problem with a bigger constraint set that also contains the solutions of~\eqref{eq:maxcut-orig}, but possibly more. As a first step, replace $x_i\in \{-1,1\}$ with vectors $\vct{u}_i\in \{\pm \vct{e}_1\}$, where $\vct{e}_1=(1,0,\dots,0)^{\trans}$ is a unit vector, and $x_ix_j$ with $\vct{u}_i^{\trans}\vct{u}_j$. The optimization is then over sets of vectors $(\vct{u}_1,\dots,\vct{u}_n)$, and can be written as
 \begin{align*}
 \maximize & \sum_{(i,j)\in E} \frac{1}{2}(1-\vct{u}_i^{\trans}\vct{u}_j)\\
 \subjto & \vct{u}_i\in \{\pm \vct{e}_1\}.
@@ -166,7 +169,7 @@ The relaxation now consists in enlarging the constraint set to allow for {\em an
 \end{align}
 As the constraint set of the relaxation is bigger, the solution will be at least as large as the solution of~\eqref{eq:maxcut-orig} (ideally, the same, but we can't guarantee this).
 
-For any set of unti vectors $\vct{u}_i$, let $\mtx{U}=(\vct{u}_1,\dots,\vct{u}_n)$ be the matrix with unit vectors $\vct{u}_i$ as columns, and consider
+For any set of unit vectors $\vct{u}_i$, let $\mtx{U}=(\vct{u}_1,\dots,\vct{u}_n)$ be the matrix with unit vectors $\vct{u}_i$ as columns, and consider
 \begin{equation*}
  \mtx{X}=\mtx{U}^{\trans}\mtx{U}.
 \end{equation*}
@@ -183,6 +186,8 @@ Write $\mathrm{SDP}(G)$ for the optimal value of~\eqref{eq:relax-sdp}. From the 
 \begin{equation*}
  \mathrm{SDP}(G)\geq \mathrm{Opt}(G).
 \end{equation*}
+This is the case, because the solution of~\eqref{eq:maxcut-orig} is contained in the feasible set of~\eqref{eq:relax-sdp}, but the latter has more options.
+
 To recover the cut, we proceed as follows.
 \begin{enumerate}
  \item Solve~\eqref{eq:relax-sdp} to accuracy $\varepsilon$ to obtain a matrix $\mtx{X}^*$ such that

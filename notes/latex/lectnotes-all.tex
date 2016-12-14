@@ -1,0 +1,161 @@
+%-----------------------------------------------------------------------
+% Beginning of chapter.tex
+%-----------------------------------------------------------------------
+%
+%  This is a sample file for use with AMS-LaTeX.  It provides an example
+%  of how to set up a file for a book to be typeset with AMS-LaTeX.
+%
+%  This is the driver file.  Separate chapters should be included at
+%  the end of this file.
+%
+%  ***** DO NOT USE THIS FILE AS A STARTER FOR YOUR BOOK. *****
+%  Follow the guidelines in the file chapter.template.
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,a4paper]{memoir}
+\chapterstyle{demo}
+\epigraphfontsize{\small\itshape}
+\setlength\epigraphwidth{8cm}
+\setlength\epigraphrule{0pt}
+\epigraphfontsize{\small\itshape}
+
+\evensidemargin=0in
+\oddsidemargin=0in
+\textwidth=6.3in
+\topmargin=-0.33in
+\headheight=0.25in
+\textheight=9in
+
+% Include macros here
+\input{macros}
+
+\usetikzlibrary{matrix,arrows,shapes}
+\usetikzlibrary{shapes,arrows,positioning}
+\tikzstyle myBG=[line width=3pt,opacity=1]
+\newcommand{\drawBG}[2]
+{
+  \draw[white,myBG]  (#1) -- (#2);
+  \draw[black,very thick] (#1) -- (#2);
+}
+\newcommand{\drawLinewithBG}[2]
+{
+  \draw[white,myBG]  (#1) -- (#2);
+  \draw[black,very thick] (#1) -- (#2);
+}
+\newcommand{\drawPolarLinewithBG}[2]
+{
+  \draw[white,myBG]  (#1) -- (#2);
+  \draw[black,very thick] (#1) -- (#2);
+}
+\tikzset{mynode/.style = {
+    % The shape
+    circle,
+    % The size
+    minimum size=0.5mm,
+    % The color
+    draw=black, fill=black}
+}
+
+%\renewcommand{\chaptername}{}
+%\renewcommand{\thechapter}{}
+
+\newcommand*{\titleGP}{\begingroup % Geometric Modeling
+%\drop=0.1\textheight
+\centering
+\vspace*{\baselineskip}
+\rule{\textwidth}{1.6pt}\vspace*{-\baselineskip}\vspace*{2pt}
+\rule{\textwidth}{0.4pt}\\[\baselineskip]
+{\LARGE CONVEX\\ OPTIMIZATION \\[0.3\baselineskip]}%\\[0.2\baselineskip]
+\rule{\textwidth}{0.4pt}\vspace*{-\baselineskip}\vspace{3.2pt}
+\rule{\textwidth}{1.6pt}%\\[\baselineskip]
+%\scshape
+%Selected and Expanded Papers from the Organisation Working
+%Conference on \\ Enigmas \\
+%Location, date from--to\par
+\vspace*{2\baselineskip}
+by \\[\baselineskip]
+{\Large MARTIN LOTZ\par}%\\
+{\itshape School of Mathematics \\ The University of Manchester\par}
+\vfill
+{\large MATH36061\\ Semester 1, 2016/17\\ December 2016}\par
+\endgroup}
+
+\begin{document}
+\numberwithin{section}{chapter}
+
+\frontmatter
+\pagestyle{empty}
+\titleGP
+%\title{Reflective Portfolio}
+
+%    Information for first author
+%\author{Martin Lotz \vspace{2cm}
+
+%New Academics Programme\\ Faculty of Engineering and Physical Science\\
+%The University of Manchester\\ April 2016}
+
+%    Address of record for the research reported here
+%\address{School of Mathematics\\ The University of Manchester\\ Alan Turing Building, Oxford Road\\ Manchester M139PL}
+
+%\email{martin.lotz@manchester.ed.uk}
+%\urladdr{http://www.maths.manchester.ac.uk/\textasciitilde mlotz}
+
+%\date{\today}
+
+%\maketitle
+
+\newpage 
+
+\tableofcontents
+
+%\include{preface}
+
+\mainmatter
+
+\part{Introduction}
+\include{lecture1}
+\part{Unconstrained Optimization}
+\include{lecture2}
+\include{lecture3}
+\include{lecture4}
+\include{lecture5}
+\include{lecture6}
+\part{Linear Programming}
+\include{lecture7}
+\include{lecture8}
+\include{lecture9}
+\include{lecture10}
+\include{lecture11}
+\include{lecture12}
+\include{lecture13}
+\part{Non-linear Convex Optimization}
+\include{lecture14}
+\include{lecture15}
+\include{lecture16}
+\include{lecture17}
+\include{lecture18}
+\part{Semidefinite Programming}
+\include{lecture19}
+\include{lecture20}
+
+
+%\include{notation}
+
+% 
+%\addcontentsline{toc}{chapter}{Appendix}
+\setcounter{section}{0}
+\setcounter{chapter}{1}
+\include{pre-include}
+
+%\backmatter
+
+%\bibliographystyle{plain}
+%\bibliography{bib}
+%\include{biblio}
+%\include{index}
+\end{document}
+
+%-----------------------------------------------------------------------
+% End of chapter.tex
+%-----------------------------------------------------------------------
